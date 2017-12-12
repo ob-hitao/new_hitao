@@ -1,0 +1,39 @@
+// 1 像素边框
+@mixin border-1px($color)
+{
+  position: relative;
+
+  &::after
+  {
+    content: '';
+    display: block;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    border-top: 1px solid $color;
+  }
+  @media (min-device-pixel-ratio: 1.5), (-webkit-min-device-pixel-ratio: 1.5)
+  {
+    &::after
+    {
+      transform: scaleY(.7);
+    }
+  }
+  @media (min-device-pixel-ratio: 2), (-webkit-min-device-pixel-ratio: 2)
+  {
+    &::after
+    {
+      transform: scaleY(.5);
+    }
+  }
+}
+
+@mixin bg-img($url)
+{
+  background: url("#{$url}@2x.png") no-repeat center center / 100% 100%;
+  @media (min-device-pixel-ratio: 3), (-webkit-min-device-pixel-ratio: 3)
+  {
+    background-image: url("#{$url}@3x.png");
+  }
+}
