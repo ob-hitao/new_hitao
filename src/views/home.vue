@@ -25,7 +25,7 @@ export default
     {
         vFooter
     },
-    mounted()
+    created()
     {
         //获得slider插件对象
         var gallery = mui('.mui-slider');
