@@ -7,7 +7,16 @@
 <script>
 export default
 {
-    name: 'app'
+    name: 'app',
+    created()
+    {
+        if (mui.os.plus)
+        {
+            // 系统顶部样式
+            plus.navigator.setStatusBarBackground('#e95168');
+            plus.navigator.setStatusBarStyle('light');
+        }
+    }
 }
 </script>
 
