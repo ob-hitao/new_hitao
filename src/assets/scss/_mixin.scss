@@ -28,7 +28,7 @@
     }
   }
 }
-
+// 适应图片
 @mixin bg-img($url)
 {
   background: url("#{$url}@2x.png") no-repeat center center / 100% 100%;

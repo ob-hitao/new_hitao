@@ -1,12 +1,12 @@
 <template>
     <div>
-        me
+        transport
         <v-footer></v-footer>
     </div>
 </template>
 
 <script>
-import vFooter from '@/components/footer';
+import vFooter from '@/components/footer/footer';
 
 export default
 {

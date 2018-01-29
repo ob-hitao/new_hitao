@@ -15,7 +15,7 @@ export default
 }
 </script>
 <style scoped lang="scss" rel="stylesheet/scss">
-@import "../assets/scss/parameter";
+@import "../../assets/scss/parameter";
 
 $animal-list:
 (
@@ -49,9 +49,9 @@ $animal-list:
         {
             &:nth-child#{$index}::before
             {
-                font-family:"iconfont" !important;
-                font-size:16px;
-                font-style:normal;
+                font-family: "iconfont" !important;
+                font-size: 20px;
+                font-style: normal;
                 -webkit-font-smoothing: antialiased;
                 -moz-osx-font-smoothing: grayscale;
                 content: $animal;

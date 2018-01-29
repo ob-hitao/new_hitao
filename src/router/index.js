@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import home from '@/views/home';
-import shopping from '@/views/shopping';
-import transport from '@/views/transport';
-import shopping_cart from '@/views/shopping_cart';
-import me from '@/views/me';
+import home from '@/views/home/home';
+import shopping from '@/views/shopping/shopping';
+import transport from '@/views/transport/transport';
+import shopping_cart from '@/views/shopping_cart/shopping_cart';
+import me from '@/views/me/me';
 
 Vue.use(Router)
 
