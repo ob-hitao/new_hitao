@@ -20,7 +20,11 @@ export default
 @import "../../assets/scss/parameter";
 .search
 {
+    position: fixed;
+    top: 0;
     display: flex;
+    width: 100%;
+    z-index: 10;
     padding: 7px 12.5px;
     background: $theme;
 

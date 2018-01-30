@@ -36,7 +36,9 @@ export default
     {
         let dpi = getDpi();
         this.images.forEach(el => el.src = require(`./${el.src}@${dpi}x.png`));
-
+    },
+    mounted()
+    {
         //获得slider插件对象
         var gallery = mui('.mui-slider');
         gallery.slider({

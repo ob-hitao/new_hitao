@@ -1,11 +1,11 @@
 <template>
   <div class="home">
       <v-search></v-search>
-      <v-slider></v-slider>
-      <v-goods></v-goods>
-      <v-goods></v-goods>
-      <v-goods></v-goods>
-      <p class="tips">没有更多了</p>
+      <div class="home__container">
+          <v-slider></v-slider>
+          <v-goods v-for="n in 10" :key="'goods' + n"></v-goods>
+          <p class="tips">没有更多了</p>
+      </div>
       <v-footer></v-footer>
   </div>
 </template>
@@ -26,20 +26,25 @@ export default
         vGoods
     }
 }
-
-
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">
 .home
 {
-    padding-bottom: 50px;
-
-    .tips
+    &__container
     {
-        color: #888888;
-        font-size: 12px;
-        text-align: center;
+        position: absolute;
+        top: 44px;
+        bottom: 50px;
+        width: 100%;
+        overflow: auto;
+
+        .tips
+        {
+            color: #888888;
+            font-size: 12px;
+            text-align: center;
+        }
     }
 }
 </style>

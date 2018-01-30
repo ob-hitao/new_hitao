@@ -9,21 +9,27 @@
             </div>
         </h4>
         <div class="goods__content">
-            <div class="item">
+            <figure class="item">
                 <img class="item__img" src="./Shopping_dress.jpg" />
-                <div class="item__name">百搭闲瘦穿搭神器</div>
-                <div class="item__price">￥362</div>
-            </div>
-            <div class="item">
+                <figcaption>
+                    <div class="item__name">百搭闲瘦穿搭神器</div>
+                    <div class="item__price">￥362</div>
+                </figcaption>
+            </figure>
+            <figure class="item">
                 <img class="item__img" src="./Shopping_dress.jpg" />
-                <div class="item__name">百搭闲瘦穿搭神器</div>
-                <div class="item__price">￥362</div>
-            </div>
-            <div class="item">
+                <figcaption>
+                    <div class="item__name">百搭闲瘦穿搭神器</div>
+                    <div class="item__price">￥362</div>
+                </figcaption>
+            </figure>
+            <figure class="item">
                 <img class="item__img" src="./Shopping_dress.jpg" />
-                <div class="item__name">百搭闲瘦穿搭神器</div>
-                <div class="item__price">￥362</div>
-            </div>
+                <figcaption>
+                    <div class="item__name">百搭闲瘦穿搭神器</div>
+                    <div class="item__price">￥362</div>
+                </figcaption>
+            </figure>
         </div>
     </section>
 </template>
@@ -77,6 +83,7 @@ export default
 
         .item
         {
+            margin: 0;
             font-size: 13px;
 
             &__img

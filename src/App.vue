@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <router-view/>
+        <router-view />
     </div>
 </template>
 
@@ -10,12 +10,12 @@ export default
     name: 'app',
     created()
     {
-        if (mui.os.plus)
+        mui.plusReady(() =>
         {
             // 系统顶部样式
             plus.navigator.setStatusBarBackground('#e95168');
             plus.navigator.setStatusBarStyle('light');
-        }
+        });
     }
 }
 </script>
