@@ -21,5 +21,19 @@ export default
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-
+/* reset */
+figure, p, h1, h2, h3, h4
+{
+    margin: 0;
+}
+/* end */
+@font-face
+{
+    font-family: "冬青黑体";
+    src: url("./assets/fonts/冬青黑体W3.otf") format("otf");
+}
+*
+{
+    font-family: "冬青黑体";
+}
 </style>

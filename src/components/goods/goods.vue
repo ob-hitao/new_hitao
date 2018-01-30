@@ -83,7 +83,6 @@ export default
 
         .item
         {
-            margin: 0;
             font-size: 13px;
 
             &__img
