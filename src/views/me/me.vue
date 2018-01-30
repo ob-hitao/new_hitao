@@ -1,4 +1,4 @@
-<template>
+ c   <template>
     <div>
         me
         <v-footer></v-footer>
@@ -13,6 +13,10 @@ export default
     components:
     {
         vFooter
+    },
+    created()
+    {
+        console.log(this.$route);
     }
 }
 </script>
