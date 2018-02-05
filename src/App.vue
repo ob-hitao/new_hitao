@@ -26,6 +26,16 @@ figure, p, h1, h2, h3, h4
 {
     margin: 0;
 }
+.mui-bar-nav
+{
+    background: #fff;
+    box-shadow: none;
+    border-bottom: 1px solid #d0d0d0;
+}
+.mui-action-back
+{
+    color: #666666;
+}
 /* end */
 @font-face
 {

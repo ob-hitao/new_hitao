@@ -5,7 +5,10 @@ import home from '@/views/home/home';
 import shopping from '@/views/shopping/shopping';
 import transport from '@/views/transport/transport';
 import shopping_cart from '@/views/shopping_cart/shopping_cart';
-import me from '@/views/me/me';
+
+import user from '@/views/user/user';
+import me from '@/views/user/me/me';
+import checkin from '@/views/user/checkin/checkin';
 
 Vue.use(Router)
 
@@ -34,8 +37,19 @@ export default new Router
             component: shopping_cart
         },
         {
-            path: '/me',
-            component: me
+            path: '/user/',
+            component: user,
+            children:
+            [
+                {
+                    path: '/',
+                    component: me
+                },
+                {
+                    path: 'checkin',
+                    component: checkin
+                }
+            ]
         },
     ]
 })

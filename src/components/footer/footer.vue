@@ -4,7 +4,7 @@
         <router-link to="/shopping" tag="a" class="nav__item">shopping</router-link>
         <router-link to="/transport" tag="a" class="nav__item">transport</router-link>
         <router-link to="/shopping_cart" tag="a" class="nav__item">shopping cart</router-link>
-        <router-link to="/me" tag="a" class="nav__item">me</router-link>
+        <router-link to="/user" tag="a" class="nav__item">me</router-link>
     </nav>
 </template>
 

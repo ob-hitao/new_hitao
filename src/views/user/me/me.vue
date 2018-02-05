@@ -14,7 +14,9 @@
                             会员等级 <v-star :size="4" :score="1"></v-star>
                         </div>
                     </figcaption>
-                    <v-checkin></v-checkin>
+                    <router-link to="checkin" tag="div" append>
+                        <v-checkin></v-checkin>
+                    </router-link>
                 </figure>
             </header>
             <section class="data elastic_module">
@@ -167,16 +169,13 @@ export default
         vFooter,
         vCheckin,
         vStar
-    },
-    created()
-    {
-
     }
 }
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">
-@import "../../assets/scss/mixin";
+@import "../../../assets/scss/mixin";
+//$arr:();
 .user__container
 {
     position: absolute;
