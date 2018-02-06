@@ -36,6 +36,14 @@ figure, p, h1, h2, h3, h4
 {
     color: #666666;
 }
+.mui-content
+{
+    position: absolute;
+    top: 44px;
+    bottom: 0;
+    overflow: auto;
+    padding: 0 !important;
+}
 /* end */
 @font-face
 {
@@ -45,5 +53,25 @@ figure, p, h1, h2, h3, h4
 *
 {
     font-family: "冬青黑体";
+}
+
+// 路由切换动画
+.child-view
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    transition: all .3s cubic-bezier(.55,0,.1,1);
+}
+.slide-left-enter, .slide-right-leave-active
+{
+    transform: translate(100%, 0);
+}
+.slide-left-leave-active, .slide-right-enter
+{
+    transform: translate(-100%, 0);
 }
 </style>

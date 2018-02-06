@@ -5,32 +5,32 @@
             <h1 class="mui-title">签到</h1>
         </header>
         <div class="mui-content">
-            <!--<section class="calendar">-->
-                <!--<div class="calendar__header">-->
-                    <!--<div>{{now.mon + '月' + now.day + '日'}}</div> <button class="check" :class="{active: check}">{{check ? '已签到' : '点击签到'}}</button>-->
-                <!--</div>-->
-                <!--<div class="calendar__body">-->
-                    <!--<div class="calendar__body__title">-->
-                        <!--<div>日</div>-->
-                        <!--<div>一</div>-->
-                        <!--<div>二</div>-->
-                        <!--<div>三</div>-->
-                        <!--<div>四</div>-->
-                        <!--<div>五</div>-->
-                        <!--<div>六</div>-->
-                    <!--</div>-->
-                    <!--<div class="calendar__body__date">-->
-                        <!--<div v-for="item in date">-->
-                            <!--<span :class="{active: now.day == item}">{{item}}</span>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="calendar__footer">-->
-                    <!--<h5>-->
-                        <!--<div>今日签到奖励 <span class="price">积分+100</span></div>-->
-                    <!--</h5>-->
-                <!--</div>-->
-            <!--</section>-->
+            <section class="calendar">
+                <div class="calendar__header">
+                    <div>{{now.mon + '月' + now.day + '日'}}</div> <button class="check" :class="{active: check}">{{check ? '已签到' : '点击签到'}}</button>
+                </div>
+                <div class="calendar__body">
+                    <div class="calendar__body__title">
+                        <div>日</div>
+                        <div>一</div>
+                        <div>二</div>
+                        <div>三</div>
+                        <div>四</div>
+                        <div>五</div>
+                        <div>六</div>
+                    </div>
+                    <div class="calendar__body__date">
+                        <div v-for="item in date">
+                            <span :class="{active: now.day == item}">{{item}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="calendar__footer">
+                    <h5>
+                        <div>今日签到奖励 <span class="price">积分+100</span></div>
+                    </h5>
+                </div>
+            </section>
             <section class="get">
                 <h4 class="get__title">赚取更多积分</h4>
                 <ul class="mui-table-view">
@@ -79,7 +79,90 @@
 <script>
 export default
 {
+    data()
+    {
+        return {
+            date: [],
+            now:
+            {
+                year:'',
+                mon: '',
+                day: null
+            },
+            check: false,
+        }
+    },
+    created()
+    {
+        this.taggleBg('#fff', 'dark');
+        this.initDate();
+    },
+    beforeDestroy()
+    {
+        this.taggleBg('#e95168', 'light');
+    },
+    methods:
+    {
+        taggleBg(bg, style)
+        {
+            mui.plusReady(() =>
+            {
+                // 系统顶部样式
+                plus.navigator.setStatusBarBackground(bg);
+                plus.navigator.setStatusBarStyle(style);
+            });
+        },
+        initDate: function()
+        {
+            var D = new Date();
+            this.now.year = D.getYear()+1900;
+            this.now.mon = D.getMonth() + 1;
+            this.now.day = D.getDate();
+            this.dateArr(D);
+        },
+        dateArr: function(D)
+        {
+            // 获取天数
+            D.setMonth(D.getMonth() + 1, 0);
+            var Day = D.getDate();
 
+            // 获取 1 号在星期几
+            var W = new Date();
+            W.setDate(1);
+            var Week = W.getDay();
+
+            for (var i = 0; i < Week + Day; i ++)
+            {
+                this.date.push(i < Week ? null : i - Week + 1);
+            }
+        },
+        checkDay: function(day)
+        {
+            if(day==null){
+                return false;
+            }
+            var mon = this.now.mon < 10? 0 + this.now.mon.toString(): this.now.mon.toString();
+            var day = day < 10? 0 + day.toString(): day.toString();
+            for(var i=0;i<this.list.length;i++)
+            {
+                if(this.list[i].date == this.now.year + mon + day.toString())
+                {
+                    return true;
+                }
+            }
+            return false;
+        },
+        checkIn: function()
+        {
+            var _this = this;
+            if(!_this.check){
+                postJSON('USER_SIGN',{'userId':_this.userId},function(data){
+                    _this.check = true;
+                    mui.currentWebview.reload();
+                });
+            }
+        }
+    }
 }
 </script>
 
@@ -156,7 +239,7 @@ $animal-list:
                         margin: 0 auto;
                         line-height: 30px;
                         text-align: center;
-                        font-size: 1.4rem;
+                        font-size: 14px;
                         color: #303030;
 
 
@@ -206,6 +289,7 @@ $animal-list:
     }
     .get
     {
+        margin-bottom: 70px;
         background: #fff;
 
         &__title
@@ -230,6 +314,13 @@ $animal-list:
                 justify-content: space-between;
                 align-items: center;
                 font-size: 14px;
+
+                .icon
+                {
+                    width: 26px;
+                    height: 26px;
+                    margin-right: 20px;
+                }
             }
             .right
             {
@@ -248,9 +339,6 @@ $animal-list:
             {
                 .icon
                 {
-                    width: 26px;
-                    height: 26px;
-                    margin-right: 20px;
                     @include bg-img(#{$animal});
                 }
             }

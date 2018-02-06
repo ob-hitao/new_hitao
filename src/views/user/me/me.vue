@@ -79,73 +79,73 @@
             <section class="grid elastic_module">
                 <div class="elastic_module__content">
                     <figure class="elastic_module__wrap">
-                        <img class="elastic_module__img" src="./mine_tool_coupon@2x.png"/>
+                        <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             优惠券
                         </figcaption>
                     </figure>
                     <figure class="elastic_module__wrap">
-                        <img class="elastic_module__img" src="./mine_tool_collect@2x.png"/>
+                        <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             我的收藏
                         </figcaption>
                     </figure>
                     <figure class="elastic_module__wrap">
-                        <img class="elastic_module__img" src="./mine_tool_alipay@2x.png"/>
+                        <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             支付宝代充
                         </figcaption>
                     </figure>
                     <figure class="elastic_module__wrap">
-                        <img class="elastic_module__img" src="./mine_tool_notice@2x.png"/>
+                        <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             通知
                         </figcaption>
                     </figure>
                     <figure class="elastic_module__wrap">
-                        <img class="elastic_module__img" src="./mine_tool_invite@2x.png"/>
+                        <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             邀请好友
                         </figcaption>
                     </figure>
                     <figure class="elastic_module__wrap">
-                        <img class="elastic_module__img" src="./mine_tool_online@2x.png"/>
+                        <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             在线客服
                         </figcaption>
                     </figure>
                     <figure class="elastic_module__wrap">
-                        <img class="elastic_module__img" src="./mine_tool_helpcenter@2x.png"/>
+                        <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             帮助中心
                         </figcaption>
                     </figure>
                     <figure class="elastic_module__wrap">
-                        <img class="elastic_module__img" src="./mine_tool_house@2x.png"/>
+                        <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             仓库地址
                         </figcaption>
                     </figure>
                     <figure class="elastic_module__wrap">
-                        <img class="elastic_module__img" src="./mine_tool_feedback@2x.png"/>
+                        <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             意见反馈
                         </figcaption>
                     </figure>
                     <figure class="elastic_module__wrap">
-                        <img class="elastic_module__img" src="./mine_tool_address@2x.png"/>
+                        <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             地址管理
                         </figcaption>
                     </figure>
                     <figure class="elastic_module__wrap">
-                        <img class="elastic_module__img" src="./mine_tool_freight@2x.png"/>
+                        <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             运费试算
                         </figcaption>
                     </figure>
                     <figure class="elastic_module__wrap">
-                        <img class="elastic_module__img" src="./mine_tool_info@2x.png"/>
+                        <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             我的信息
                         </figcaption>
@@ -175,7 +175,21 @@ export default
 
 <style scoped lang="scss" rel="stylesheet/scss">
 @import "../../../assets/scss/mixin";
-//$arr:();
+$animal-list:
+(
+    "(1)": "mine_tool_coupon",
+    "(2)": "mine_tool_collect",
+    "(3)": "mine_tool_alipay",
+    "(4)": "mine_tool_notice",
+    "(5)": "mine_tool_invite",
+    "(6)": "mine_tool_online",
+    "(7)": "mine_tool_helpcenter",
+    "(8)": "mine_tool_house",
+    "(9)": "mine_tool_feedback",
+    "(10)": "mine_tool_address",
+    "(11)": "mine_tool_freight",
+    "(12)": "mine_tool_info"
+);
 .user__container
 {
     position: absolute;
@@ -313,12 +327,23 @@ export default
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
+
+                .icon
+                {
+                    width: 26px;
+                    height: 26px;
+                    margin-bottom: 10px;
+                }
             }
-            &__img
+            @each $index, $animal in $animal-list
             {
-                width: 26px;
-                height: 26px;
-                margin-bottom: 10px;
+                &__wrap:nth-child#{$index}
+                {
+                    .icon
+                    {
+                        @include bg-img($animal);
+                    }
+                }
             }
         }
     }
