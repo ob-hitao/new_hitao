@@ -5,73 +5,75 @@
             <h1 class="mui-title">签到</h1>
         </header>
         <div class="mui-content">
-            <section class="calendar">
-                <div class="calendar__header">
-                    <div>{{now.mon + '月' + now.day + '日'}}</div> <button class="check" :class="{active: check}">{{check ? '已签到' : '点击签到'}}</button>
-                </div>
-                <div class="calendar__body">
-                    <div class="calendar__body__title">
-                        <div>日</div>
-                        <div>一</div>
-                        <div>二</div>
-                        <div>三</div>
-                        <div>四</div>
-                        <div>五</div>
-                        <div>六</div>
+            <div class="plus">
+                <section class="calendar">
+                    <div class="calendar__header">
+                        <div>{{now.mon + '月' + now.day + '日'}}</div> <button class="check" :class="{active: check}">{{check ? '已签到' : '点击签到'}}</button>
                     </div>
-                    <div class="calendar__body__date">
-                        <div v-for="item in date">
-                            <span :class="{active: now.day == item}">{{item}}</span>
+                    <div class="calendar__body">
+                        <div class="calendar__body__title">
+                            <div>日</div>
+                            <div>一</div>
+                            <div>二</div>
+                            <div>三</div>
+                            <div>四</div>
+                            <div>五</div>
+                            <div>六</div>
+                        </div>
+                        <div class="calendar__body__date">
+                            <div v-for="item in date">
+                                <span :class="{active: now.day == item}">{{item}}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="calendar__footer">
-                    <h5>
-                        <div>今日签到奖励 <span class="price">积分+100</span></div>
-                    </h5>
-                </div>
-            </section>
-            <section class="get">
-                <h4 class="get__title">赚取更多积分</h4>
-                <ul class="mui-table-view">
-                    <li class="mui-table-view-cell">
-                        <div class="left">
-                            <div class="icon"></div>
-                            <div>
-                                完善个人信息<br />
-                                <span class="price">+100</span>
+                    <div class="calendar__footer">
+                        <h5>
+                            <div>今日签到奖励 <span class="price">积分+100</span></div>
+                        </h5>
+                    </div>
+                </section>
+                <section class="get">
+                    <h4 class="get__title">赚取更多积分</h4>
+                    <ul class="mui-table-view">
+                        <li class="mui-table-view-cell">
+                            <div class="left">
+                                <div class="icon"></div>
+                                <div>
+                                    完善个人信息<br />
+                                    <span class="price">+100</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="right">
-                            <button>立即完善</button>
-                        </div>
-                    </li>
-                    <li class="mui-table-view-cell">
-                        <div class="left">
-                            <div class="icon"></div>
-                            <div>
-                                首次代购<br />
-                                <span class="price">+100</span>
+                            <div class="right">
+                                <button>立即完善</button>
                             </div>
-                        </div>
-                        <div class="right">
-                            <button>去代购</button>
-                        </div>
-                    </li>
-                    <li class="mui-table-view-cell">
-                        <div class="left">
-                            <div class="icon"></div>
-                            <div>
-                                首次代运<br />
-                                <span class="price">+100</span>
+                        </li>
+                        <li class="mui-table-view-cell">
+                            <div class="left">
+                                <div class="icon"></div>
+                                <div>
+                                    首次代购<br />
+                                    <span class="price">+100</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="right">
-                            <button>去代运</button>
-                        </div>
-                    </li>
-                </ul>
-            </section>
+                            <div class="right">
+                                <button>去代购</button>
+                            </div>
+                        </li>
+                        <li class="mui-table-view-cell">
+                            <div class="left">
+                                <div class="icon"></div>
+                                <div>
+                                    首次代运<br />
+                                    <span class="price">+100</span>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <button>去代运</button>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+            </div>
         </div>
     </div>
 </template>
@@ -289,7 +291,6 @@ $animal-list:
     }
     .get
     {
-        margin-bottom: 70px;
         background: #fff;
 
         &__title

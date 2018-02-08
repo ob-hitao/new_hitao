@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <router-view />
+        <router-view></router-view>
     </div>
 </template>
 
@@ -41,7 +41,6 @@ figure, p, h1, h2, h3, h4
     position: absolute;
     top: 44px;
     bottom: 0;
-    overflow: auto;
     padding: 0 !important;
 }
 /* end */
@@ -73,5 +72,11 @@ figure, p, h1, h2, h3, h4
 .slide-left-leave-active, .slide-right-enter
 {
     transform: translate(-100%, 0);
+}
+
+// auto 滚动
+.plus
+{
+    height: calc(100% + 1px);
 }
 </style>

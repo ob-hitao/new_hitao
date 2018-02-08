@@ -13,11 +13,11 @@ export default
             transitionName: ''
         }
     },
-    //监听路由的路径，可以通过不同的路径去选择不同的切换效果
     watch:
     {
         '$route' (to, from)
         {
+            //监听路由的路径，可以通过不同的路径去选择不同的切换效果
             const toDepth = to.path.split('/').length,
                   fromDepth = from.path.split('/').length;
             this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left';

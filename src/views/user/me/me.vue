@@ -3,7 +3,7 @@
         <div class="user__container">
             <header class="user__info">
                 <div class="user__icon">
-                    <i class="iconfont icon-shezhi"></i>
+                    <router-link to="setting" tag="i" class="iconfont icon-shezhi" append></router-link>
                     <i class="iconfont icon-xinxi"></i>
                 </div>
                 <figure class="user__content">

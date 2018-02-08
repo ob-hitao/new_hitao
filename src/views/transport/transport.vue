@@ -1,91 +1,93 @@
 <template>
     <div class="transport">
         <div class="transport__container">
-            <h2 class="title">转运</h2>
-            <section class="main">
-                <div class="tab">
-                    <button @click="transportFlag = true" :class="{active: transportFlag}">代购服务</button>
-                    <button @click="transportFlag = false" :class="{active: !transportFlag}">国际转运</button>
-                </div>
-                <div v-show="transportFlag" class="dg">
-                    <figure class="dg__item">
-                        <div class="dg__icon"></div>
-                        <figcaption class="dg__content">
-                            <h4 class="dg__title">物美价廉</h4>
-                            <p class="dg__text">在淘宝或其他购物网站上挑选您想要的商品</p>
-                        </figcaption>
+            <div class="plus">
+                <h2 class="title">转运</h2>
+                <section class="main">
+                    <div class="tab">
+                        <button @click="transportFlag = true" :class="{active: transportFlag}">代购服务</button>
+                        <button @click="transportFlag = false" :class="{active: !transportFlag}">国际转运</button>
+                    </div>
+                    <div v-show="transportFlag" class="dg">
+                        <figure class="dg__item">
+                            <div class="dg__icon"></div>
+                            <figcaption class="dg__content">
+                                <h4 class="dg__title">物美价廉</h4>
+                                <p class="dg__text">在淘宝或其他购物网站上挑选您想要的商品</p>
+                            </figcaption>
+                        </figure>
+                        <figure class="dg__item">
+                            <div class="dg__icon"></div>
+                            <figcaption class="dg__content">
+                                <h4 class="dg__title">快速处理</h4>
+                                <p class="dg__text">周一到周六我们会在24小时之内处理你的订单或者包裹</p>
+                            </figcaption>
+                        </figure>
+                        <figure class="dg__item">
+                            <div class="dg__icon"></div>
+                            <figcaption class="dg__content">
+                                <h4 class="dg__title">服务费</h4>
+                                <p class="dg__text">普通会员：6%，黄金会员：5%，铂金会员：4%，钻石会员：3%</p>
+                            </figcaption>
+                        </figure>
+                        <figure class="dg__item">
+                            <div class="dg__icon"></div>
+                            <figcaption class="dg__content">
+                                <h4 class="dg__title">6*14 快捷服务</h4>
+                                <p class="dg__text">我们在周一到周六提供14个小时的在线服务</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div v-show="!transportFlag" class="zy">
+                        <figure class="dg__item">
+                            <div class="dg__icon"></div>
+                            <figcaption class="dg__content">
+                                <h4 class="dg__title">省钱省时</h4>
+                                <p class="dg__text">你可以自己在国内任何网站购买，然后寄到我们仓库</p>
+                            </figcaption>
+                        </figure>
+                        <figure class="dg__item">
+                            <div class="dg__icon"></div>
+                            <figcaption class="dg__content">
+                                <h4 class="dg__title">无服务费</h4>
+                                <p class="dg__text">我们不收取任何服务费，节省了你的费用</p>
+                            </figcaption>
+                        </figure>
+                        <figure class="dg__item">
+                            <div class="dg__icon"></div>
+                            <figcaption class="dg__content">
+                                <h4 class="dg__title">低运费</h4>
+                                <p class="dg__text">我们提供10几种低价的运输方式，总有一种适合你</p>
+                            </figcaption>
+                        </figure>
+                        <figure class="dg__item">
+                            <div class="dg__icon"></div>
+                            <figcaption class="dg__content">
+                                <h4 class="dg__title">验货服务</h4>
+                                <p class="dg__text">如果有需要，我们提供验货服务，可以拍货物的照片给你</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+                </section>
+                <section class="links">
+                    <figure>
+                        <div class="links__icon"></div>
+                        <figcaption class="links__desc">转运订单</figcaption>
                     </figure>
-                    <figure class="dg__item">
-                        <div class="dg__icon"></div>
-                        <figcaption class="dg__content">
-                            <h4 class="dg__title">快速处理</h4>
-                            <p class="dg__text">周一到周六我们会在24小时之内处理你的订单或者包裹</p>
-                        </figcaption>
+                    <figure>
+                        <div class="links__icon"></div>
+                        <figcaption class="links__desc">仓库地址</figcaption>
                     </figure>
-                    <figure class="dg__item">
-                        <div class="dg__icon"></div>
-                        <figcaption class="dg__content">
-                            <h4 class="dg__title">服务费</h4>
-                            <p class="dg__text">普通会员：6%，黄金会员：5%，铂金会员：4%，钻石会员：3%</p>
-                        </figcaption>
+                    <figure>
+                        <div class="links__icon"></div>
+                        <figcaption class="links__desc">转运指引</figcaption>
                     </figure>
-                    <figure class="dg__item">
-                        <div class="dg__icon"></div>
-                        <figcaption class="dg__content">
-                            <h4 class="dg__title">6*14 快捷服务</h4>
-                            <p class="dg__text">我们在周一到周六提供14个小时的在线服务</p>
-                        </figcaption>
+                    <figure>
+                        <div class="links__icon"></div>
+                        <figcaption class="links__desc">运费估算</figcaption>
                     </figure>
-                </div>
-                <div v-show="!transportFlag" class="zy">
-                    <figure class="dg__item">
-                        <div class="dg__icon"></div>
-                        <figcaption class="dg__content">
-                            <h4 class="dg__title">省钱省时</h4>
-                            <p class="dg__text">你可以自己在国内任何网站购买，然后寄到我们仓库</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="dg__item">
-                        <div class="dg__icon"></div>
-                        <figcaption class="dg__content">
-                            <h4 class="dg__title">无服务费</h4>
-                            <p class="dg__text">我们不收取任何服务费，节省了你的费用</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="dg__item">
-                        <div class="dg__icon"></div>
-                        <figcaption class="dg__content">
-                            <h4 class="dg__title">低运费</h4>
-                            <p class="dg__text">我们提供10几种低价的运输方式，总有一种适合你</p>
-                        </figcaption>
-                    </figure>
-                    <figure class="dg__item">
-                        <div class="dg__icon"></div>
-                        <figcaption class="dg__content">
-                            <h4 class="dg__title">验货服务</h4>
-                            <p class="dg__text">如果有需要，我们提供验货服务，可以拍货物的照片给你</p>
-                        </figcaption>
-                    </figure>
-                </div>
-            </section>
-            <section class="links">
-                <figure>
-                    <div class="links__icon"></div>
-                    <figcaption class="links__desc">转运订单</figcaption>
-                </figure>
-                <figure>
-                    <div class="links__icon"></div>
-                    <figcaption class="links__desc">仓库地址</figcaption>
-                </figure>
-                <figure>
-                    <div class="links__icon"></div>
-                    <figcaption class="links__desc">转运指引</figcaption>
-                </figure>
-                <figure>
-                    <div class="links__icon"></div>
-                    <figcaption class="links__desc">运费估算</figcaption>
-                </figure>
-            </section>
+                </section>
+            </div>
         </div>
         <v-footer></v-footer>
     </div>
@@ -254,7 +256,6 @@ export default
             display: flex;
             justify-content: space-around;
             padding: 15px 25px;
-            margin-bottom: 50px;
             text-align: center;
             background: #fff;
 
