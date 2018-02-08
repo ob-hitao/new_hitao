@@ -42,13 +42,10 @@ export default
 <style scoped lang="scss" rel="stylesheet/scss">
 .child-child-view
 {
-    position: absolute;
-    top: 44px;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 999;
-    overflow: auto;
     transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+}
+.mui-bar-nav
+{
+    position: relative;
 }
 </style>

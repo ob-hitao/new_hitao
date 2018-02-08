@@ -40,8 +40,12 @@ figure, p, h1, h2, h3, h4
 {
     position: absolute;
     top: 44px;
+    right: 0;
     bottom: 0;
+    left: 0;
+    z-index: 999;
     padding: 0 !important;
+    overflow: auto;
 }
 /* end */
 @font-face

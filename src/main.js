@@ -10,7 +10,7 @@ import '@/assets/fonts/iconfont.scss';
 
 // 移动端 click 事件消除
 FastClick.attach(document.body);
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
