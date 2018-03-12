@@ -41,6 +41,7 @@ export default
 
         .tips
         {
+            margin-bottom: 10px;
             color: #888888;
             font-size: 12px;
             text-align: center;

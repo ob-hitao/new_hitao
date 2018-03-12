@@ -5,9 +5,9 @@
                 <router-link :to="{path: 'users', query: {title: '账号管理'}}" tag="li" class="mui-table-view-cell" append>
                     <a class="mui-navigate-right">账号管理</a>
                 </router-link>
-                <li class="mui-table-view-cell">
+                <router-link :to="{path: 'language', query: {title: 'null'}}"" tag="li" class="mui-table-view-cell" append>
                     <a class="mui-navigate-right">语言设置language</a>
-                </li>
+                </router-link>
                 <router-link :to="{path: 'guide', query: {title: '关于我们'}}" tag="li" class="mui-table-view-cell" append>
                     <a class="mui-navigate-right">使用指南</a>
                 </router-link>
@@ -33,7 +33,7 @@ export default
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">
-@import "../../../../assets/scss/_parameter";
+@import "../../../../assets/scss/parameter";
 .setting
 {
     font-size: 14px;

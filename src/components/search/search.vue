@@ -1,10 +1,10 @@
 <template>
     <section class="search">
-        <div class="search__main">
-            <input class="search__text" type="text" placeholder="请输入淘宝链接或者关键字">
+        <router-link to="shopping_search" tag="div" class="search__main">
+            <div class="search__text">请输入淘宝链接或关键字</div>
             <i class="iconfont icon-sousuo1"></i>
             <i class="iconfont icon-xiangji"></i>
-        </div>
+        </router-link>
         <i class="iconfont icon-xinxi"></i>
     </section>
 </template>
@@ -54,10 +54,13 @@ export default
     {
         margin: 0;
         height: 30px;
+        line-height: 30px;
         border-radius: 5px;
         border: none;
         font-size: 14px;
-        text-indent: 15px;
+        text-indent: 30px;
+        color: #c7c7ca;
+        background: #fff;
     }
     .icon-xinxi
     {

@@ -16,6 +16,13 @@ export default
             plus.navigator.setStatusBarBackground('#e95168');
             plus.navigator.setStatusBarStyle('light');
         });
+    },
+    watch:
+    {
+        '$route' (to, from)
+        {
+
+        }
     }
 }
 </script>

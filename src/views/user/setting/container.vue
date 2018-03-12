@@ -1,6 +1,6 @@
 <template>
     <div class="setting">
-        <header class="mui-bar mui-bar-nav">
+        <header v-if="titleShow" class="mui-bar mui-bar-nav">
             <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
             <h1 class="mui-title animated" :class="transitionTitle" style="position: absolute">{{title}}</h1>
         </header>
@@ -18,7 +18,8 @@ export default
         return {
             title: '设置',
             transitionName: '',
-            transitionTitle: ''
+            transitionTitle: '',
+            titleShow: true
         }
     },
     watch:
@@ -28,6 +29,7 @@ export default
             //设置标题
             let query = to.query;
             this.title = typeof query.title != 'undefined' ? query.title : '设置';
+            this.titleShow = query.title == 'null' ? false : true;
 
             //监听路由的路径，可以通过不同的路径去选择不同的切换效果
             const toDepth = to.path.split('/').length,

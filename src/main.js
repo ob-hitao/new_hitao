@@ -5,7 +5,7 @@ import FastClick from 'fastclick';
 import App from './App';
 import router from './router';
 
-import 'animate.css';
+// import 'animate.css';
 import '@/assets/fonts/iconfont.scss';
 
 // 移动端 click 事件消除

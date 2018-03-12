@@ -195,6 +195,7 @@ $animal-list:
     position: absolute;
     top: 0;
     bottom: 50px;
+    width: 100%;
     overflow: auto;
 }
 .elastic_module
@@ -248,6 +249,7 @@ $animal-list:
 {
     display: flex;
     flex-direction: column;
+    background: #efeff4;
 
     &__info
     {
