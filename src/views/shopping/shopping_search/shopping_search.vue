@@ -149,9 +149,9 @@ export default
         .mui-action-back
         {
             color: #fff;
-            font-size: 16px;
+            font-size: 13px;
             line-height: 30px;
-            margin-left: 9px;
+            margin-left: 8px;
         }
     }
     .mui-content

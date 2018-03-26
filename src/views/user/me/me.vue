@@ -84,12 +84,12 @@
                             优惠券
                         </figcaption>
                     </figure>
-                    <figure class="elastic_module__wrap">
+                    <router-link to="collection" class="elastic_module__wrap" append>
                         <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             我的收藏
                         </figcaption>
-                    </figure>
+                    </router-link>
                     <figure class="elastic_module__wrap">
                         <div class="icon"></div>
                         <figcaption class="elastic_module__description">
@@ -120,36 +120,36 @@
                             帮助中心
                         </figcaption>
                     </figure>
-                    <figure class="elastic_module__wrap">
+                    <router-link to="warehouse" class="elastic_module__wrap" append>
                         <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             仓库地址
                         </figcaption>
-                    </figure>
-                    <figure class="elastic_module__wrap">
+                    </router-link>
+                    <router-link to="feedback" class="elastic_module__wrap" append>
                         <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             意见反馈
                         </figcaption>
-                    </figure>
-                    <figure class="elastic_module__wrap">
+                    </router-link>
+                    <router-link to="address" class="elastic_module__wrap" append>
                         <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             地址管理
                         </figcaption>
-                    </figure>
+                    </router-link>
                     <figure class="elastic_module__wrap">
                         <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             运费试算
                         </figcaption>
                     </figure>
-                    <figure class="elastic_module__wrap">
+                    <router-link to="user_info" class="elastic_module__wrap" append>
                         <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             我的信息
                         </figcaption>
-                    </figure>
+                    </router-link>
                 </div>
             </section>
         </div>

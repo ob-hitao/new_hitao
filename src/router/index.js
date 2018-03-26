@@ -19,6 +19,13 @@ import about from '@/views/user/setting/about/about';
 import users from '@/views/user/setting/users/users';
 import language from '@/views/user/setting/language/language';
 import login from '@/views/user/login/login';
+import warehouse from '@/views/user/warehouse/warehouse';
+import feedback from '@/views/user/feedback/feedback';
+import user_info from '@/views/user/user_info/user_info';
+import notice from '@/views/user/notice/notice';
+import collection from '@/views/user/collection/collection';
+import address from '@/views/user/address/address';
+import add_address from '@/views/user/address/add_address/add_address';
 
 Vue.use(Router)
 
@@ -86,6 +93,34 @@ export default new Router
                 {
                     path: 'login',
                     component: login
+                },
+                {
+                    path: 'warehouse',
+                    component: warehouse
+                },
+                {
+                    path: 'feedback',
+                    component: feedback
+                },
+                {
+                    path: 'user_info',
+                    component: user_info
+                },
+                {
+                    path: 'notice',
+                    component: notice
+                },
+                {
+                    path: 'collection',
+                    component: collection
+                },
+                {
+                    path: 'address',
+                    component: address
+                },
+                {
+                    path: 'address/add_address',
+                    component: add_address
                 }
             ]
         },
