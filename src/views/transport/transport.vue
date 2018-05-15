@@ -78,10 +78,10 @@
                         <div class="links__icon"></div>
                         <figcaption class="links__desc">仓库地址</figcaption>
                     </figure>
-                    <figure>
+                    <router-link to="guidance" tag="figure" append>
                         <div class="links__icon"></div>
                         <figcaption class="links__desc">转运指引</figcaption>
-                    </figure>
+                    </router-link>
                     <figure>
                         <div class="links__icon"></div>
                         <figcaption class="links__desc">运费估算</figcaption>

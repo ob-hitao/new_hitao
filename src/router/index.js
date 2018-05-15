@@ -1,19 +1,28 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+/************************************* transitions **************************************/
+import container from '@/components/container/container';
+import setcontainer from '@/components/setcontainer/setcontainer';
+
+/************************************* home **************************************/
 import home from '@/views/home/home';
 
+/************************************* shopping **************************************/
 import shopping from '@/views/shopping/shopping';
 import shopping_search from '@/views/shopping/shopping_search/shopping_search';
 
+/************************************* transport **************************************/
 import transport from '@/views/transport/transport';
+import guidance from '@/views/transport/guidance/guidance';
+
+/************************************* shopping_cart **************************************/
 import shopping_cart from '@/views/shopping_cart/shopping_cart';
 
+/************************************* user **************************************/
 import user from '@/views/user/user';
-import me from '@/views/user/me/me';
 import checkin from '@/views/user/checkin/checkin';
-import container from '@/views/user/setting/container';
-import setting from '@/views/user/setting/setting/setting';
+import setting from '@/views/user/setting/setting';
 import guide from '@/views/user/setting/guide/guide';
 import about from '@/views/user/setting/about/about';
 import users from '@/views/user/setting/users/users';
@@ -26,6 +35,11 @@ import notice from '@/views/user/notice/notice';
 import collection from '@/views/user/collection/collection';
 import address from '@/views/user/address/address';
 import add_address from '@/views/user/address/add_address/add_address';
+import wallet from '@/views/user/wallet/wallet';
+import expenses_record from '@/views/user/wallet/expenses_record/expenses_record';
+import alipay from '@/views/user/alipay/alipay';
+import alipayguidance from '@/views/user/alipay/alipayguidance/alipayguidance';
+import invite from '@/views/user/invite/invite';
 
 Vue.use(Router)
 
@@ -33,7 +47,6 @@ export default new Router
 ({
     routes:
     [
-        // 基本界面
         {
             path: '/',
             component: home
@@ -44,20 +57,31 @@ export default new Router
         },
         {
             path: '/transport',
-            component: transport
+            component: container,
+            children:
+            [
+                {
+                    path: '/',
+                    component: transport
+                },
+                {
+                    path: 'guidance',
+                    component: guidance
+                }
+            ]
         },
         {
             path: '/shopping_cart',
             component: shopping_cart
         },
         {
-            path: '/user/',
-            component: user,
+            path: '/user',
+            component: container,
             children:
             [
                 {
                     path: '/',
-                    component: me
+                    component: user
                 },
                 {
                     path: 'checkin',
@@ -65,7 +89,7 @@ export default new Router
                 },
                 {
                     path: 'setting',
-                    component: container,
+                    component: setcontainer,
                     children:
                     [
                         {
@@ -95,6 +119,21 @@ export default new Router
                     component: login
                 },
                 {
+                    path: 'wallet',
+                    component: container,
+                    children:
+                    [
+                        {
+                            path: '/',
+                            component: wallet
+                        },
+                        {
+                            path: 'expenses_record',
+                            component: expenses_record
+                        }
+                    ]
+                },
+                {
                     path: 'warehouse',
                     component: warehouse
                 },
@@ -115,12 +154,38 @@ export default new Router
                     component: collection
                 },
                 {
-                    path: 'address',
-                    component: address
+                    path: 'alipay',
+                    component: container,
+                    children:
+                    [
+                        {
+                            path: '/',
+                            component: alipay,
+                        },
+                        {
+                            path: 'alipayguidance',
+                            component: alipayguidance,
+                        }
+                    ]
                 },
                 {
-                    path: 'address/add_address',
-                    component: add_address
+                    path: 'invite',
+                    component: invite
+                },
+                {
+                    path: 'address',
+                    component: container,
+                    children:
+                    [
+                        {
+                            path: '/',
+                            component: address
+                        },
+                        {
+                            path: 'add_address',
+                            component: add_address
+                        }
+                    ]
                 }
             ]
         },

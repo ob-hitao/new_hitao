@@ -1,6 +1,6 @@
 <template>
     <div class="shopping_search">
-        <header class="search">
+        <section class="search">
             <div class="search__main">
                 <form>
                     <input class="search__text" type="search" placeholder="请输入淘宝链接或者关键字" />
@@ -8,11 +8,6 @@
                 </form>
             </div>
             <span class="mui-action-back">取消</span>
-        </header>
-        <section >
-            <router-link to="shopping_search" tag="div" >
-                <div class="">请输入淘宝链接或关键字</div>
-            </router-link>
         </section>
         <div class="mui-content">
             <div class="plus">
@@ -153,10 +148,6 @@ export default
             line-height: 30px;
             margin-left: 8px;
         }
-    }
-    .mui-content
-    {
-        top: 40px;
     }
     .elastic_module
     {

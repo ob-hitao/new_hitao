@@ -33,7 +33,7 @@ export default
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">
-@import "../../../../assets/scss/parameter";
+@import "../../../assets/scss/parameter";
 .setting
 {
     font-size: 14px;

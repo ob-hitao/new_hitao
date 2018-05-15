@@ -29,7 +29,7 @@
                 <v-no_data icon="icon-address" text="您还没有收货地址"></v-no_data>
             </div>
         </div>
-        <router-link to="address/add_address" tag="footer" class="footer">
+        <router-link to="add_address" tag="footer" class="footer" append>
             新增收货地址
         </router-link>
     </div>

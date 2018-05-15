@@ -104,10 +104,22 @@ export default
             a
             {
                 padding-right: 35px;
+                background: #fff !important;
+
 
                 span
                 {
                     float: right;
+                }
+                input, select
+                {
+                    margin: 0;
+                    width: 85%;
+                    padding: 0 15px;
+                    height: auto;
+                    float: right;
+                    border: none;
+                    font-size: inherit;
                 }
             }
         }

@@ -49,6 +49,26 @@ export default
     components:
     {
         vHeader
+    },
+    created()
+    {
+        this.taggleBg('#fff', 'dark');
+    },
+    beforeDestroy()
+    {
+        this.taggleBg('#e95168', 'light');
+    },
+    methods:
+    {
+        taggleBg(bg, style)
+        {
+            mui.plusReady(() =>
+            {
+                // 系统顶部样式
+                plus.navigator.setStatusBarBackground(bg);
+                plus.navigator.setStatusBarStyle(style);
+            });
+        }
     }
 }
 </script>
