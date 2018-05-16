@@ -37,9 +37,14 @@ import address from '@/views/user/address/address';
 import add_address from '@/views/user/address/add_address/add_address';
 import wallet from '@/views/user/wallet/wallet';
 import expenses_record from '@/views/user/wallet/expenses_record/expenses_record';
+import rechange from '@/views/user/wallet/rechange/rechange';
+import offline_recharge from '@/views/user/wallet/rechange/offline_recharge/offline_recharge';
 import alipay from '@/views/user/alipay/alipay';
 import alipayguidance from '@/views/user/alipay/alipayguidance/alipayguidance';
 import invite from '@/views/user/invite/invite';
+import integral from '@/views/user/integral/integral';
+import help from '@/views/user/help/help';
+import help_details from '@/views/user/help/help_details/help_details';
 
 Vue.use(Router)
 
@@ -130,6 +135,21 @@ export default new Router
                         {
                             path: 'expenses_record',
                             component: expenses_record
+                        },
+                        {
+                            path: 'rechange',
+                            component: container,
+                            children:
+                            [
+                                {
+                                    path: '/',
+                                    component: rechange,
+                                },
+                                {
+                                    path: 'offline_recharge',
+                                    component: offline_recharge,
+                                }
+                            ]
                         }
                     ]
                 },
@@ -171,6 +191,25 @@ export default new Router
                 {
                     path: 'invite',
                     component: invite
+                },
+                {
+                    path: 'integral',
+                    component: integral
+                },
+                {
+                    path: 'help',
+                    component: container,
+                    children:
+                    [
+                        {
+                            path: '/',
+                            component: help
+                        },
+                        {
+                            path: 'help_details',
+                            component: help_details
+                        }
+                    ]
                 },
                 {
                     path: 'address',

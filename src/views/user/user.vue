@@ -56,18 +56,18 @@
                     <span>我的资产</span>
                 </h4>
                 <div class="elastic_module__content">
-                    <router-link to="wallet" class="elastic_module__wrap" append>
+                    <router-link to="wallet" tag="figure" class="elastic_module__wrap" append>
                         <figcaption class="elastic_module__description">
                             ￥0.00<br />
                             当前余额
                         </figcaption>
                     </router-link>
-                    <figure class="elastic_module__wrap">
+                    <router-link to="integral" tag="figure" class="elastic_module__wrap" append>
                         <figcaption class="elastic_module__description">
                             0<br />
                             会员积分
                         </figcaption>
-                    </figure>
+                    </router-link>
                     <figure class="elastic_module__wrap">
                         <figcaption class="elastic_module__description">
                             ￥0.00<br />
@@ -114,12 +114,12 @@
                             在线客服
                         </figcaption>
                     </figure>
-                    <figure class="elastic_module__wrap">
+                    <router-link to="help" class="elastic_module__wrap" append>
                         <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             帮助中心
                         </figcaption>
-                    </figure>
+                    </router-link>
                     <router-link to="warehouse" class="elastic_module__wrap" append>
                         <div class="icon"></div>
                         <figcaption class="elastic_module__description">

@@ -12,8 +12,8 @@
                         <span>￥0.00</span>
                     </figcaption>
                 </figure>
-                <button class="rechange">充值</button>
-                <button class="withdraw">提现</button>
+                <router-link to="rechange" tag="button" class="rechange" append>充值</router-link>
+                <router-link to="" tag="button" class="withdraw" append>提现</router-link>
                 <ul class="mui-table-view">
                     <li class="mui-table-view-cell">充值记录</li>
                     <li class="mui-table-view-cell wallet__list">

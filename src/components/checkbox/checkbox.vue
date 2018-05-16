@@ -36,11 +36,12 @@ export default
     .iconfont
     {
         font-size: 20px;
-        color: $theme;
+        color: #c8c8c8;
     }
     .icon-selected
     {
         display: none;
+        color: $theme;
     }
 }
 </style>
