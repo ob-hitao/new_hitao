@@ -138,12 +138,12 @@
                             地址管理
                         </figcaption>
                     </router-link>
-                    <figure class="elastic_module__wrap">
+                    <router-link to="calculation" class="elastic_module__wrap" append>
                         <div class="icon"></div>
                         <figcaption class="elastic_module__description">
                             运费试算
                         </figcaption>
-                    </figure>
+                    </router-link>
                     <router-link to="user_info" class="elastic_module__wrap" append>
                         <div class="icon"></div>
                         <figcaption class="elastic_module__description">

@@ -29,7 +29,7 @@ export default
             }
             &~.icon-selected
             {
-                display: block;
+                display: inline-block;
             }
         }
     }

@@ -11,6 +11,7 @@ import home from '@/views/home/home';
 /************************************* shopping **************************************/
 import shopping from '@/views/shopping/shopping';
 import shopping_search from '@/views/shopping/shopping_search/shopping_search';
+import pay from '@/views/shopping/pay/pay';
 
 /************************************* transport **************************************/
 import transport from '@/views/transport/transport';
@@ -45,6 +46,7 @@ import invite from '@/views/user/invite/invite';
 import integral from '@/views/user/integral/integral';
 import help from '@/views/user/help/help';
 import help_details from '@/views/user/help/help_details/help_details';
+import calculation from '@/views/user/calculation/calculation';
 
 Vue.use(Router)
 
@@ -58,7 +60,18 @@ export default new Router
         },
         {
             path: '/shopping',
-            component: shopping
+            component: container,
+            children:
+            [
+                {
+                    path: '/',
+                    component: shopping
+                },
+                {
+                    path: 'pay',
+                    component: pay
+                }
+            ]
         },
         {
             path: '/transport',
@@ -195,6 +208,10 @@ export default new Router
                 {
                     path: 'integral',
                     component: integral
+                },
+                {
+                    path: 'calculation',
+                    component: calculation
                 },
                 {
                     path: 'help',
