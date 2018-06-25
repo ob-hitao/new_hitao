@@ -47,6 +47,16 @@ import integral from '@/views/user/integral/integral';
 import help from '@/views/user/help/help';
 import help_details from '@/views/user/help/help_details/help_details';
 import calculation from '@/views/user/calculation/calculation';
+import coupon from '@/views/user/coupon/coupon';
+import exchange from '@/views/user/coupon/exchange/exchange';
+
+import order from '@/views/user/order/order';
+import order_desc from '@/views/user/order/order_desc/order_desc';
+import order_submit from '@/views/user/order/order_submit/order_submit';
+import order_logistics from '@/views/user/order/order_submit/order_logistics/order_logistics';
+
+import waybill from '@/views/user/waybill/waybill';
+
 
 Vue.use(Router)
 
@@ -241,6 +251,66 @@ export default new Router
                             path: 'add_address',
                             component: add_address
                         }
+                    ]
+                },
+                {
+                    path: 'coupon',
+                    component: container,
+                    children:
+                    [
+                        {
+                            path: '/',
+                            component: coupon
+                        },
+                        {
+                            path: 'exchange',
+                            component: exchange
+                        }
+                    ]
+                },
+                {
+                    path: 'order',
+                    component: container,
+                    children:
+                    [
+                        {
+                            path: '/',
+                            component: order
+                        },
+                        {
+                            path: 'order_desc',
+                            component: order_desc
+                        },
+                        {
+                            path: 'order_submit',
+                            component: container,
+                            children:
+                            [
+                                {
+                                    path: '/',
+                                    component: order_submit
+                                },
+                                {
+                                    path: 'order_logistics',
+                                    component: order_logistics
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    path: 'waybill',
+                    component: container,
+                    children:
+                    [
+                        {
+                            path: '/',
+                            component: waybill
+                        },
+                        // {
+                        //     path: 'exchange',
+                        //     component: exchange
+                        // }
                     ]
                 }
             ]
