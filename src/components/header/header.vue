@@ -1,6 +1,6 @@
 <template>
     <header class="mui-bar mui-bar-nav">
-        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <a v-if="backShow" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
         <h1 class="mui-title">{{title}}</h1>
         <slot></slot>
     </header>
@@ -11,7 +11,12 @@ export default
 {
     props:
     {
-        title: String
+        title: String,
+        backShow:
+        {
+            type: Boolean,
+            default: true
+        }
     }
 }
 </script>

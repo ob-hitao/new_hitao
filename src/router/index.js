@@ -12,6 +12,8 @@ import home from '@/views/home/home';
 import shopping from '@/views/shopping/shopping';
 import shopping_search from '@/views/shopping/shopping_search/shopping_search';
 import pay from '@/views/shopping/pay/pay';
+import shopping_list from '@/views/shopping/shopping_list/shopping_list';
+import shopping_desc from '@/views/shopping/shopping_list/shopping_desc/shopping_desc';
 
 /************************************* transport **************************************/
 import transport from '@/views/transport/transport';
@@ -19,6 +21,7 @@ import guidance from '@/views/transport/guidance/guidance';
 
 /************************************* shopping_cart **************************************/
 import shopping_cart from '@/views/shopping_cart/shopping_cart';
+import clearing from '@/views/shopping_cart/clearing/clearing';
 
 /************************************* user **************************************/
 import user from '@/views/user/user';
@@ -56,6 +59,7 @@ import order_submit from '@/views/user/order/order_submit/order_submit';
 import order_logistics from '@/views/user/order/order_submit/order_logistics/order_logistics';
 
 import waybill from '@/views/user/waybill/waybill';
+import mypackage_desc from '@/views/user/waybill/mypackage_desc/mypackage_desc';
 
 
 Vue.use(Router)
@@ -80,6 +84,21 @@ export default new Router
                 {
                     path: 'pay',
                     component: pay
+                },
+                {
+                    path: 'shopping_list',
+                    component: container,
+                    children:
+                    [
+                        {
+                            path: '/',
+                            component: shopping_list
+                        },
+                        {
+                            path: 'shopping_desc',
+                            component: shopping_desc
+                        }
+                    ]
                 }
             ]
         },
@@ -100,7 +119,18 @@ export default new Router
         },
         {
             path: '/shopping_cart',
-            component: shopping_cart
+            component: container,
+            children:
+            [
+                {
+                    path: '/',
+                    component: shopping_cart
+                },
+                {
+                    path: 'clearing',
+                    component: clearing
+                }
+            ]
         },
         {
             path: '/user',
@@ -300,18 +330,11 @@ export default new Router
                 },
                 {
                     path: 'waybill',
-                    component: container,
-                    children:
-                    [
-                        {
-                            path: '/',
-                            component: waybill
-                        },
-                        // {
-                        //     path: 'exchange',
-                        //     component: exchange
-                        // }
-                    ]
+                    component: waybill
+                },
+                {
+                    path: 'waybill/mypackage_desc',
+                    component: mypackage_desc
                 }
             ]
         },

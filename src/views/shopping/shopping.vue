@@ -1,6 +1,6 @@
 <template>
     <div class="shopping">
-        <v-search></v-search>
+        <v-search icon="icon-xinxi"></v-search>
         <div class="shopping__container">
             <div class="menu">
                 <ul>

@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-      <v-search></v-search>
+      <v-search icon="icon-xinxi"></v-search>
       <div class="home__container">
           <v-slider></v-slider>
           <v-goods v-for="n in 10" :key="'goods' + n"></v-goods>

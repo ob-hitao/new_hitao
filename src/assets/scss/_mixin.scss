@@ -38,3 +38,11 @@
         background-image: url("#{$url}@3x.png");
     }
 }
+// 行省略
+@mixin line-omitted($default: 2)
+{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $default;
+    overflow: hidden;
+}

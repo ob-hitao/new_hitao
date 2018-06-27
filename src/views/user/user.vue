@@ -58,19 +58,19 @@
                     <span>转运订单</span>
                 </h4>
                 <div class="elastic_module__content">
-                    <router-link to="waybill" tag="figure" class="elastic_module__wrap" append>
+                    <router-link :to="{path: 'waybill', query: {modules: 'mypackage'}}" tag="figure" class="elastic_module__wrap" append>
                         <i class="iconfont icon-baoguoxia"></i>
                         <figcaption class="elastic_module__description">
                             我的包裹
                         </figcaption>
                     </router-link>
-                    <router-link to="waybill" tag="figure" class="elastic_module__wrap" append>
+                    <router-link :to="{path: 'waybill', query: {modules: 'submit'}}" tag="figure" class="elastic_module__wrap" append>
                         <i class="iconfont icon-liebiao1"></i>
                         <figcaption class="elastic_module__description">
                             提交代购订单
                         </figcaption>
                     </router-link>
-                    <router-link to="waybill" tag="figure" class="elastic_module__wrap" append>
+                    <router-link :to="{path: 'waybill', query: {modules: 'other'}}" tag="figure" class="elastic_module__wrap" append>
                         <i class="iconfont icon-zongheyewudingdan"></i>
                         <figcaption class="elastic_module__description">
                             其他订单

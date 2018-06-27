@@ -77,6 +77,7 @@
         .iconfont
         {
             margin-left: 20px;
+            font-size: 22px;
         }
     }
     .tab

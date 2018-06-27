@@ -1,18 +1,22 @@
 <template>
     <section class="search">
+        <slot></slot>
         <router-link to="shopping_search" tag="div" class="search__main">
             <div class="search__text">请输入淘宝链接或关键字</div>
             <i class="iconfont icon-sousuo1"></i>
             <i class="iconfont icon-xiangji"></i>
         </router-link>
-        <i class="iconfont icon-xinxi"></i>
+        <i class="iconfont icontaggle" :class="icon"></i>
     </section>
 </template>
 
 <script>
 export default
 {
-
+    props:
+    {
+        icon: String
+    }
 }
 </script>
 
@@ -62,7 +66,7 @@ export default
         color: #c7c7ca;
         background: #fff;
     }
-    .icon-xinxi
+    .icontaggle
     {
         color: #fff;
         font-size: 25px;
