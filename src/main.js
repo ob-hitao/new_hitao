@@ -4,12 +4,15 @@ import Vue from 'vue';
 import FastClick from 'fastclick';
 import App from './App';
 import router from './router';
+import API from '@/assets/js/api';
 
 import 'animate.css';
 import '@/assets/fonts/iconfont.scss';
 
 // 移动端 click 事件消除
 FastClick.attach(document.body);
+// api
+Vue.prototype.API = API;
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */

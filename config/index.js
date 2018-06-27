@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '/api': {
-            target: 'http://mock.l.onebound.cn/',
+            target: 'http://hitao.dev.onebound.cn/api/app.php',
             changeOrigin: true,
             pathRewrite: {
                 '^/api': '/'

@@ -1,6 +1,6 @@
 <template>
     <div class="waybill">
-        <v-header title="代购订单"><i class="iconfont icon-msnui-more"></i></v-header>
+        <v-header title="转运订单"><i class="iconfont icon-msnui-more"></i></v-header>
         <div class="mui-content">
             <nav class="tab">
                 <div class="tab__item" @click="modules = 'mypackage'">

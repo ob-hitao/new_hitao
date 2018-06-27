@@ -2,40 +2,22 @@
     <section class="mui-slider">
         <div class="mui-slider-group mui-slider-loop">
             <!--支持循环，需要重复图片节点-->
-            <div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img :src="images[images.length - 1].src" /></a></div>
-            <div class="mui-slider-item" v-for="item in images"><a href="#"><img :src="item.src" /></a></div>
+            <div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img :src="images[images.length - 1].link + images[images.length - 1].img" /></a></div>
+            <div class="mui-slider-item" v-for="item in images"><a href="#"><img :src="item.link + item.img" /></a></div>
             <!--支持循环，需要重复图片节点-->
-            <div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img :src="images[0].src" /></a></div>
+            <div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img :src="images[0].link + images[0].img" /></a></div>
         </div>
     </section>
 </template>
 
 <script>
-import {getDpi, imgAuto} from '@/assets/js/common';  //公共函数库
+import {getDpi} from '@/assets/js/common';  //公共函数库
 
 export default
 {
-    data()
+    props:
     {
-        return {
-            images:
-            [
-                {
-                    src: 'home_banner1'
-                },
-                {
-                    src: 'home_banner2'
-                },
-                {
-                    src: 'home_banner3'
-                }
-            ]
-        }
-    },
-    created()
-    {
-        let dpi = getDpi();
-        this.images.forEach(el => el.src = require(`./${el.src}@${dpi}x.png`));
+        images: Array
     },
     mounted()
     {
@@ -51,9 +33,9 @@ export default
 <style scoped lang="scss" rel="stylesheet/scss">
 .mui-slider
 {
-    img
-    {
-        height: 131px;
-    }
+    /*img*/
+    /*{*/
+        /*height: 131px;*/
+    /*}*/
 }
 </style>

@@ -70,22 +70,22 @@
                     </div>
                 </section>
                 <section class="links">
-                    <figure>
+                    <router-link to="/user/waybill?modules=submit" tag="figure">
                         <div class="links__icon"></div>
                         <figcaption class="links__desc">转运订单</figcaption>
-                    </figure>
-                    <figure>
+                    </router-link>
+                    <router-link to="/user/warehouse" tag="figure">
                         <div class="links__icon"></div>
                         <figcaption class="links__desc">仓库地址</figcaption>
-                    </figure>
+                    </router-link>
                     <router-link to="guidance" tag="figure" append>
                         <div class="links__icon"></div>
                         <figcaption class="links__desc">转运指引</figcaption>
                     </router-link>
-                    <figure>
+                    <router-link to="/user/calculation" tag="figure">
                         <div class="links__icon"></div>
                         <figcaption class="links__desc">运费估算</figcaption>
-                    </figure>
+                    </router-link>
                 </section>
             </div>
         </div>

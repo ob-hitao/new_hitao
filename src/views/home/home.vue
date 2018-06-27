@@ -2,7 +2,7 @@
   <div class="home">
       <v-search icon="icon-xinxi"></v-search>
       <div class="home__container">
-          <v-slider></v-slider>
+          <v-slider v-if="bannerList.length" :images="bannerList"></v-slider>
           <v-goods v-for="n in 10" :key="'goods' + n"></v-goods>
           <p class="tips">没有更多了</p>
       </div>
@@ -16,6 +16,8 @@ import vSearch from '@/components/search/search';
 import vSlider from '@/components/slider/slider';
 import vGoods from '@/components/goods/goods';
 
+import {postJSON} from '@/assets/js/common';  //公共函数库
+
 export default
 {
     components:
@@ -24,6 +26,17 @@ export default
         vSearch,
         vSlider,
         vGoods
+    },
+    data()
+    {
+        return {
+            bannerList: []
+        }
+    },
+    created()
+    {
+        // 轮播
+        postJSON(this.API.INDEX_CAROUSEL, {}, data => this.bannerList = data.list);
     }
 }
 </script>
