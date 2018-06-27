@@ -1,7 +1,7 @@
 <template>
     <section class="search">
         <slot></slot>
-        <router-link to="shopping_search" tag="div" class="search__main">
+        <router-link to="/shopping_search" tag="div" class="search__main">
             <div class="search__text">请输入淘宝链接或关键字</div>
             <i class="iconfont icon-sousuo1"></i>
             <i class="iconfont icon-xiangji"></i>
@@ -69,7 +69,7 @@ export default
     .icontaggle
     {
         color: #fff;
-        font-size: 25px;
+        font-size: 21px;
         line-height: 30px;
         margin-left: 9px;
     }

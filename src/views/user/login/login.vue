@@ -13,19 +13,15 @@
                 <section v-show="taggle == 'login'" class="model-login">
                     <ul>
                         <li>
-                            <input type="text" placeholder="请输入您的用户名" >
+                            <input type="text" placeholder="请输入您的用户名" v-model="login_option.userName" />
                             <i class="iconfont icon-yonghu"></i>
                         </li>
                         <li>
-                            <input type="email" placeholder="请输入您的邮箱" >
-                            <i class="iconfont icon-youxiang"></i>
-                        </li>
-                        <li>
-                            <input type="password" placeholder="请输入您的密码" >
+                            <input type="password" placeholder="请输入您的密码" v-model="login_option.passWord" />
                             <i class="iconfont icon-mima"></i>
                         </li>
                         <li class="submit">
-                            <button type="button" class="mui-btn">登陆</button>
+                            <button @click="login" type="button" class="mui-btn">登陆</button>
                         </li>
                         <li>
                             <p class="forget">忘记密码?</p>
@@ -42,22 +38,22 @@
                 <section v-show="taggle == 'reg'" class="model-reg">
                     <ul>
                         <li>
-                            <input type="text" placeholder="请输入您的用户名" >
+                            <input type="text" placeholder="请输入您的用户名" v-model="reg_option.userName" />
                         </li>
                         <li>
-                            <input type="email" placeholder="请输入您的邮箱" >
+                            <input type="email" placeholder="请输入您的邮箱" v-model="reg_option.userEmail" />
                         </li>
                         <li>
-                            <input type="password" placeholder="请输入6-20位数字、字母或字符的密码" >
+                            <input type="password" placeholder="请输入6-20位数字、字母或字符的密码" v-model="reg_option.passWord" />
                         </li>
                         <li>
-                            <input type="password" placeholder="请再次输入您的密码" >
+                            <input type="password" placeholder="请再次输入您的密码" v-model="reg_option.passWordAgain" />
                         </li>
                         <li class="submit">
-                            <button type="button" class="mui-btn">注册</button>
+                            <button @click="reg" type="button" class="mui-btn">注册</button>
                         </li>
-                        <li class="protocol">
-                            <i class="iconfont icon-weixuanzhongkuang"></i>
+                        <li class="protocol" @click="protocol = !protocol">
+                            <i class="iconfont " :class="[protocol ? 'icon-30xuanzhongfangxing' : 'icon-weixuanzhongkuang']"></i>
                             我同意
                             <span class="link">《注册协议》</span>
                         </li>
@@ -69,12 +65,73 @@
 </template>
 
 <script>
+import {postJSON, isEmail, isPassworld, yesAlert} from '@/assets/js/common';  //公共函数库
+
 export default
 {
     data()
     {
         return {
-            taggle: 'login'
+            taggle: 'login',
+            login_option:
+            {
+                userName: null,
+                passWord: null
+            },
+            reg_option:
+            {
+                userName: null,
+                userEmail: null,
+                passWord: null,
+                passWordAgain: null
+            },
+            protocol: true
+        }
+    },
+    methods:
+    {
+        login()
+        {
+            postJSON(this.API.USER_LOGIN, this.login_option, data =>
+            {
+                if (data.userId)
+                {
+                    localStorage.setItem('userId', JSON.stringify(data.userId));
+                    localStorage.setItem('uname', JSON.stringify(data.uname));
+                    localStorage.setItem('auth', JSON.stringify(data.auth));
+                    yesAlert('登陆成功!', () => this.$router.push({path: '/user'}));
+                }
+            });
+        },
+        reg()
+        {
+            let bomb = null;
+            if (!this.protocol)
+            {
+                bomb = '请同意注册协议！';
+            }
+            if (!isEmail(this.reg_option.userEmail))
+            {
+                bomb = '请输入正确的验证码！';
+            }
+            if (!isPassworld(this.reg_option.passWord))
+            {
+                bomb = '请输入正确的验证码！';
+            }
+            if (this.reg_option.passWord != this.reg_option.passWordAgain)
+            {
+                bomb = '请输入相同的密码！';
+            }
+            if (bomb)
+            {
+                mui.toast(bomb);
+                return;
+            }
+
+            postJSON(this.API.USER_REGISTER, this.reg_option, data =>
+            {
+                yesAlert('注册成功！');
+            });
         }
     }
 }
@@ -240,7 +297,7 @@ export default
                 {
                     text-align: left;
 
-                    .icon-weixuanzhongkuang
+                    .iconfont
                     {
                         position: static;
                         vertical-align: text-bottom;

@@ -3,7 +3,7 @@
       <v-search icon="icon-xinxi"></v-search>
       <div class="home__container">
           <v-slider v-if="bannerList.length" :images="bannerList"></v-slider>
-          <v-goods v-for="n in 10" :key="'goods' + n"></v-goods>
+          <v-goods></v-goods>
           <p class="tips">没有更多了</p>
       </div>
       <v-footer></v-footer>
@@ -30,13 +30,16 @@ export default
     data()
     {
         return {
-            bannerList: []
+            bannerList: [],
+            goodList: []
         }
     },
     created()
     {
         // 轮播
         postJSON(this.API.INDEX_CAROUSEL, {}, data => this.bannerList = data.list);
+        // 推荐商品
+        // postJSON(this.API.INDEX_GOODSRECOMMEND, {}, data => this.goodList = data.list);
     }
 }
 </script>

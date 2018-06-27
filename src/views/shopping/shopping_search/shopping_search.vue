@@ -2,8 +2,8 @@
     <div class="shopping_search">
         <section class="search">
             <div class="search__main">
-                <form>
-                    <input class="search__text" type="search" placeholder="请输入淘宝链接或者关键字" />
+                <form @submit.prevent="search">
+                    <input class="search__text" type="search" placeholder="请输入淘宝链接或者关键字" v-model="query" />
                     <i class="iconfont icon-xiangji"></i>
                 </form>
             </div>
@@ -57,28 +57,17 @@
                 <section class="shopping_search__popular">
                     <h4 class="shopping_search__popular__title">热门搜索</h4>
                     <div class="shopping_search__popular__content">
-                        <span>春季套装</span>
-                        <span>春季套装</span>
-                        <span>春季套装</span>
-                        <span>春季套装</span>
-                        <span>春季套装</span>
-                        <span>春季套装</span>
-                        <span>春季套装</span>
-                        <span>春季套装</span>
-                        <span>春季套装</span>
-                        <span>春季套装</span>
-                        <span>春季套装</span>
-                        <span>春季套装</span>
+                        <span v-for="item in hot">{{item}}</span>
                     </div>
                 </section>
 
                 <section class="shopping_search__history">
                     <h4 class="shopping_search__popular__title">
                         历史记录
-                        <span class="mui-pull-right">清除</span>
+                        <!--<span class="mui-pull-right">清除</span>-->
                     </h4>
                     <div class="shopping_search__popular__content">
-                        <span>123</span>
+                        <span v-for="item in history">{{item.goodsname}}</span>
                     </div>
                 </section>
             </div>
@@ -87,9 +76,33 @@
 </template>
 
 <script>
+import {postJSON} from '@/assets/js/common';  //公共函数库
+
 export default
 {
-
+    data()
+    {
+        return {
+            hot: [],
+            history: [],
+            query: ''
+        }
+    },
+    created()
+    {
+        // 热门搜素
+        postJSON(this.API.HOME_HOTSEARCH, {}, data => this.hot = data.list);
+        // 历史记录
+        let userId = localStorage.getItem('userId');
+        postJSON(this.API.INDEX_HISTORY_RECORD, {userId}, data => this.history = data.list);
+    },
+    methods:
+    {
+        search()
+        {
+            this.$router.push({path: '/shopping/shopping_list', query: {query: this.query}});
+        }
+    }
 }
 </script>
 

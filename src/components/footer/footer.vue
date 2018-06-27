@@ -3,15 +3,35 @@
         <router-link to="/" tag="a" class="nav__item" exact>home</router-link>
         <router-link to="/shopping" tag="a" class="nav__item">shopping</router-link>
         <router-link to="/transport" tag="a" class="nav__item">transport</router-link>
-        <router-link to="/shopping_cart" tag="a" class="nav__item">shopping cart</router-link>
-        <router-link to="/user" tag="a" class="nav__item">me</router-link>
+        <router-link :to="shopping_cart" tag="a" class="nav__item">shopping cart</router-link>
+        <router-link :to="user" tag="a" class="nav__item">me</router-link>
     </nav>
 </template>
 
 <script>
 export default
 {
-
+    data()
+    {
+        return {
+            shopping_cart: '/shopping_cart',
+            user: '/user'
+        }
+    },
+    created()
+    {
+        let userid = localStorage.getItem('userId');
+        if (userid)
+        {
+            this.shopping_cart = '/shopping_cart';
+            this.user = '/user'
+        }
+        else
+        {
+            this.shopping_cart = '/user/login';
+            this.user = '/user/login'
+        }
+    }
 }
 </script>
 <style scoped lang="scss" rel="stylesheet/scss">

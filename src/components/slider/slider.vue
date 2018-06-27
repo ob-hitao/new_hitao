@@ -2,10 +2,10 @@
     <section class="mui-slider">
         <div class="mui-slider-group mui-slider-loop">
             <!--支持循环，需要重复图片节点-->
-            <div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img :src="images[images.length - 1].link + images[images.length - 1].img" /></a></div>
-            <div class="mui-slider-item" v-for="item in images"><a href="#"><img :src="item.link + item.img" /></a></div>
+            <div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img v-lazy="images[images.length - 1].link + images[images.length - 1].img" /></a></div>
+            <div class="mui-slider-item" v-for="item in images"><a href="#"><img v-lazy="item.link + item.img" /></a></div>
             <!--支持循环，需要重复图片节点-->
-            <div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img :src="images[0].link + images[0].img" /></a></div>
+            <div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img v-lazy="images[0].link + images[0].img" /></a></div>
         </div>
     </section>
 </template>
@@ -33,9 +33,9 @@ export default
 <style scoped lang="scss" rel="stylesheet/scss">
 .mui-slider
 {
-    /*img*/
-    /*{*/
-        /*height: 131px;*/
-    /*}*/
+    img
+    {
+        height: 210px;
+    }
 }
 </style>

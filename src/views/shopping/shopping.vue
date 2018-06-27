@@ -4,112 +4,13 @@
         <div class="shopping__container">
             <div class="menu">
                 <ul>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
-                    <li class="menu__item">为您推荐</li>
+                    <li v-for="item in shopping_type" @click="getChild(item.typeid)" class="menu__item" :class="{active : item.typeid == active}">{{item.typename}}</li>
                 </ul>
             </div>
             <div class="lists">
-                <figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure>
-                <figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
-                </figure><figure class="lists__item">
-                    <img class="lists__img" src="./Shopping_dress.jpg" />
-                    <figcaption class="lists__type">
-                        裙子
-                    </figcaption>
+                <figure v-for="item in shopping_list" class="lists__item">
+                    <img class="lists__img" v-lazy="item.img" />
+                    <figcaption class="lists__type">{{item.typename}}</figcaption>
                 </figure>
             </div>
         </div>
@@ -121,17 +22,46 @@
 import vFooter from '@/components/footer/footer';
 import vSearch from '@/components/search/search';
 
+import {postJSON} from '@/assets/js/common';  //公共函数库
+
 export default
 {
     components:
     {
         vFooter,
         vSearch
+    },
+    data()
+    {
+        return {
+            shopping_type: [],
+            shopping_list: [],
+            active: null
+        }
+    },
+    created()
+    {
+        // 商品主分类
+        postJSON(this.API.INDEX_CATEGORY, {}, data =>
+        {
+            this.shopping_type = data.list;
+            this.getChild(this.shopping_type[0].typeid);
+        });
+    },
+    methods:
+    {
+        getChild(id)
+        {
+            this.active = id;
+            // 商品次分类
+            postJSON(this.API.INDEX_CHILD_CATEGORY, {typeId: id}, data => this.shopping_list = data.list);
+        }
     }
 }
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">
+@import "../../assets/scss/parameter";
 .shopping
 {
 
@@ -159,7 +89,15 @@ export default
                 list-style: none;
                 line-height: 44px;
                 text-align: center;
-                font-size: 15px;
+                font-size: 12px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+
+                &.active
+                {
+                    color: $theme;
+                }
             }
         }
         .lists

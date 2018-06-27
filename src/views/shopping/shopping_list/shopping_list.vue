@@ -3,29 +3,29 @@
         <v-search icon="icon-msnui-more">
             <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
         </v-search>
+        <nav class="tab">
+            <div class="tab__item">
+                <span class="tab__text active">综合</span>
+            </div>
+            <div class="tab__item">
+                <span class="tab__text">销量</span>
+            </div>
+            <div class="tab__item">
+                <span class="tab__text">价格<i class="mui-icon mui-icon-arrowthinup"></i></span>
+            </div>
+            <div class="tab__item">
+                <span class="tab__text">价格<i class="mui-icon mui-icon-arrowthindown"></i></span>
+            </div>
+            <div class="tab__item">
+                <span class="tab__text"><i class="iconfont icon-shaixuan"></i>筛选</span>
+            </div>
+        </nav>
         <div class="mui-content">
-            <nav class="tab">
-                <div class="tab__item">
-                    <span class="tab__text active">综合</span>
-                </div>
-                <div class="tab__item">
-                    <span class="tab__text">销量</span>
-                </div>
-                <div class="tab__item">
-                    <span class="tab__text">价格<i class="mui-icon mui-icon-arrowthinup"></i></span>
-                </div>
-                <div class="tab__item">
-                    <span class="tab__text">价格<i class="mui-icon mui-icon-arrowthindown"></i></span>
-                </div>
-                <div class="tab__item">
-                    <span class="tab__text"><i class="iconfont icon-shaixuan"></i>筛选</span>
-                </div>
-            </nav>
-            <div v-for="n in 10" class="mui-table-view mui-table-view-chevron mui-row" :class="{ 'shopping--grid': lay == 'grid', 'shopping--list': lay == 'list' }">
+            <div v-for="item in shopping_list" class="mui-table-view mui-table-view-chevron mui-row" :class="{ 'shopping--grid': lay == 'grid', 'shopping--list': lay == 'list' }">
                 <div :class="{ 'mui-col-xs-6': lay == 'grid', 'mui-col-xs-12': lay == 'list' }">
-                    <img class="shopping__img" src="./Shopping_dress.jpg"/>
+                    <img class="shopping__img" v-lazy="item.pic_url" />
                     <div class="shopping__info">
-                        <h4 class="shopping__info__name">春夏新款韩式公主抹胸显瘦</h4>
+                        <h4 class="shopping__info__name">{{item.name}}</h4>
                         <div class="mui-row">
                             <span class="mui-pull-left shopping__info__shop_name">皇宫婚纱</span>
                             <span class="mui-pull-right shopping__info__shop_address">广州</span>
@@ -74,6 +74,7 @@
 
 <script>
 import vSearch from '@/components/search/search';
+import {getJSON} from '@/assets/js/common';  //公共函数库
 
 export default
 {
@@ -84,7 +85,29 @@ export default
     data()
     {
         return {
-            lay: 'grid'
+            lay: 'grid',
+            shopping_list: [],
+            option:
+            {
+                q: '',
+                cat: 0,
+                page: 1,
+                page_size: 6,
+                lang: 'cn',
+                key: "test_api_key"
+            }
+        }
+    },
+    created()
+    {
+        this.option.q = this.$route.query.query;
+        this.getShoppingList();
+    },
+    methods:
+    {
+        getShoppingList()
+        {
+            mui.getJSON(this.API.SEARCH_TAOBAO, this.option, data => this.shopping_list = data.items.item);
         }
     }
 }
@@ -99,6 +122,14 @@ export default
         margin-left: -10px;
         font-size: 30px;
         color: #fff;
+    }
+    .mui-content
+    {
+        top: 88px;
+    }
+    .mui-content>.mui-table-view:first-child
+    {
+        margin-top: 0;
     }
     .search
     {
@@ -154,10 +185,14 @@ export default
     }
     .tab
     {
+        position: fixed;
+        top: 44px;
         display: flex;
-        height: 40px;
+        width: 100%;
+        height: 44px;
         border-bottom: 1px solid #cfcfcf;
         background: #fff;
+        z-index: 1000;
 
         &__item
         {

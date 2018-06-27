@@ -1,5 +1,5 @@
 //服务器
-// SERVER: "http://hitao.dev.onebound.cn/api/app.php",
+// const SERVER = "http://hitao.dev.onebound.cn/api/app.php",
 const SERVER = "/api",
       TAOBAO_SERVER = "http://api.onebound.cn/taobao/api_call.php?key=test_api_key&secret=ob8899.",
       ALIBABA_SERVER = "http://api.onebound.cn/1688/api_call.php?key=test_api_key&secret=ob8899.",
@@ -14,7 +14,7 @@ const API =
     INDEX_CATEGORY: SERVER + "?module=index&action=category",
     INDEX_CHILD_CATEGORY: SERVER + "?module=index&action=childCategory",
     INDEX_SHOPGOODSINFO: SERVER + "?module=index&action=shopGoodsInfo",
-    INDEX_GOODSRECOMMEND: SERVER + "?module=index&action=goodsRecommend",
+    INDEX_GOODSRECOMMEND: SERVER + "?module=index&action=getTaobaogoodsRecommend",
     INDEX_SHOPRECOMMEND: SERVER + "?module=index&action=shopRecommend",
     INDEX_CAROUSEL: SERVER + "?module=index&action=carousel",
     INDEX_HISTORY_RECORD: SERVER + "?module=index&action=history_record",
@@ -146,11 +146,6 @@ const API =
     PAY_CHINABANK_RECHARGE: SERVER + "?module=pay&action=chinaBankRecharge",
     //第三方支付接口
     PLUGINS_PAYMENT: SERVER + "?module=pay&action=payment",
-    //自营商城
-    MALL_INDEX: SERVER + "?module=mall&action=index",
-    MALL_LISTS: SERVER + "?module=mall&action=lists",
-    MALL_PRODUCT: SERVER + "?module=mall&action=product",
-    MALL_CATEGORY: SERVER + "?module=mall&action=category",
 }
 
 export default API

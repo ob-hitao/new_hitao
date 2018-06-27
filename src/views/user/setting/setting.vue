@@ -19,16 +19,28 @@
                 </router-link>
             </ul>
             <div class="off">
-                <button class="off__button">退出当前账号</button>
+                <button @click="logout" class="off__button">退出当前账号</button>
             </div>
         </div>
     </section>
 </template>
 
 <script>
+import {postJSON, yesAlert} from '@/assets/js/common';  //公共函数库
 export default
 {
-
+    methods:
+    {
+        logout()
+        {
+            let userId = localStorage.getItem('userId');
+            postJSON(this.API.USER_LOGOUT, {userId}, data =>
+            {
+                localStorage.removeItem('userId');
+                yesAlert('退出成功!', () => this.$router.push({path: '/'}));
+            });
+        }
+    }
 }
 </script>
 
