@@ -4,71 +4,57 @@
             <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
         </v-search>
         <nav class="tab">
-            <div class="tab__item">
-                <span class="tab__text active">综合</span>
+            <div @click="sort('')" class="tab__item">
+                <span class="tab__text" :class="{active: option.sort == ''}">综合</span>
             </div>
-            <div class="tab__item">
-                <span class="tab__text">销量</span>
+            <div @click="sort('_sale')" class="tab__item">
+                <span class="tab__text" :class="{active: option.sort == '_sale'}">销量</span>
             </div>
-            <div class="tab__item">
-                <span class="tab__text">价格<i class="mui-icon mui-icon-arrowthinup"></i></span>
+            <div @click="sort('_bid')" class="tab__item">
+                <span class="tab__text" :class="{active: option.sort == '_bid'}">价格<i class="mui-icon mui-icon-arrowthinup"></i></span>
             </div>
-            <div class="tab__item">
-                <span class="tab__text">价格<i class="mui-icon mui-icon-arrowthindown"></i></span>
+            <div @click="sort('bid')" class="tab__item">
+                <span class="tab__text" :class="{active: option.sort == 'bid'}">价格<i class="mui-icon mui-icon-arrowthindown"></i></span>
             </div>
-            <div class="tab__item">
+            <div @click="filterShow" class="tab__item">
                 <span class="tab__text"><i class="iconfont icon-shaixuan"></i>筛选</span>
             </div>
         </nav>
-        <div class="mui-content">
-            <div v-for="item in shopping_list" class="mui-table-view mui-table-view-chevron mui-row" :class="{ 'shopping--grid': lay == 'grid', 'shopping--list': lay == 'list' }">
-                <div :class="{ 'mui-col-xs-6': lay == 'grid', 'mui-col-xs-12': lay == 'list' }">
-                    <img class="shopping__img" v-lazy="item.pic_url" />
+        <div class="mui-content" @scroll.passive="next($event)">
+            <div class="mui-table-view mui-table-view-chevron mui-row" :class="{ 'shopping--grid': lay == 'grid', 'shopping--list': lay == 'list' }">
+                <div @click="goDesc(item.num_iid)" v-for="item in shopping_list" :class="{ 'mui-col-xs-6': lay == 'grid', 'mui-col-xs-12': lay == 'list' }">
+                    <img class="shopping__img" v-lazy="'http://' + item.pic_url" />
                     <div class="shopping__info">
                         <h4 class="shopping__info__name">{{item.name}}</h4>
-                        <div class="mui-row">
-                            <span class="mui-pull-left shopping__info__shop_name">皇宫婚纱</span>
-                            <span class="mui-pull-right shopping__info__shop_address">广州</span>
+                        <div class="mui-row mui-ellipsis shopping__info__shop_name">
+                            {{item.title}}
+                            <!--<span class="mui-pull-left shopping__info__shop_name">{{item.title}}</span>-->
+                            <!--<span class="mui-pull-right shopping__info__shop_address">{{item.area}}</span>-->
                         </div>
-                        <p class="mui-pull-left price">￥495.9</p>
+                        <p class="mui-pull-left price">￥{{item.price}}</p>
                         <p class="mui-pull-right"></p>
                     </div>
                 </div>
             </div>
         </div>
-        <!--<div class="cover"></div>-->
-        <!--<div class="filter">-->
-            <!--<section class="type">-->
-                <!--<h4 class="type__title">相关分类</h4>-->
-                <!--<div class="type__wrap">-->
-                    <!--<span>小西装</span>-->
-                    <!--<span>小西装</span>-->
-                    <!--<span>小西装</span>-->
-                    <!--<span>小西装</span>-->
-                    <!--<span>小西装</span>-->
-                    <!--<span>小西装</span>-->
-                <!--</div>-->
-            <!--</section>-->
-            <!--<section class="shopping_bomb__info">-->
-                <!--<div class="mui-row">-->
-                    <!--1<br />-->
-                    <!--<button type="button" class="mui-btn">2</button>-->
-                    <!--<button type="button" class="mui-btn">2</button>-->
-                    <!--<button type="button" class="mui-btn">2</button>-->
-                    <!--<button type="button" class="mui-btn">2</button>-->
-                <!--</div>-->
-            <!--</section>-->
-            <!--<section class="price_spacing">-->
-                <!--<h4 class="price_spacing__title">价格区间</h4>-->
-                <!--<div class="price_spacing__wrap">-->
-                    <!--<input type="text" placeholder="最低价"> —— <input type="text" placeholder="最高价">-->
-                <!--</div>-->
-            <!--</section>-->
-            <!--<section class="fixed">-->
-                <!--<div>重置</div>-->
-                <!--<div>完成</div>-->
-            <!--</section>-->
-        <!--</div>-->
+        <transition enter-active-class="animated tada"
+                    leave-active-class="animated bounceOutRight">
+            <div v-if="filters" class="filter">
+                <section v-for="item in navs.common" class="type">
+                    <h4 class="type__title">{{item.title}}</h4>
+                    <div class="type__wrap">
+                        <span @click="keysearch(i.param_value)" v-for="i in item.item">{{i.title}}</span>
+                    </div>
+                </section>
+                <section v-for="item in navs.adv" class="type">
+                    <h4 class="type__title">{{item.title}}</h4>
+                    <div class="type__wrap">
+                        <span v-for="i in item.item">{{i.title}}</span>
+                    </div>
+                </section>
+                <footer @click="mask.close" class="footer">关闭</footer>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -85,29 +71,83 @@ export default
     data()
     {
         return {
+            mask: mui.createMask(() =>
+            {
+                this.filters = false;
+            }),
             lay: 'grid',
             shopping_list: [],
+            navs: {},
             option:
             {
                 q: '',
+                imgid: '',
                 cat: 0,
+                sort: '',
                 page: 1,
                 page_size: 6,
-                lang: 'cn',
-                key: "test_api_key"
-            }
+                ppath: ''
+            },
+            scrolled: false,
+            filters: false
         }
     },
     created()
     {
-        this.option.q = this.$route.query.query;
+        this.option.imgid = this.$route.query.imgid ? this.$route.query.imgid : '';
+        this.option.q = this.$route.query.query ? this.$route.query.query : '';
         this.getShoppingList();
     },
     methods:
     {
+        goDesc(num_iid)
+        {
+            this.$router.push({path: '/shopping/shopping_list/shopping_desc', query: {num_iid: num_iid}});
+        },
+        sort(type)
+        {
+            this.shopping_list = [];
+            this.option.sort = type;
+            this.option.page = 1;
+            this.getShoppingList();
+        },
         getShoppingList()
         {
-            mui.getJSON(this.API.SEARCH_TAOBAO, this.option, data => this.shopping_list = data.items.item);
+            mui.getJSON(this.API.SEARCH_TAOBAO, this.option, data =>
+            {
+                let goods = this.shopping_list = this.shopping_list.concat(data.items.item);
+                this.shopping_list = goods;
+                this.navs = data.items.navs;
+            });
+        },
+        next(ev)
+        {
+            // 防止重入
+            if (this.scrolled) return false;
+            this.scrolled = true;
+            // 锁定
+            let el = ev.target;
+            let bottom = el.scrollHeight - el.scrollTop - el.offsetHeight;
+            if (bottom <= 250)
+            {
+                this.option.page++;
+                this.getShoppingList();
+            }
+            //解锁
+            setTimeout(() => this.scrolled = false, 1);
+        },
+        filterShow()
+        {
+            this.mask.show();
+            this.filters = true;
+        },
+        keysearch(key)
+        {
+            this.ppath = key;
+            this.shopping_list = [];
+            this.option.page = 1;
+            this.getShoppingList();
+            this.mask.close();
         }
     }
 }
@@ -136,7 +176,7 @@ export default
         position: fixed;
         top: 0;
         display: flex;
-        width: 100%;
+        width: 100vw;
         z-index: 10;
         padding: 7px 12.5px;
         background: $theme;
@@ -188,11 +228,11 @@ export default
         position: fixed;
         top: 44px;
         display: flex;
-        width: 100%;
+        width: 100vw;
         height: 44px;
         border-bottom: 1px solid #cfcfcf;
         background: #fff;
-        z-index: 1000;
+        z-index: 999;
 
         &__item
         {
@@ -237,7 +277,7 @@ export default
         {
             &__img
             {
-                max-width: 100%;
+                width: 100%;
                 height: 200px;
             }
             &__info
@@ -324,8 +364,10 @@ export default
     right: 0;
     width: 80%;
     min-height: 100vh;
+    height: 100vh;
+    overflow: auto;
     background: #ffffff;
-    z-index: 1001;
+    z-index: 1000;
     padding-bottom: 50px;
 
     %thisTitle
@@ -359,66 +401,19 @@ export default
             }
         }
     }
-
-    .price_spacing
-    {
-        padding: 7px;
-        border-bottom: 1px solid #efefef;
-
-        &__title
-        {
-            @extend %thisTitle;
-        }
-        &__wrap
-        {
-            display: flex;
-            justify-content: space-between;
-            line-height: 30px;
-
-            input
-            {
-                width: 120px;
-                height: 30px;
-                padding: 0;
-                font-size: 14px;
-                text-indent: 10px;
-                vertical-align: middle;
-                margin: 0;
-            }
-        }
-    }
-
-    .fixed
+    .footer
     {
         position: fixed;
         bottom: 0;
-        width: 80%;
+        width: 80vw;
         height: 50px;
         line-height: 50px;
-        display: flex;
-        justify-content: space-between;
-
-        div
-        {
-            width: 50%;
-            text-align: center;
-            font-size: 18px;
-
-            &:first-child
-            {
-                background: #fbdce1;
-                color: $theme;
-            }
-            &:last-child
-            {
-                background: $theme;
-                color: #fff;
-            }
-        }
+        z-index: 999;
+        font-size: 18px;
+        text-align: center;
+        background: $theme;
+        color: #fff;
     }
 }
-.cover
-{
-    z-index: 1000;
-}
+
 </style>

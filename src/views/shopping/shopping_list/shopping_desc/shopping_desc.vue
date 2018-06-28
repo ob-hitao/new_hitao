@@ -1,106 +1,66 @@
 <template>
     <div class="shopping_desc">
-        <v-slider></v-slider>
+        <v-slider v-if="goods.item_imgs" :images="goods.item_imgs"></v-slider>
+        <div class="top" :class="{active: topActive}">
+            <span class="left">
+                <i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></i>
+            </span>
+            <span class="right">
+                <router-link :to="{path: '/shopping_cart', query: {back: true}}" class="iconfont icon-gouwuche" tag="i"></router-link>
+            </span>
+        </div>
         <section class="info">
             <h4 class="title">
-                Pristian zouboutin 秋季新款羽毛蕾丝抹胸长拖尾镶钻
-                拉链婚纱
+                {{goods.title}}
             </h4>
             <div class="price">
-                ￥489
+                ￥{{goods.price}}
             </div>
             <div class="detailed">
-                <span>国内运费：RMB 0.00</span>
-                <span>月销量：月销量：997</span>
+                <span>国内运费：RMB {{goods.express_fee}}</span>
+                <span>月销量：{{goods.sales ? goods.sales : 'null'}}</span>
             </div>
         </section>
-        <p class="select">
+        <p @click="bombShow" class="select">
             请选择尺码  颜色  分类  款式 <span class="mui-pull-right">></span>
         </p>
-        <!--<div class="evaluation">-->
-            <!--<div class="top">商品评价(99)</div>-->
-            <!--<div class="evaluation__wrap">-->
-                <!--<div class="evaluation__wrap__head">-->
-                    <!--<div>-->
-                        <!--<img class="atr" src="../../images/60x60.gif" />人不犯二枉少年-->
-                    <!--</div>-->
-                    <!--<div>-->
-                        <!--<img class="star" src="../../images/icon/fivestars.png"/>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="evaluation__wrap__main">收到了，费了老大劲才穿上，但是非常合身，效果特别好，家里人都说很美，太棒了，五分好评。</div>-->
-                <!--<div class="evaluation__wrap__time">2015-12-28  颜色:白色  尺码:S</div>-->
-            <!--</div>-->
-            <!--<div class="bottom">查看更多评价</div>-->
-        <!--</div>-->
-        <section class="shop">
+        <section v-if="goods.item_imgs" class="shop">
             <div class="mui-card-header mui-card-media">
-                <img class="logo" src="./avatar@2x.png" />
+                <!--<img class="logo" src="./avatar@2x.png" />-->
                 <div class="mui-media-body">
-                    皇宫婚纱旗舰店
-                    <p>总销量：1368  收藏数：987</p>
+                    {{goods.seller_info.title}}
                 </div>
             </div>
             <div class="integrated">
                 <div>
-                    描述相符  <i>4.7</i> <span>高</span>
+                    描述相符  <i>{{goods.seller_info.score}}</i>
                 </div>
                 <div>
-                    物流速度<i>4.7</i> <span>高</span>
+                    物流速度<i>{{goods.seller_info.delivery_score}}</i>
                 </div>
                 <div>
-                    商品质量  <i>4.7</i> <span>高</span>
+                    商品质量  <i>{{goods.seller_info.item_score}}</i>
                 </div>
-            </div>
-            <div class="mui-card-footer">
-                <button type="button" class="mui-btn" id="allGoods">全部商品</button>
-                <button type="button" class="mui-btn" id="goShop">进店逛逛</button>
             </div>
         </section>
-        <!--<div id="slider" class="mui-slider">-->
-            <!--<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">-->
-                <!--<a class="mui-control-item" href="#item1mobile">-->
-                    <!--图文详情-->
-                <!--</a>-->
-                <!--<a class="mui-control-item" href="#item2mobile">-->
-                    <!--产品参数-->
-                <!--</a>-->
-                <!--<a class="mui-control-item" href="#item3mobile">-->
-                    <!--热卖推荐-->
-                <!--</a>-->
-            <!--</div>-->
-            <!--<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4"></div>-->
-            <!--<div class="mui-slider-group">-->
-                <!--<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">-->
-                    <!--<div id="scroll1" class="mui-scroll-wrapper">-->
-                        <!--<div class="mui-scroll">-->
-                            <!--<div id="desc"></div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div id="item2mobile" class="mui-slider-item mui-control-content">-->
-                    <!--<div id="scroll2" class="mui-scroll-wrapper">-->
-                        <!--<div class="mui-scroll">-->
-                            <!--<ul class="mui-table-view">-->
-                                <!--&lt;!&ndash;<li v-for="pro in item.props" class="mui-table-view-cell">&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<span>{{pro.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{pro.value}}&ndash;&gt;-->
-                                <!--&lt;!&ndash;</li>&ndash;&gt;-->
-                            <!--</ul>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div id="item3mobile" class="mui-slider-item mui-control-content">-->
-                    <!--<div id="scroll3" class="mui-scroll-wrapper">-->
-                        <!--<div class="mui-scroll">-->
-                            <!--<div class="mui-loading">-->
-                                <!--<div class="mui-spinner">-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
+        <section class="details">
+            <nav class="tab">
+                <div class="tab__item">
+                    <span class="tab__text" :class="{active: details_show}" @click="details_show = true">图文详情</span>
+                </div>
+                <div class="tab__item">
+                    <span class="tab__text" :class="{active: details_show}" @click="details_show = false">产品参数</span>
+                </div>
+            </nav>
+            <section v-if="details_show" v-html="details" class="details__item"></section>
+            <section v-else class="details__list">
+                <ul class="mui-table-view">
+                    <li v-for="pro in goods.props" class="mui-table-view-cell">
+                        <span>{{pro.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{pro.value}}
+                    </li>
+                </ul>
+            </section>
+        </section>
         <nav class="mui-bar mui-bar-tab">
             <a class="mui-tab-item mui-col-xs-2">
                 <i class="iconfont icon-xinxi"></i>
@@ -121,80 +81,146 @@
                 <span class="mui-tab-label">立即购买</span>
             </a>
         </nav>
-
-        <!--<div class="cover"></div>-->
-        <!--<div class="shopping_bomb">-->
-            <!--<figure class="goods">-->
-                <!--<img class="goods__img" src="./avatar@2x.png"/>-->
-                <!--<figcaption class="goods__wrap">-->
-                    <!--<h4 class="goods__wrap__title">-->
-                        <!--蕾丝送吊带2017春夏新款韩版直筒H型-->
-                        <!--两件套连衣裙短裙女-->
-                    <!--</h4>-->
-                    <!--<p class="goods__wrap__description">请选择颜色分类</p>-->
-                <!--</figcaption>-->
-                <!--<i class="iconfont icon-guanbi mui-action-back goods__close"></i>-->
-            <!--</figure>-->
-            <!--<div class="mui-scroll-wrapper">-->
-                <!--<div class="mui-scroll">-->
-                    <!--&lt;!&ndash;这里放置真实显示的DOM内容&ndash;&gt;-->
-                    <!--<section class="shopping_bomb__info">-->
-                        <!--<div class="mui-row">-->
-                            <!--颜色<br />-->
-                            <!--<button type="button" class="mui-btn">白色</button>-->
-                        <!--</div>-->
-                        <!--<div class="mui-row">-->
-                            <!--数量<br />-->
-                            <!--<div class="mui-numbox" data-numbox-step='1' data-numbox-min='1' data-numbox-max='goods.maxnum' style="margin: 10px 10px 10px 0">-->
-                                <!--<button class="mui-btn mui-numbox-btn-minus" type="button" style="margin: 0;">-</button>-->
-                                <!--<input id="goodsNum" class="mui-numbox-input" type="number" value="1" readonly="readonly"/>-->
-                                <!--<button class="mui-btn mui-numbox-btn-plus" type="button" style="margin: 0;">+</button>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="mui-row">-->
-                            <!--备注<br />-->
-                            <!--<textarea style="margin: 10px 0 0 0;" placeholder="如您有需要客服留心的问题或要求，可以在这里进行留言哦~"></textarea>-->
-                        <!--</div>-->
-                    <!--</section>-->
-                    <!--<section class="mui-row shopping_bomb__total">-->
-                        <!--<div class="mui-row">-->
-                            <!--<div class="mui-pull-left">商品价格</div>-->
-                            <!--<div class="mui-pull-right price"><button type="button" class="mui-btn active">修改</button> ￥149.40</div>-->
-                        <!--</div>-->
-                        <!--<div class="mui-row">-->
-                            <!--<div class="mui-pull-left shopping_bomb__total__special">国内运费</div>-->
-                            <!--<div class="mui-pull-right price"><button type="button" class="mui-btn active">修改</button>￥149.40</div>-->
-                        <!--</div>-->
-                        <!--<div class="mui-row">-->
-                            <!--<div class="mui-pull-left">国际运费</div>-->
-                            <!--<div class="mui-pull-right"><i class="iconfont icon-zhuyi"></i> 另计</div>-->
-                        <!--</div>-->
-                    <!--</section>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<footer class="footer">-->
-                <!--确定-->
-            <!--</footer>-->
-        <!--</div>-->
+        <transition enter-active-class="animated bounceInUp"
+                    leave-active-class="animated bounceOutDown">
+            <div v-if="bomb" class="shopping_bomb">
+                <figure class="goods">
+                    <img class="goods__img" src=""/>
+                    <figcaption class="goods__wrap">
+                        <h4 class="goods__wrap__title">
+                            蕾丝送吊带2017春夏新款韩版直筒H型
+                            两件套连衣裙短裙女
+                        </h4>
+                        <p class="goods__wrap__description">请选择颜色分类</p>
+                    </figcaption>
+                    <i  @click="mask.close" class="iconfont icon-guanbi goods__close"></i>
+                </figure>
+                <div class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <!--这里放置真实显示的DOM内容-->
+                        <section class="shopping_bomb__info">
+                            <div class="mui-row">
+                                颜色<br />
+                                <button type="button" class="mui-btn">白色</button>
+                            </div>
+                            <div class="mui-row">
+                                数量<br />
+                                <div class="mui-numbox" data-numbox-step='1' data-numbox-min='1' data-numbox-max='goods.maxnum' style="margin: 10px 10px 10px 0">
+                                    <button class="mui-btn mui-numbox-btn-minus" type="button" style="margin: 0;">-</button>
+                                    <input id="goodsNum" class="mui-numbox-input" type="number" value="1" readonly="readonly"/>
+                                    <button class="mui-btn mui-numbox-btn-plus" type="button" style="margin: 0;">+</button>
+                                </div>
+                            </div>
+                            <div class="mui-row">
+                                备注<br />
+                                <textarea style="margin: 10px 0 0 0;" placeholder="如您有需要客服留心的问题或要求，可以在这里进行留言哦~"></textarea>
+                            </div>
+                        </section>
+                        <section class="mui-row shopping_bomb__total">
+                            <div class="mui-row">
+                                <div class="mui-pull-left">商品价格</div>
+                                <div class="mui-pull-right price"><button type="button" class="mui-btn active">修改</button> ￥149.40</div>
+                            </div>
+                            <div class="mui-row">
+                                <div class="mui-pull-left shopping_bomb__total__special">国内运费</div>
+                                <div class="mui-pull-right price"><button type="button" class="mui-btn active">修改</button>￥149.40</div>
+                            </div>
+                            <div class="mui-row">
+                                <div class="mui-pull-left">国际运费</div>
+                                <div class="mui-pull-right"><i class="iconfont icon-zhuyi"></i> 另计</div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <footer class="footer">
+                    确定
+                </footer>
+            </div>
+        </transition>
     </div>
 </template>
 
 <script>
 import vSlider from '@/components/slider/slider';
+import {getJSON} from '@/assets/js/common';  //公共函数库
+
 export default
 {
     components:
     {
         vSlider
+    },
+    data()
+    {
+        return {
+            mask: mui.createMask(() =>
+            {
+                this.bomb = false;
+            }),
+            bomb: false,
+            goods: {},
+            option:
+            {
+                num_iid: ''
+            },
+            details: '',
+            details_show: true,
+            topActive: false
+        }
+    },
+    created()
+    {
+        this.option.num_iid = this.$route.query.num_iid ? this.$route.query.num_iid : '';
+        this.getDesc();
+
+        window.addEventListener('scroll', this.handleScroll)
+    },
+    methods:
+    {
+        getDesc()
+        {
+            mui.getJSON(this.API.DETAILS_TAOBAO, this.option, data =>
+            {
+                this.goods = data.item;
+                // 轮播
+                this.goods.item_imgs = data.item.item_imgs.map(e => {return 'http:' + e.url});
+                // 详情
+                if(data.item.desc != null)
+                {
+                    this.details = data.item.desc;
+                    // var list = document.querySelectorAll('table');
+                    // for(var n = 0; n < list.length; n++) {
+                    //     list[n].style = "max-width:" + plus.screen.resolutionWidth + "px";
+                    //     //					console.log(list[n].style);
+                    // }
+                }
+            });
+        },
+        handleScroll ()
+        {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+            this.topActive =  scrollTop > 60 ? true : false;
+        },
+        bombShow()
+        {
+            this.mask.show();
+            this.bomb = true;
+        }
     }
 }
 </script>
-
 <style scoped lang="scss" rel="stylesheet/scss">
 @import "../../../../assets/scss/parameter";
 @import "../../../../assets/scss/mixin";
 .shopping_desc
 {
+    padding-bottom: 50px;
+
+    // 渗透子组件
+    /deep/ .mui-slider img
+    {
+        height: auto;
+    }
     %mb
     {
         margin-bottom: 10px;
@@ -202,6 +228,55 @@ export default
         background: #fff;
     }
 
+    .top
+    {
+        position: fixed;
+        top: 0;
+        padding: 12px;
+        width: 100%;
+        z-index: 1;
+        transition: .5s;
+
+        .left, .right
+        {
+            display: block;
+            width: 24px;
+            height: 24px;
+            padding: 5px;
+            font-size: 32px;
+            background: #f7f3f2;
+            border-radius: 50%;
+            color: #f7f3f2;
+            z-index: 1;
+            opacity: .7;
+            box-sizing: content-box;
+        }
+        .left
+        {
+            float: left;
+        }
+        .right
+        {
+            float: right;
+
+            .icon-gouwuche
+            {
+                font-size: 24px;
+                color: #666666;
+            }
+        }
+
+        &.active
+        {
+            background: #f7f3f2;
+            opacity: .7;
+
+            .left
+            {
+                opacity: 1;
+            }
+        }
+    }
     .info
     {
         @extend %mb;
@@ -439,7 +514,6 @@ export default
                 display: block;
                 width: 15px;
                 height: 15px;
-                //background: url("../../images/shopping/spxq-btn-shutdown.png") no-repeat center center / 100%;
             }
         }
         .color
@@ -482,16 +556,44 @@ export default
             }
         }
     }
+    .details
+    {
+        .tab
+        {
+            display: flex;
+            height: 40px;
+            border-bottom: 1px solid #cfcfcf;
+            background: #fff;
+
+            &__item
+            {
+                flex: auto;
+                text-align: center;
+            }
+            &__text
+            {
+                font-size: 14px;
+                display: inline-block;
+                height: 39px;
+                line-height: 39px;
+
+                &.active
+                {
+                    color: $theme;
+                    border-bottom: 2px solid $theme;
+                }
+            }
+        }
+    }
 }
 .shopping_bomb
 {
     position: absolute;
     top: 100px;
-    z-index: 999;
+    z-index: 1000;
     width: 100%;
     height: calc(100% - 100px);
     background: #fff;
-    animation: .5s bounceInUp;
 
     .goods
     {
@@ -637,4 +739,10 @@ export default
         color: #fff;
     }
 }
+</style>
+<style>
+    .details__item img, .details__item table
+    {
+        width: 100%;
+    }
 </style>

@@ -8,7 +8,7 @@
                 </ul>
             </div>
             <div class="lists">
-                <figure v-for="item in shopping_list" class="lists__item">
+                <figure @click="openList(item.typename)" v-for="item in shopping_list" class="lists__item">
                     <img class="lists__img" v-lazy="item.img" />
                     <figcaption class="lists__type">{{item.typename}}</figcaption>
                 </figure>
@@ -55,6 +55,10 @@ export default
             this.active = id;
             // 商品次分类
             postJSON(this.API.INDEX_CHILD_CATEGORY, {typeId: id}, data => this.shopping_list = data.list);
+        },
+        openList(typename)
+        {
+            this.$router.push({path: '/shopping/shopping_list', query: {query: typename}});
         }
     }
 }

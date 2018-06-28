@@ -101,8 +101,8 @@ figure, p, h1, h2, h3, h4
     left: 0;
     background-color: rgba(0, 0, 0, 0.3);
 }
-.mui-popup-backdrop
+.mui-backdrop
 {
-    z-index: 9999;
+    z-index: 999;
 }
 </style>

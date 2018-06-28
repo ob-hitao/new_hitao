@@ -37,7 +37,7 @@ export default
     created()
     {
         // 轮播
-        postJSON(this.API.INDEX_CAROUSEL, {}, data => this.bannerList = data.list);
+        postJSON(this.API.INDEX_CAROUSEL, {}, data => this.bannerList = data.list.map(e => {return e.link + e.img}));
         // 推荐商品
         // postJSON(this.API.INDEX_GOODSRECOMMEND, {}, data => this.goodList = data.list);
     }

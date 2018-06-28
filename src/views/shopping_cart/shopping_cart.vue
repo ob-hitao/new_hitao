@@ -1,6 +1,6 @@
 <template>
     <div class="shopping_cart">
-        <v-header title="购物车" :backShow="false">
+        <v-header title="购物车" :backShow="back">
             <div class="shopping_cart__right">
                 <span>编辑</span>
                 <i class="iconfont icon-xinxi"></i>
@@ -69,6 +69,16 @@ export default
         vFooter,
         vNo_data,
         vCheckbox
+    },
+    data()
+    {
+        return {
+            back: false
+        }
+    },
+    created()
+    {
+        this.back = this.$route.query.back ? true : false;
     }
 }
 </script>

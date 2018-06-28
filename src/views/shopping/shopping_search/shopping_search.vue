@@ -4,7 +4,10 @@
             <div class="search__main">
                 <form @submit.prevent="search">
                     <input class="search__text" type="search" placeholder="请输入淘宝链接或者关键字" v-model="query" />
-                    <i class="iconfont icon-xiangji"></i>
+                    <label>
+                        <i @click="fileShow" class="iconfont icon-xiangji"></i>
+                        <input @change="changeFile($event)" ref="file" type="file" accept="image/*" />
+                    </label>
                 </form>
             </div>
             <span class="mui-action-back">取消</span>
@@ -57,7 +60,7 @@
                 <section class="shopping_search__popular">
                     <h4 class="shopping_search__popular__title">热门搜索</h4>
                     <div class="shopping_search__popular__content">
-                        <span v-for="item in hot">{{item}}</span>
+                        <span @click="keySearch(item)" v-for="item in hot">{{item}}</span>
                     </div>
                 </section>
 
@@ -67,7 +70,7 @@
                         <!--<span class="mui-pull-right">清除</span>-->
                     </h4>
                     <div class="shopping_search__popular__content">
-                        <span v-for="item in history">{{item.goodsname}}</span>
+                        <span @click="keySearch(item.goodsname)" v-for="item in history">{{item.goodsname}}</span>
                     </div>
                 </section>
             </div>
@@ -76,7 +79,7 @@
 </template>
 
 <script>
-import {postJSON} from '@/assets/js/common';  //公共函数库
+import {postJSON, yesAlert, compress} from '@/assets/js/common';  //公共函数库
 
 export default
 {
@@ -101,6 +104,49 @@ export default
         search()
         {
             this.$router.push({path: '/shopping/shopping_list', query: {query: this.query}});
+        },
+        fileShow()
+        {
+            // FastClick的bug，手动触发
+            this.$refs.file.click();
+        },
+        changeFile(ev)
+        {
+            let file = ev.target.files[0];
+            if (!/image\/\w+/.test(file.type))
+            {
+                yesAlert("请选择正确的图像");
+                return false;
+            }
+
+            //读取图片
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = e =>
+            {
+                let img = new Image();
+                img.src = e.target.result;
+                img.onload = () =>
+                {
+                    let result = compress(img);
+                    mui.post
+                    (
+                        this.API.TAOBAO_UPLOADIMG,
+                        {
+                            imgcode: result
+                        },
+                        data =>
+                        {
+                            this.$router.push({path: '/shopping/shopping_list', query: {imgid: data.items.item.name}});
+                        }
+                    );
+                }
+            }
+        },
+        keySearch(key)
+        {
+            this.query = key;
+            this.search();
         }
     }
 }
@@ -110,6 +156,10 @@ export default
 @import "../../../assets/scss/parameter";
 .shopping_search
 {
+    input[type=file]
+    {
+        display: none;
+    }
     .search
     {
         position: fixed;
