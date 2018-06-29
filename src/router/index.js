@@ -14,6 +14,7 @@ import shopping_search from '@/views/shopping/shopping_search/shopping_search';
 import pay from '@/views/shopping/pay/pay';
 import shopping_list from '@/views/shopping/shopping_list/shopping_list';
 import shopping_desc from '@/views/shopping/shopping_list/shopping_desc/shopping_desc';
+import shopping_market from '@/views/shopping/shopping_list/shopping_desc/shopping_market/shopping_market';
 
 /************************************* transport **************************************/
 import transport from '@/views/transport/transport';
@@ -96,7 +97,18 @@ export default new Router
                         },
                         {
                             path: 'shopping_desc',
-                            component: shopping_desc
+                            component: container,
+                            children:
+                            [
+                                {
+                                    path: '/',
+                                    component: shopping_desc
+                                },
+                                {
+                                    path: 'shopping_market',
+                                    component: shopping_market
+                                }
+                            ]
                         }
                     ]
                 }

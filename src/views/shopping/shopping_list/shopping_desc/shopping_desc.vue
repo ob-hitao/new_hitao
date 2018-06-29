@@ -49,7 +49,7 @@
                     <span class="tab__text" :class="{active: details_show}" @click="details_show = true">图文详情</span>
                 </div>
                 <div class="tab__item">
-                    <span class="tab__text" :class="{active: details_show}" @click="details_show = false">产品参数</span>
+                    <span class="tab__text" :class="{active: !details_show}" @click="details_show = false">产品参数</span>
                 </div>
             </nav>
             <section v-if="details_show" v-html="details" class="details__item"></section>
@@ -62,22 +62,22 @@
             </section>
         </section>
         <nav class="mui-bar mui-bar-tab">
-            <a class="mui-tab-item mui-col-xs-2">
-                <i class="iconfont icon-xinxi"></i>
-                <span class="mui-tab-label">客服</span>
-            </a>
-            <a class="mui-tab-item mui-col-xs-2">
+            <!--<a class="mui-tab-item mui-col-xs-2">-->
+                <!--<i class="iconfont icon-xinxi"></i>-->
+                <!--<span class="mui-tab-label">客服</span>-->
+            <!--</a>-->
+            <a @click="goShop" class="mui-tab-item mui-col-xs-2">
                 <i class="iconfont icon-dianpu1"></i>
                 <span class="mui-tab-label">店铺</span>
             </a>
-            <a class="mui-tab-item mui-col-xs-2">
+            <a @click="favorites" class="mui-tab-item mui-col-xs-2">
                 <i class="iconfont icon-kongaixin"></i>
                 <span class="mui-tab-label">收藏</span>
             </a>
-            <a class="mui-tab-item mui-col-xs-3 cat">
+            <a @click="bombShow" class="mui-tab-item mui-col-xs-3 cart">
                 <span class="mui-tab-label">加入购物车</span>
             </a>
-            <a class="mui-tab-item mui-col-xs-3 buy">
+            <a @click="bombShow" class="mui-tab-item mui-col-xs-3 buy">
                 <span class="mui-tab-label">立即购买</span>
             </a>
         </nav>
@@ -85,52 +85,42 @@
                     leave-active-class="animated bounceOutDown">
             <div v-if="bomb" class="shopping_bomb">
                 <figure class="goods">
-                    <img class="goods__img" src=""/>
+                    <img class="goods__img" v-lazy="goods.pic_url" />
                     <figcaption class="goods__wrap">
-                        <h4 class="goods__wrap__title">
-                            蕾丝送吊带2017春夏新款韩版直筒H型
-                            两件套连衣裙短裙女
-                        </h4>
+                        <h4 class="goods__wrap__title">{{goods.title}}</h4>
                         <p class="goods__wrap__description">请选择颜色分类</p>
                     </figcaption>
                     <i  @click="mask.close" class="iconfont icon-guanbi goods__close"></i>
                 </figure>
-                <div class="mui-scroll-wrapper">
-                    <div class="mui-scroll">
-                        <!--这里放置真实显示的DOM内容-->
-                        <section class="shopping_bomb__info">
-                            <div class="mui-row">
-                                颜色<br />
-                                <button type="button" class="mui-btn">白色</button>
-                            </div>
-                            <div class="mui-row">
-                                数量<br />
-                                <div class="mui-numbox" data-numbox-step='1' data-numbox-min='1' data-numbox-max='goods.maxnum' style="margin: 10px 10px 10px 0">
-                                    <button class="mui-btn mui-numbox-btn-minus" type="button" style="margin: 0;">-</button>
-                                    <input id="goodsNum" class="mui-numbox-input" type="number" value="1" readonly="readonly"/>
-                                    <button class="mui-btn mui-numbox-btn-plus" type="button" style="margin: 0;">+</button>
-                                </div>
-                            </div>
-                            <div class="mui-row">
-                                备注<br />
-                                <textarea style="margin: 10px 0 0 0;" placeholder="如您有需要客服留心的问题或要求，可以在这里进行留言哦~"></textarea>
-                            </div>
-                        </section>
-                        <section class="mui-row shopping_bomb__total">
-                            <div class="mui-row">
-                                <div class="mui-pull-left">商品价格</div>
-                                <div class="mui-pull-right price"><button type="button" class="mui-btn active">修改</button> ￥149.40</div>
-                            </div>
-                            <div class="mui-row">
-                                <div class="mui-pull-left shopping_bomb__total__special">国内运费</div>
-                                <div class="mui-pull-right price"><button type="button" class="mui-btn active">修改</button>￥149.40</div>
-                            </div>
-                            <div class="mui-row">
-                                <div class="mui-pull-left">国际运费</div>
-                                <div class="mui-pull-right"><i class="iconfont icon-zhuyi"></i> 另计</div>
-                            </div>
-                        </section>
-                    </div>
+                <div class="wrap">
+                    <section class="shopping_bomb__info">
+                        <div v-for="pro in props" class="mui-row">
+                            {{pro}}<br/>
+                            <button v-for="p in propsList"  v-if="p.value.split(':')[0]==pro" type="button" class="mui-btn size">{{p.value.split(':')[1]}}</button>
+                        </div>
+                        <div class="mui-row">
+                            数量<br />
+                            <v-numbox></v-numbox>
+                        </div>
+                        <div class="mui-row">
+                            备注<br />
+                            <textarea style="margin: 10px 0 0 0;" placeholder="如您有需要客服留心的问题或要求，可以在这里进行留言哦~"></textarea>
+                        </div>
+                    </section>
+                    <!--<section class="mui-row shopping_bomb__total">-->
+                        <!--<div class="mui-row">-->
+                            <!--<div class="mui-pull-left">商品价格</div>-->
+                            <!--<div class="mui-pull-right price"><button type="button" class="mui-btn active">修改</button> ￥149.40</div>-->
+                        <!--</div>-->
+                        <!--<div class="mui-row">-->
+                            <!--<div class="mui-pull-left shopping_bomb__total__special">国内运费</div>-->
+                            <!--<div class="mui-pull-right price"><button type="button" class="mui-btn active">修改</button>￥149.40</div>-->
+                        <!--</div>-->
+                        <!--<div class="mui-row">-->
+                            <!--<div class="mui-pull-left">国际运费</div>-->
+                            <!--<div class="mui-pull-right"><i class="iconfont icon-zhuyi"></i> 另计</div>-->
+                        <!--</div>-->
+                    <!--</section>-->
                 </div>
                 <footer class="footer">
                     确定
@@ -142,13 +132,15 @@
 
 <script>
 import vSlider from '@/components/slider/slider';
-import {getJSON} from '@/assets/js/common';  //公共函数库
+import vNumbox from '@/components/numbox/numbox';
+import {getJSON, postJSON, yesAlert} from '@/assets/js/common';  //公共函数库
 
 export default
 {
     components:
     {
-        vSlider
+        vSlider,
+        vNumbox
     },
     data()
     {
@@ -156,13 +148,17 @@ export default
             mask: mui.createMask(() =>
             {
                 this.bomb = false;
+                document.body.style.overflow = '';
             }),
             bomb: false,
             goods: {},
+            props: [],
+            propsList: [],
             option:
             {
                 num_iid: ''
             },
+            type: '',
             details: '',
             details_show: true,
             topActive: false
@@ -171,6 +167,7 @@ export default
     created()
     {
         this.option.num_iid = this.$route.query.num_iid ? this.$route.query.num_iid : '';
+        this.type = this.$route.query.type ? this.$route.query.type : '';
         this.getDesc();
 
         window.addEventListener('scroll', this.handleScroll)
@@ -179,20 +176,47 @@ export default
     {
         getDesc()
         {
-            mui.getJSON(this.API.DETAILS_TAOBAO, this.option, data =>
+            // 判断api
+            let api = this.API[`DETAILS_${this.type}`];
+
+            // 获取api
+            mui.getJSON(api, this.option, data =>
             {
                 this.goods = data.item;
                 // 轮播
-                this.goods.item_imgs = data.item.item_imgs.map(e => {return 'http:' + e.url});
+                let http = this.type == 'ALIBABA' ? '' : 'http:';
+                this.goods.item_imgs = data.item.item_imgs.map(e => {return http + e.url});
                 // 详情
-                if(data.item.desc != null)
+                if(data.item.desc != null) this.details = data.item.desc;
+                // 颜色、尺码
+                if(data.item.props_list)
                 {
-                    this.details = data.item.desc;
-                    // var list = document.querySelectorAll('table');
-                    // for(var n = 0; n < list.length; n++) {
-                    //     list[n].style = "max-width:" + plus.screen.resolutionWidth + "px";
-                    //     //					console.log(list[n].style);
-                    // }
+                    function contains(arr, obj)
+                    {
+                        var i = arr.length;
+                        while (i--)
+                        {
+                            if (arr[i] === obj)
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                    var pro = '';
+                    for(var props in data.item.props_list)
+                    {
+                        var op ={};
+                        op.name = props;
+                        op.value = data.item.props_list[props];
+                        this.propsList.push(op);
+                        if(pro != props.split(':')[0])
+                        {
+                            var p = data.item.props_list[props].split(':')[0];
+                            if(!contains(this.props,p)) this.props.push(p);
+                            pro = props.split(':')[0];
+                        }
+                    }
                 }
             });
         },
@@ -205,6 +229,29 @@ export default
         {
             this.mask.show();
             this.bomb = true;
+            document.body.style.overflow = 'hidden';
+        },
+        goShop()
+        {
+            this.$router.push({path: 'shopping_market', query: {href: `http:${this.goods.seller_info.zhuy}`, title: this.goods.seller_info.title}, append: true});
+        },
+        favorites()
+        {
+            let userId = localStorage.getItem('userId');
+            let options =
+            {
+                "userId": userId,
+                "goodsimg": this.goods.pic_url,
+                "goodsurl": this.goods.detail_url,
+                "goodsname": this.goods.title,
+                "goodsprice": this.goods.price,
+                "goodsseller": this.goods.nick,
+                "shopName": this.goods.seller_info.title
+            }
+            postJSON(this.API.FAVORITES_ADD, options, data =>
+            {
+                if(data.msg) yesAlert('收藏成功!');
+            })
         }
     }
 }
@@ -422,12 +469,12 @@ export default
             color: #666666;
             border-right: 1px solid #dedede;
 
-            &:nth-child(4)
+            &.cart
             {
                 background: #fbdce1;
                 color: $theme;
             }
-            &:nth-child(5)
+            &.buy
             {
                 background: $theme;
                 color: #ffffff;
@@ -588,7 +635,7 @@ export default
 }
 .shopping_bomb
 {
-    position: absolute;
+    position: fixed;
     top: 100px;
     z-index: 1000;
     width: 100%;
@@ -661,15 +708,11 @@ export default
             margin-left: 20px;
         }
     }
-    .mui-scroll-wrapper
+    .wrap
     {
-        background: #fff;
-        top: 100px;
-    }
-    &__x
-    {
-        width: 17.5px;
-        height: 18px;
+        height: 100%;
+        padding-bottom: 155px;
+        overflow: auto;
     }
     &__info
     {

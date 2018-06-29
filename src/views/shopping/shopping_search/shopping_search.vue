@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import {postJSON, yesAlert, compress} from '@/assets/js/common';  //公共函数库
+import {getUrlId, postJSON, yesAlert, compress, isUrl, getQueryString} from '@/assets/js/common';  //公共函数库
 
 export default
 {
@@ -103,7 +103,21 @@ export default
     {
         search()
         {
-            this.$router.push({path: '/shopping/shopping_list', query: {query: this.query}});
+            if (this.query == '')
+            {
+                yesAlert('搜索商品不能为空！');
+                return;
+            }
+
+            if (!isUrl(this.query))
+            {
+                this.$router.push({path: '/shopping/shopping_list', query: {query: this.query}});
+            }
+            else
+            {
+                let parameter = getUrlId(this.query);
+                this.$router.push({path: '/shopping/shopping_list/shopping_desc', query: parameter});
+            }
         },
         fileShow()
         {
@@ -195,7 +209,7 @@ export default
         &__text
         {
             margin: 0;
-            padding: 0;
+            padding-right: 30px;
             height: 30px;
             border-radius: 5px;
             border: none;

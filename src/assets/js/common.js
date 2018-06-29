@@ -24,6 +24,70 @@ function isEmail(str)
 
 /**
  *
+ * @desc   判断是否为链接
+ * @param str
+ * @returns {boolean}
+ */
+function isUrl(str)
+{
+    return /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/.test(str);
+}
+
+/**
+ *
+ * @param {Object} url 页面请求路径
+ * @param {Object} name 需要获取的参数名
+ */
+function getQueryString(url,name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = url.match(reg);
+    if (r != null) {
+        return unescape(r[2]);
+    }
+    return null;
+}
+
+/**
+ *
+ * @desc   获取电商网站ID
+ * @returns {{num_iid: *, type: string}}
+ */
+function getUrlId(query)
+{
+    let num_iid, type;
+
+    if(/.1688./.test(query))
+    {
+        let str = String(query.match(/\/[0-9]+.html/));
+        num_iid = str.substr(1,str.length-6);
+        type = 'ALIBABA';
+    }
+    else if (query.indexOf('jd.') != -1)
+    {
+        num_iid = /(\d+)\.html/.exec(query)[1];
+        type = 'JD';
+    }
+    else if (query.indexOf('amazon.') != -1)
+    {
+        let match = /amazon\.([^\/]+)\/dp\/([\w\d]+)/ig.exec(query);
+        if(!match[2]) match = /amazon\.([^\/]+)\/[^\/]+\/dp\/([\w\d]+)/ig.exec(query);
+        num_iid = match[2];
+        type = 'AMAZON';
+    }
+    else
+    {
+        num_iid = getQueryString(query.split('?')[1].trim(),'id');
+        type = 'TAOBAO';
+    }
+
+    return {
+        num_iid,
+        type
+    }
+}
+
+/**
+ *
  * @desc 判断是否为6-20位的密码
  * @param str
  * @returns {boolean}
@@ -160,9 +224,12 @@ function getJSON(url,option,Func){
 
 export
 {
+    getUrlId,
     getDpi,
     isEmail,
     isPassworld,
+    isUrl,
+    getQueryString,
     yesAlert,
     postJSON,
     getJSON,
