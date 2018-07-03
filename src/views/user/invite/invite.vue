@@ -7,10 +7,10 @@
                     <ul class="mui-table-view">
                         <li class="mui-table-view-cell">
                             <span class="ps">好友邮箱</span>
-                            <input type="text" placeholder="请输入好友的邮箱地址" />
+                            <input type="text" placeholder="请输入好友的邮箱地址" v-model="email" />
                         </li>
                         <li class="mui-table-view-cell">
-                            <button class="post">发送邀请</button>
+                            <button @click="sendEmail" class="post">发送邀请</button>
                         </li>
                     </ul>
                 </section>
@@ -21,45 +21,36 @@
                 </section>
                 <section class="recording">
                     <nav class="tab">
-                        <div class="tab__item">
-                            <span class="tab__text active">邀请记录列表</span>
+                        <div @click="taggle = true" class="tab__item">
+                            <span class="tab__text" :class="{active: taggle == true}">邀请记录列表</span>
                         </div>
-                        <div class="tab__item">
-                            <span class="tab__text">现金返还记录</span>
+                        <div @click="taggle = false" class="tab__item">
+                            <span class="tab__text" :class="{active: taggle == false}">现金返还记录</span>
                         </div>
                     </nav>
-                    <ul class="mui-table-view">
-                        <li class="mui-table-view-cell">
+                    <ul v-if="taggle" class="mui-table-view">
+                        <li v-for="item in list" class="mui-table-view-cell">
                             <div class="left">
-                                好友：CC<br />
-                                <span class="ps">2016-11-09 09:08</span>
+                                好友：{{item.reg_uname}}<br />
+                                <span class="ps">{{new Date(item.reg_time*1000).Format("yyyy-MM-dd hh:mm:ss")}}</span>
                             </div>
                             <div class="right">
                                 <span class="status">已邀请</span>
                             </div>
                         </li>
-                        <li class="mui-table-view-cell">
+                    </ul>
+                    <ul v-else class="mui-table-view">
+                        <li v-for="item in rlist"  class="mui-table-view-cell cash">
                             <div class="left">
-                                好友：CC<br />
-                                <span class="ps">2016-11-09 09:08</span>
+                                好友：{{item.reg_uname}}<br />
+                                <span class="ps">{{new Date(item.datetime*1000).Format("yyyy-MM-dd hh:mm:ss")}}</span>
                             </div>
                             <div class="right">
-                                <span class="status">已加入</span>
+                                <span class="green">+{{item.cachback_amount}}</span><br />
+                                <span class="price">{{item.amount}}</span>
                             </div>
                         </li>
                     </ul>
-                    <!--<ul class="mui-table-view">
-                            <li class="mui-table-view-cell cash">
-                                <div class="left">
-                                    好友：CC<br />
-                                    <span class="ps">2016-11-09 09:08</span>
-                                </div>
-                                <div class="right">
-                                    <span class="green">+15.92</span><br />
-                                    <span class="price">398.00</span>
-                                </div>
-                            </li>
-                        </ul>-->
                 </section>
             </div>
         </div>
@@ -68,12 +59,69 @@
 
 <script>
 import vHeader from '@/components/header/header';
+import {getJSON, postJSON, isEmail, yesAlert} from '@/assets/js/common';  //公共函数库
+
 
 export default
 {
     components:
     {
         vHeader
+    },
+    data()
+    {
+        return {
+            taggle: true,
+            userId: '',
+            list: {},
+            rlist: {},
+            email: ''
+        }
+    },
+    created()
+    {
+        this.userId = localStorage.getItem('userId');
+        getJSON
+        (
+            this.API.USER_INVITELIST,
+            {
+                userId: this.userId
+            }, data =>
+            {
+                this.list = data.list;
+            }
+        );
+        getJSON
+        (
+            this.API.USER_CASHBACK_RECORDS,
+            {
+                userId: this.userId
+            }, data =>
+            {
+                this.rlist = data.list;
+            }
+        );
+    },
+    methods:
+    {
+        sendEmail()
+        {
+            if(!isEmail(email)){
+                yesAlert('请输入正确的邮箱!');
+                return;
+            }
+            postJSON
+            (
+                this.API.USER_INVITEFRIENDS,
+                {
+                    userId: this.userId,
+                    email: this.email
+                }, data =>
+                {
+                    if(data.msg) yesAlert('发送成功');
+                }
+            );
+        }
     }
 }
 </script>

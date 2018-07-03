@@ -3,17 +3,17 @@
         <v-header title="通知"></v-header>
         <div class="mui-content">
             <ul class="mui-table-view">
-                <li class="mui-table-view-cell mui-transitioning">
+                <li v-for="item in list" class="mui-table-view-cell mui-transitioning">
                     <div class="mui-slider-right mui-disabled">
                         <a class="mui-btn mui-btn-red">删除</a>
                     </div>
                     <div class="mui-slider-handle">
                         <div class="notice__wrap">
                             <div class="notice__wrap__header">
-                                <span>积分延迟发放通知 </span>
-                                <span class="notice__wrap__header__date">2016-11-09 09:08</span>
+                                <span>{{item.title}}</span>
+                                <span class="notice__wrap__header__date">{{new Date(item.addtime*1000).Format("yyyy-MM-dd hh:mm:ss")}}</span>
                             </div>
-                            <p>由于系统发生故障，积分可能会延迟发放，我们正在努力检</p>
+                            <p>{{item.body}}</p>
                         </div>
                     </div>
                 </li>
@@ -24,12 +24,31 @@
 
 <script>
 import vHeader from '@/components/header/header';
+import {postJSON} from '@/assets/js/common';  //公共函数库
+
 
 export default
 {
     components:
     {
         vHeader
+    },
+    data()
+    {
+        return {
+            list: []
+        }
+    },
+    created()
+    {
+        postJSON
+        (
+            this.API.OTHER_ANNOUNCEMENT,
+            {}, data =>
+            {
+                this.list = data.list;
+            }
+        );
     }
 }
 </script>

@@ -3,30 +3,30 @@
         <v-header title="地址管理"></v-header>
         <div class="mui-content">
             <div class="plus">
-                <!--<section class="address__item">-->
-                    <!--<div class="address__main">-->
-                        <!--<div class="address__user">-->
-                            <!--<span>张章彰</span>-->
-                            <!--<span>13955567887</span>-->
-                        <!--</div>-->
-                        <!--<div class="address__address">中国江西省新余市渝水区人民路313号中小企业局5楼</div>-->
-                        <!--<div class="address__mailCode">邮编：444444</div>-->
-                    <!--</div>-->
-                    <!--<div class="address__footer">-->
-                        <!--<div class="address__default active">-->
-                            <!--<v-checkbox></v-checkbox> 默认地址-->
-                        <!--</div>-->
-                        <!--<div class="address__control">-->
-                            <!--<span>-->
-                                <!--<i class="iconfont icon-bianji"></i> 编辑-->
-                            <!--</span>-->
-                            <!--<span>-->
-                                <!--<i class="iconfont icon-shanchu"></i> 删除-->
-                            <!--</span>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</section>-->
-                <v-no_data icon="icon-address" text="您还没有收货地址"></v-no_data>
+                <section v-for="item in list" class="address__item">
+                    <div class="address__main">
+                        <div class="address__user">
+                            <span>{{item.uname}}</span>
+                            <span>{{item.tel}}</span>
+                        </div>
+                        <div class="address__address">{{item.CountryName + ' ' + item.city + ' ' + item.address}}</div>
+                        <div class="address__mailCode">邮编：{{item.zip}}</div>
+                    </div>
+                    <div class="address__footer">
+                        <div @click="setDefault(!!Number(item.def), item.aid)" class="address__default active">
+                            <v-checkbox :checked="!!Number(item.def)"></v-checkbox> 默认地址
+                        </div>
+                        <div class="address__control">
+                            <router-link :to="{path: 'add_address', query: {edit: item}}" tag="span" append>
+                                <i class="iconfont icon-bianji"></i> 编辑
+                            </router-link>
+                            <span @click="del(item.aid)">
+                                <i class="iconfont icon-shanchu"></i> 删除
+                            </span>
+                        </div>
+                    </div>
+                </section>
+                <v-no_data v-if="!list" icon="icon-address" text="您还没有收货地址"></v-no_data>
             </div>
         </div>
         <router-link to="add_address" tag="footer" class="footer" append>
@@ -39,6 +39,8 @@
 import vHeader from '@/components/header/header';
 import vCheckbox from '@/components/checkbox/checkbox';
 import vNo_data from '@/components/no_data/no_data';
+import {getJSON, postJSON} from '@/assets/js/common';  //公共函数库
+
 export default
 {
     components:
@@ -46,6 +48,65 @@ export default
         vHeader,
         vCheckbox,
         vNo_data
+    },
+    data()
+    {
+        return {
+            list: [],
+            userId: localStorage.getItem('userId')
+        }
+    },
+    created()
+    {
+        this.getList()
+    },
+    methods:
+    {
+        getList()
+        {
+            postJSON
+            (
+                this.API.ADDRESS_LIST,
+                {userId: this.userId},
+                data =>
+                {
+                    this.list = data.list;
+                }
+            );
+        },
+        setDefault(flag, aid)
+        {
+            if (!flag)
+            {
+                getJSON
+                (
+                    this.API.ADDRESS_DEFAULT,
+                    {
+                        userId: this.userId,
+                        addressId: aid
+                    },
+                    data =>
+                    {
+                        if (data.msg) this.getList();
+                    }
+                );
+            }
+        },
+        del(aid)
+        {
+            postJSON
+            (
+                this.API.ADDRESS_DEL,
+                {
+                    userId: this.userId,
+                    addressId: aid
+                },
+                data =>
+                {
+                    this.getList()
+                }
+            );
+        }
     }
 }
 </script>

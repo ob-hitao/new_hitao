@@ -2,6 +2,29 @@
  * Created by jesse on 2018/1/29.
  */
 /**
+ * 时间格式化
+ * @param {String} fmt 格式化样式
+ */
+Date.prototype.Format = function(fmt)
+{
+    var o = {
+        "M+" : this.getMonth()+1,                 //月份
+        "d+" : this.getDate(),                    //日
+        "h+" : this.getHours(),                   //小时
+        "m+" : this.getMinutes(),                 //分
+        "s+" : this.getSeconds(),                 //秒
+        "q+" : Math.floor((this.getMonth()+3)/3), //季度
+        "S"  : this.getMilliseconds()             //毫秒
+    };
+    if(/(y+)/.test(fmt))
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+    for(var k in o)
+        if(new RegExp("("+ k +")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+    return fmt;
+}
+
+/**
  *
  * @desc 获取dpi
  * @returns {number}
@@ -105,6 +128,30 @@ function isPassworld(str)
 function yesAlert(message,callback)
 {
     mui.alert(message, 'hitao', '确定', callback);
+}
+
+/**
+ *
+ * @desc 确认框
+ * @param {Function} callback
+ */
+function confirm(callback)
+{
+    mui.confirm('', 'hitao', ['女', '男'], callback)
+}
+
+/**
+ *
+ * @desc  输入弹窗
+ * @param title
+ * @param deftext
+ * @param ntitle
+ * @param callback
+ */
+function prompt(callback)
+{
+    // mui.prompt('text','deftext','title',['true','false'],callback,'div')
+    mui.prompt('', '请输入', 'hitao', ['否','是'], callback);
 }
 
 /**
@@ -222,6 +269,48 @@ function getJSON(url,option,Func){
     );
 }
 
+/**
+ *
+ * @desc 切换状态栏样式
+ * @param bg
+ * @param style
+ */
+function taggleBg(bg, style)
+{
+    mui.plusReady(() =>
+    {
+        // 系统顶部样式
+        plus.navigator.setStatusBarBackground(bg);
+        plus.navigator.setStatusBarStyle(style);
+    });
+}
+
+/**
+ * 设置剪贴板内容
+ * @param {String} text内容
+ */
+function setClipText(text){
+    if(plus.os.name=='Android')
+    {
+        var Context = plus.android.importClass("android.content.Context");
+        var main = plus.android.runtimeMainActivity();
+        var clip = main.getSystemService(Context.CLIPBOARD_SERVICE);
+        plus.android.invoke(clip, "setText", text);
+    }
+    else if(plus.os.name=='iOS')
+    {
+        var UIPasteboard  = plus.ios.importClass("UIPasteboard");
+        var generalPasteboard = UIPasteboard.generalPasteboard();
+
+        // 设置
+        generalPasteboard.plusCallMethod
+        ({
+            setValue: text,
+            forPasteboardType: "public.utf8-plain-text"
+        });
+    }
+}
+
 export
 {
     getUrlId,
@@ -231,7 +320,11 @@ export
     isUrl,
     getQueryString,
     yesAlert,
+    prompt,
+    confirm,
     postJSON,
     getJSON,
-    compress
+    compress,
+    taggleBg,
+    setClipText
 }

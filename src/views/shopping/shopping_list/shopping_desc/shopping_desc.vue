@@ -167,7 +167,7 @@ export default
     created()
     {
         this.option.num_iid = this.$route.query.num_iid ? this.$route.query.num_iid : '';
-        this.type = this.$route.query.type ? this.$route.query.type : '';
+        this.type = this.$route.query.type ? this.$route.query.type : 'TAOBAO';
         this.getDesc();
 
         window.addEventListener('scroll', this.handleScroll)
@@ -178,7 +178,6 @@ export default
         {
             // 判断api
             let api = this.API[`DETAILS_${this.type}`];
-
             // 获取api
             mui.getJSON(api, this.option, data =>
             {

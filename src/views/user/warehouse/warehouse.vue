@@ -8,11 +8,11 @@
                     包裹转运的寄送地址
                 </h4>
                 <ul class="mui-table-view">
-                    <li class="mui-table-view-cell"><span>省份</span>广东省 <i class="iconfont icon-copy"></i></li>
-                    <li class="mui-table-view-cell"><span>城市</span>广东市 <i class="iconfont icon-copy"></i></li>
-                    <li class="mui-table-view-cell"><span>地址</span>白云区太和镇均禾街道南岭岗埔大道新洋工业园A栋一楼A仓 3468 库 <i class="iconfont icon-copy"></i></li>
-                    <li class="mui-table-view-cell"><span>收件人</span>YES-CC大小姐 <i class="iconfont icon-copy"></i></li>
-                    <li class="mui-table-view-cell"><span>邮编</span>510440 <i class="iconfont icon-copy"></i></li>
+                    <li @click="setcopy(address.diqu)" class="mui-table-view-cell"><span>省份</span>{{address.diqu}} <i class="iconfont icon-copy"></i></li>
+                    <li @click="setcopy(address.jiedao)" class="mui-table-view-cell"><span>地址</span>{{address.jiedao}} <i class="iconfont icon-copy"></i></li>
+                    <li @click="setcopy(address.shoujianren)" class="mui-table-view-cell"><span>收件人</span>{{address.shoujianren}} <i class="iconfont icon-copy"></i></li>
+                    <li @click="setcopy(address.ZipCode)" class="mui-table-view-cell"><span>邮编</span>{{address.ZipCode}} <i class="iconfont icon-copy"></i></li>
+                    <li @click="setcopy(address.dianhua)" class="mui-table-view-cell"><span>电话</span>{{address.dianhua}} <i class="iconfont icon-copy"></i></li>
                 </ul>
                 <p class="warehouse__content__ps">提示：复制仓库地址到你的淘宝或其他网站帐号，作为收货人地址，当您获得快递跟踪号后，到会员中心 “转运” 提交订单页面提交相交的信息。收到货物后我们会为您更新货物的最新信息。</p>
             </div>
@@ -22,12 +22,45 @@
 
 <script>
 import vHeader from '@/components/header/header';
+import {postJSON, setClipText} from '@/assets/js/common';  //公共函数库
+
 
 export default
 {
     components:
     {
         vHeader
+    },
+    data()
+    {
+        return {
+            address: {}
+        }
+    },
+    created()
+    {
+        postJSON
+        (
+            this.API.SENDORDER_ADDRESS,
+            {
+                userId: localStorage.getItem('userId')
+            },
+            data =>
+            {
+                this.address = data.address;
+            }
+        );
+    },
+    methods:
+    {
+        setcopy(text)
+        {
+            mui.plusReady(() =>
+            {
+                setClipText(text);
+                mui.toast('copy成功！');
+            })
+        }
     }
 }
 </script>

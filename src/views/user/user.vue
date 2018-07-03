@@ -7,11 +7,11 @@
                     <i class="iconfont icon-xinxi"></i>
                 </div>
                 <figure class="user__content">
-                    <img class="user__avatar" src="./avatar@2x.png"/>
+                    <img class="user__avatar" v-lazy="'http://hitao.dev.onebound.cn/' + userInfo.touxiang" />
                     <figcaption class="user__detailed">
-                        <h4 class="user__name">公主殿下</h4>
+                        <h4 class="user__name">{{userInfo.uname}}</h4>
                         <div class="user__level">
-                            会员等级 <v-star :size="4" :score="1"></v-star>
+                            会员等级 <v-star :size="4" :score="Number(userInfo.level)"></v-star>
                         </div>
                     </figcaption>
                     <router-link to="checkin" tag="div" append>
@@ -85,19 +85,19 @@
                 <div class="elastic_module__content">
                     <router-link to="wallet" tag="figure" class="elastic_module__wrap" append>
                         <figcaption class="elastic_module__description">
-                            ￥0.00<br />
+                            ￥{{userInfo.money}}<br />
                             当前余额
                         </figcaption>
                     </router-link>
                     <router-link to="integral" tag="figure" class="elastic_module__wrap" append>
                         <figcaption class="elastic_module__description">
-                            0<br />
+                            {{userInfo.score}}<br />
                             会员积分
                         </figcaption>
                     </router-link>
                     <figure class="elastic_module__wrap">
                         <figcaption class="elastic_module__description">
-                            ￥0.00<br />
+                            ￥{{userInfo.commission}}<br />
                             佣金
                         </figcaption>
                     </figure>
@@ -188,6 +188,7 @@
 import vFooter from '@/components/footer/footer';
 import vCheckin from '@/components/checkin/checkin';
 import vStar from '@/components/star/star';
+import {postJSON} from '@/assets/js/common';  //公共函数库
 
 export default
 {
@@ -196,6 +197,24 @@ export default
         vFooter,
         vCheckin,
         vStar
+    },
+    data()
+    {
+        return {
+            userInfo: {}
+        }
+    },
+    created()
+    {
+        this.getUser();
+    },
+    methods:
+    {
+        getUser()
+        {
+            let userId = localStorage.getItem('userId');
+            postJSON(this.API.USER_INDEX, {userId}, data => this.userInfo = data.userInfo)
+        }
     }
 }
 </script>

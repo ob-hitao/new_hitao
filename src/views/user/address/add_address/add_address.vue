@@ -1,7 +1,7 @@
 <template>
     <div class="add_address">
-        <v-header title="新增收货地址">
-            <span class="right">保存</span>
+        <v-header :title="edit ? '编辑收货地址' : '新增收货地址'">
+            <span @click="addAddress" class="right">保存</span>
         </v-header>
         <div class="mui-content">
             <div class="plus">
@@ -9,47 +9,47 @@
                     <li class="mui-table-view-cell">
                         <a href="#">
                             收件人
-                            <input type="text" value="jesse"/>
+                            <input type="text" v-model="options.consignee" />
                         </a>
                     </li>
                     <li class="mui-table-view-cell">
                         <a class="mui-navigate-right">
                             国家
-                            <select id="list">
-                                <option>江西</option>
+                            <select v-model="options.country">
+                                <option :selected="options.country == item.region_id" v-for="item in countryList" :value="item.region_id">{{item.region_name}}</option>
                             </select>
                         </a>
                     </li>
                     <li class="mui-table-view-cell">
-                        <a class="mui-navigate-right">
+                        <a>
                             城市
-                            <input type="text" value="新余"/>
+                            <input type="text" v-model="options.city" />
                         </a>
                     </li>
                     <li class="mui-table-view-cell">
                         <a href="#">
                             地址
-                            <input type="text" value="江西"/>
+                            <input type="text" v-model="options.address" />
                         </a>
                     </li>
                     <li class="mui-table-view-cell">
                         <a href="#">
                             邮编
-                            <input type="number" value="123456"/>
+                            <input type="number" v-model="options.zipcode" />
                         </a>
                     </li>
                     <li class="mui-table-view-cell last">
                         <a href="#">
                             电话
-                            <input type="number" value="123456"/>
+                            <input type="number" v-model="options.tel" />
                         </a>
                     </li>
-                    <li class="mui-table-view-cell default">
-                        <a href="#">设为默认</a>
-                        <div class="mui-switch mui-switch-mini mui-active">
-                            <div class="mui-switch-handle"></div>
-                        </div>
-                    </li>
+                    <!--<li class="mui-table-view-cell default">-->
+                        <!--<a href="#">设为默认</a>-->
+                        <!--<div class="mui-switch mui-switch-mini mui-active">-->
+                            <!--<div class="mui-switch-handle"></div>-->
+                        <!--</div>-->
+                    <!--</li>-->
                 </ul>
             </div>
         </div>
@@ -58,12 +58,67 @@
 
 <script>
 import vHeader from '@/components/header/header';
+import {getJSON, postJSON} from '@/assets/js/common';  //公共函数库
+
 
 export default
 {
     components:
     {
         vHeader
+    },
+    data()
+    {
+        return {
+            options:
+            {
+                userId: localStorage.getItem('userId'),
+                consignee: '',
+                country: '',
+                city: '',
+                zipcode: '',
+                tel: '',
+                address: ''
+            },
+            countryList: [],
+            edit: {}
+        }
+    },
+    created()
+    {
+        this.edit = this.$route.query.edit ? this.$route.query.edit : '';
+        if (this.edit)
+        {
+            this.options = this.edit;
+            this.options.zipcode = this.edit.zip;
+            this.options.addressId = this.edit.aid;
+        }
+
+        getJSON
+        (
+            this.API.ADDRESS_GETREGIONSNAME,
+            {},
+            data =>
+            {
+                this.countryList = data.list;
+            }
+        )
+    },
+    methods:
+    {
+        addAddress()
+        {
+            postJSON
+            (
+                this.API[this.edit ? 'ADDRESS_EDIT' : 'ADDRESS_ADD'],
+                this.options,
+                data =>
+                {
+                    console.log(1)
+                    if(data.msg) mui.back();
+                }
+            );
+        }
     }
 }
 </script>

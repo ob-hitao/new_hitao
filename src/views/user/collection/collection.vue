@@ -6,43 +6,122 @@
         <div class="mui-content" :class="{'btm-50': edit}">
             <div class="plus">
                 <ul class="mui-table-view">
-                    <li v-for="n in 10" class="mui-table-view-cell">
+                    <li v-for="item in list" class="mui-table-view-cell">
                         <div class="mui-slider-right mui-disabled">
-                            <a class="mui-btn mui-btn-red">删除</a>
+                            <a @click="del(item.fid)" class="mui-btn mui-btn-red">删除</a>
                         </div>
                         <div class="mui-slider-handle">
                             <div class="collection__item">
                                 <div class="collection__item__checkbox">
-                                    <v-checkbox v-show="edit"></v-checkbox>
+                                    <v-checkbox v-model="item.checked" v-show="edit"></v-checkbox>
                                 </div>
-                                <v-goods-row></v-goods-row>
+                                <figure @click="toDesc(item.goodsurl)" class="goods_row">
+                                    <img class="goods_row__img" v-lazy="item.goodsimg" />
+                                    <figcaption class="goods_row__wrap">
+                                        <h4 class="goods_row__title">
+                                            {{item.goodsname}}
+                                        </h4>
+                                        <div class="goods_row__priceAndnumber">
+                                            <span class="goods_row__price">￥{{item.goodsprice}}</span>
+                                        </div>
+                                    </figcaption>
+                                </figure>
                             </div>
                         </div>
                     </li>
                 </ul>
             </div>
         </div>
-        <footer v-show="edit" class="footer">删除(1)</footer>
+        <footer @click="del" v-show="edit" class="footer">删除({{checkedList.length}})</footer>
     </div>
 </template>
 
 <script>
 import vHeader from '@/components/header/header';
-import vGoodsRow from '@/components/goods_row/goods_row';
 import vCheckbox from '@/components/checkbox/checkbox';
+import {postJSON, getUrlId} from '@/assets/js/common';  //公共函数库
+
 
 export default
 {
     components:
     {
         vHeader,
-        vGoodsRow,
         vCheckbox
     },
     data()
     {
         return {
-            edit: false
+            edit: false,
+            options:
+            {
+                userId: localStorage.getItem('userId'),
+                p: 1,
+                size: 6
+            },
+            list: []
+        }
+    },
+    computed:
+    {
+        checkedList()
+        {
+            let list = [];
+            for (var i in this.list)
+            {
+                if (this.list[i].checked)
+                {
+                    list.push(this.list[i].fid);
+                }
+            }
+            return list;
+        }
+    },
+    created()
+    {
+        this.getFavorite();
+    },
+    methods:
+    {
+        getFavorite()
+        {
+            postJSON
+            (
+                this.API.FAVORITES_LIST,
+                this.options,
+                data =>
+                {
+                    this.list = data.list;
+                    for (var i in this.list)
+                    {
+                        this.$set(this.list[i], 'checked', false);
+                    }
+                }
+            )
+        },
+        toDesc(url)
+        {
+            let parameter = getUrlId(url);
+            this.$router.push({path: '/shopping/shopping_list/shopping_desc', query: parameter});
+        },
+        del(fid)
+        {
+            postJSON
+            (
+                this.API.FAVORITES_DEL,
+                {
+                    userId: this.options.userId,
+                    favoriteId: fid ? fid : this.checkedList
+                },
+                data =>
+                {
+                    if(data.msg)
+                    {
+                        this.options.p = 1;
+                        this.getFavorite()
+                    }
+                }
+            )
         }
     }
 }
@@ -52,6 +131,30 @@ export default
 @import "../../../assets/scss/parameter";
 .collection
 {
+    .goods_row
+    {
+        position: relative;
+
+        &__img
+        {
+            float: left;
+            margin-right: 10px;
+            width: 90px;
+            height: 90px;
+        }
+        &__title
+        {
+            font-weight: normal;
+            font-size: 14px;
+        }
+        &__price
+        {
+            position: absolute;
+            bottom: 0;
+            font-size: 16px;
+            color: #ff6900;
+        }
+    }
     .btm-50
     {
         bottom: 50px;
@@ -93,7 +196,7 @@ export default
     &__item
     {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
         background: #fff;
 

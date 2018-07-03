@@ -4,23 +4,10 @@
         <div class="mui-content">
             <div class="plus">
                 <div class="feedback__main">
-                    <textarea placeholder="请反馈您在使用中遇到的问题或你给我们的建议"></textarea>
-                    <div class="feedback__main__verification">
-                        <input placeholder="输入验证码" /><img src=""/>
-                    </div>
-                    <button class="mui-btn">提交</button>
+                    <textarea placeholder="请反馈您在使用中遇到的问题或你给我们的建议" v-model="text"></textarea>
+                    <button @click="submit" class="mui-btn">提交</button>
                 </div>
                 <h4 class="feedback__title">已提交的意见内容</h4>
-                <ul class="mui-table-view">
-                    <li class="mui-table-view-cell">
-                        <span>很好很好不好怎么这样的？</span>
-                        <span>2017-07-20</span>
-                    </li>
-                    <li class="mui-table-view-cell">
-                        <span>很好很好不好怎么这样的？</span>
-                        <span>2017-07-20</span>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
@@ -28,12 +15,37 @@
 
 <script>
 import vHeader from '@/components/header/header';
+import {postJSON, yesAlert} from '@/assets/js/common';  //公共函数库
 
 export default
 {
     components:
     {
         vHeader
+    },
+    data()
+    {
+        return {
+            text: ''
+        }
+    },
+    methods:
+    {
+        submit()
+        {
+            postJSON
+            (
+                this.API.OTHER_FEEDBACK,
+                {
+                    uid: localStorage.getItem('userId'),
+                    content: this.text
+                },
+                data =>
+                {
+                    if (data.msg) yesAlert('提交成功！');
+                }
+            );
+        }
     }
 }
 </script>

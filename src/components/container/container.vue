@@ -1,21 +1,21 @@
 <template>
-    <transition :name="transitionName">
+    <!--<transition :name="transitionName">-->
         <!--<router-view class="child-view"></router-view>-->
         <router-view></router-view>
-    </transition>
+    <!--</transition>-->
 </template>
 
 <script>
 export default
 {
-    data()
-    {
-        return {
-            transitionName: ''
-        }
-    },
-    watch:
-    {
+    // data()
+    // {
+    //     return {
+    //         transitionName: ''
+    //     }
+    // },
+    // watch:
+    // {
         // '$route' (to, from)
         // {
         //     //监听路由的路径，可以通过不同的路径去选择不同的切换效果
@@ -28,7 +28,7 @@ export default
         //     // }
         //     this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left';
         // }
-    }
+    // }
 }
 </script>
 
