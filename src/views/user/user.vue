@@ -83,7 +83,7 @@
                     <span>我的资产</span>
                 </h4>
                 <div class="elastic_module__content">
-                    <router-link to="wallet" tag="figure" class="elastic_module__wrap" append>
+                    <router-link :to="{path: 'wallet', query: {money: userInfo.money}}" tag="figure" class="elastic_module__wrap" append>
                         <figcaption class="elastic_module__description">
                             ￥{{userInfo.money}}<br />
                             当前余额

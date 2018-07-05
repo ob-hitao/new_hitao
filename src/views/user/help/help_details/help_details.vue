@@ -1,21 +1,9 @@
 <template>
     <div class="help_details">
-        <v-header title="新手上路"></v-header>
+        <v-header :title="title"></v-header>
         <div class="help_details__content mui-content">
             <div class="plus">
-                <article class="help_details__content__article">
-                    <h4 class="help_details__content__article__title">费用</h4>
-                    <p class="help_details__content__article__content">总成本=产品价格+中国货运+国际货运+服务费，包括：产品价格：产品的零售价。中国货运：货物从零售商的地点运到一个仓库。国际运费：此运费根据您的货物重量，运送方式以及清关费用收取。服务费：服务费=（产品价+中国货运）×6％。</p>
-                    <p class="help_details__content__article__next"><span>下一篇>></span></p>
-                </article>
-                <section class="help_details__content__lists">
-                    <h4 class="help_details__content__lists__title">相关问题帮助</h4>
-                    <ul class="mui-table-view">
-                        <li class="mui-table-view-cell">1.万邦服务</li>
-                        <li class="mui-table-view-cell">2.费用</li>
-                        <li class="mui-table-view-cell">3.订单程序</li>
-                    </ul>
-                </section>
+                <article class="help_details__content__article" v-html="body"></article>
             </div>
         </div>
     </div>
@@ -23,12 +11,38 @@
 
 <script>
 import vHeader from '@/components/header/header';
+import {getJSON} from '@/assets/js/common';  //公共函数库
+
 export default
 {
     components:
-        {
-            vHeader
+    {
+        vHeader
+    },
+    data()
+    {
+        return {
+            title: '',
+            body: ''
         }
+    },
+    created()
+    {
+        let articleId = this.$route.query.viewId ? this.$route.query.viewId : '';
+
+        getJSON
+        (
+            this.API.ARTICLE_VIEW,
+            {
+                articleId
+            },
+            data =>
+            {
+                this.title = data.msg.title;
+                this.body = data.msg.body;
+            }
+        );
+    }
 }
 </script>
 

@@ -9,27 +9,27 @@
                     <i class="iconfont icon-qianbao1"></i>
                     <figcaption class="wallet__details">
                         当前余额(￥)
-                        <span>￥0.00</span>
+                        <span>￥{{money}}</span>
                     </figcaption>
                 </figure>
                 <router-link to="rechange" tag="button" class="rechange" append>充值</router-link>
                 <router-link to="" tag="button" class="withdraw" append>提现</router-link>
-                <ul class="mui-table-view">
-                    <li class="mui-table-view-cell">充值记录</li>
-                    <li class="mui-table-view-cell wallet__list">
-                        <div class="wallet__list__left">
-                            中国银行
-                            <p>2016-11-09 09:08</p>
-                        </div>
-                        <div class="wallet__list__right">
-                                <span class="wallet__list__right__price green">
-                                    +￥100
-                                </span>
+                <!--<ul class="mui-table-view">-->
+                    <!--<li class="mui-table-view-cell">充值记录</li>-->
+                    <!--<li class="mui-table-view-cell wallet__list">-->
+                        <!--<div class="wallet__list__left">-->
+                            <!--中国银行-->
+                            <!--<p>2016-11-09 09:08</p>-->
+                        <!--</div>-->
+                        <!--<div class="wallet__list__right">-->
+                                <!--<span class="wallet__list__right__price green">-->
+                                    <!--+￥100-->
+                                <!--</span>-->
                             <!--<button class="btn_empty">-->
                                 <!--退款-->
                             <!--</button>-->
-                        </div>
-                    </li>
+                        <!--</div>-->
+                    <!--</li>-->
                     <!--<li class="mui-table-view-cell wallet__list">-->
                         <!--<div class="wallet__list__left">-->
                             <!--中国银行-->
@@ -44,7 +44,7 @@
                             <!--</button>-->
                         <!--</div>-->
                     <!--</li>-->
-                </ul>
+                <!--</ul>-->
             </div>
         </div>
     </div>
@@ -57,6 +57,16 @@ export default
     components:
     {
         vHeader
+    },
+    data()
+    {
+        return {
+            money: 0
+        }
+    },
+    created()
+    {
+        this.money = this.$route.query.money ? this.$route.query.money : 0;
     }
 }
 </script>

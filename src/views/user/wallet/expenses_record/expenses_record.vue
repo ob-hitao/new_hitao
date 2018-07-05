@@ -4,13 +4,13 @@
         <div class="mui-content">
             <nav class="tab">
                 <div class="tab__item">
-                    <span class="tab__text active">全部</span>
+                    <span class="tab__text" :class="{active: options.type == 0}" @click="options.type = 0">全部</span>
                 </div>
                 <div class="tab__item">
-                    <span class="tab__text">支出</span>
+                    <span class="tab__text" :class="{active: options.type == 1}" @click="options.type = 1">支出</span>
                 </div>
                 <div class="tab__item">
-                    <span class="tab__text">收入</span>
+                    <span class="tab__text" :class="{active: options.type == 2}" @click="options.type = 2">收入</span>
                 </div>
             </nav>
             <section class="date">
@@ -57,12 +57,46 @@
 
 <script>
 import vHeader from '@/components/header/header';
+import {postJSON} from '@/assets/js/common';  //公共函数库
+
 export default
 {
     components:
-        {
-            vHeader
+    {
+        vHeader
+    },
+    data()
+    {
+        return {
+            options:
+            {
+                userId: localStorage.getItem('userId'),
+                p: 1,
+                size: 10,
+                type: 0
+            },
+            list: []
         }
+    },
+    created()
+    {
+        this.getList()
+    },
+    methods:
+    {
+        getList()
+        {
+            postJSON
+            (
+                this.API.USER_RECORDS,
+                this.options,
+                data =>
+                {
+                    this.list = data.list;
+                }
+            );
+        }
+    }
 }
 </script>
 

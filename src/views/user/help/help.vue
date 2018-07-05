@@ -5,49 +5,49 @@
             <div class="plus">
                 <section class="grid elastic_module">
                     <div class="elastic_module__content">
-                        <figure class="elastic_module__wrap">
+                        <figure @click="getHelp(1)" class="elastic_module__wrap">
                             <div class="icon"></div>
                             <figcaption class="elastic_module__description">
                                 新手上路
                             </figcaption>
                         </figure>
-                        <figure class="elastic_module__wrap">
+                        <figure @click="getHelp(2)" class="elastic_module__wrap">
                             <div class="icon"></div>
                             <figcaption class="elastic_module__description">
                                 操作指南
                             </figcaption>
                         </figure>
-                        <figure class="elastic_module__wrap">
+                        <figure @click="getHelp(3)" class="elastic_module__wrap">
                             <div class="icon"></div>
                             <figcaption class="elastic_module__description">
                                 付款
                             </figcaption>
                         </figure>
-                        <figure class="elastic_module__wrap">
+                        <figure @click="getHelp(4)" class="elastic_module__wrap">
                             <div class="icon"></div>
                             <figcaption class="elastic_module__description">
                                 运输
                             </figcaption>
                         </figure>
-                        <figure class="elastic_module__wrap">
+                        <figure @click="getHelp(5)" class="elastic_module__wrap">
                             <div class="icon"></div>
                             <figcaption class="elastic_module__description">
                                 账户
                             </figcaption>
                         </figure>
-                        <figure class="elastic_module__wrap">
+                        <figure @click="getHelp(6)" class="elastic_module__wrap">
                             <div class="icon"></div>
                             <figcaption class="elastic_module__description">
                                 售后服务
                             </figcaption>
                         </figure>
-                        <figure class="elastic_module__wrap">
+                        <figure @click="getHelp(7)" class="elastic_module__wrap">
                             <div class="icon"></div>
                             <figcaption class="elastic_module__description">
                                 会员等级
                             </figcaption>
                         </figure>
-                        <figure class="elastic_module__wrap">
+                        <figure @click="getHelp(8)" class="elastic_module__wrap">
                             <div class="icon"></div>
                             <figcaption class="elastic_module__description">
                                 其他问题
@@ -62,9 +62,7 @@
                             <a class="mui-navigate-right">对于新的初学者</a>
                             <div class="mui-collapse-content">
                                 <ul class="mui-table-view">
-                                    <li class="mui-table-view-cell">1.是否可以购买中国商品？</li>
-                                    <li class="mui-table-view-cell">2.什么费用？</li>
-                                    <li class="mui-table-view-cell">3.液体，糊状物，食品，DVD和药物有什么局限性？</li>
+                                    <li v-for="item in list" @click="toDesc(item.aid)" class="mui-table-view-cell">{{item.title}}</li>
                                 </ul>
                             </div>
                         </li>
@@ -77,12 +75,45 @@
 
 <script>
 import vHeader from '@/components/header/header';
+import {getJSON} from '@/assets/js/common';  //公共函数库
+
 export default
 {
     components:
-        {
-            vHeader
+    {
+        vHeader
+    },
+    data()
+    {
+        return {
+            list: []
         }
+    },
+    created()
+    {
+        this.getHelp();
+    },
+    methods:
+    {
+        getHelp(typeid = 1)
+        {
+            getJSON
+            (
+                this.API.ARTICLE_LIST,
+                {
+                    typeid
+                },
+                data =>
+                {
+                    this.list = data.list
+                }
+            )
+        },
+        toDesc(viewId)
+        {
+            this.$router.push({path: 'help_details', query: {viewId}, append: true});
+        }
+    }
 }
 </script>
 

@@ -1,8 +1,8 @@
 <template>
     <div class="numbox">
-        <button class="minus" @click="number--" :disabled="number <= 1">-</button>
-        <input type="number" v-model="number" />
-        <button class="plus" @click="number++">+</button>
+        <button class="minus" @click="changeNum(false)" ref="minus">-</button>
+        <input type="number" ref="input" :value="num" @input="$emit('input', $event.target.value)" />
+        <button class="plus" @click="changeNum(true)">+</button>
     </div>
 </template>
 
@@ -17,10 +17,13 @@ export default
             default: 1
         }
     },
-    data()
+    methods:
     {
-        return {
-            number: this.num
+        changeNum(behavior)
+        {
+            behavior ? this.$refs.input.value++ : this.$refs.input.value--;
+            this.$refs.minus.disabled = this.$refs.input.value <= 1 ? true : false;
+            this.$emit('input', this.$refs.input.value);
         }
     }
 }

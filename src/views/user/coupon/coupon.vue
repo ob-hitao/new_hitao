@@ -48,17 +48,50 @@
 </template>
 
 <script>
-    import vHeader from '@/components/header/header';
-    import vNo_data from '@/components/no_data/no_data';
+import vHeader from '@/components/header/header';
+import vNo_data from '@/components/no_data/no_data';
+import {getJSON} from '@/assets/js/common';  //公共函数库
 
-    export default
+
+export default
+{
+    components:
     {
-        components:
+        vHeader,
+        vNo_data
+    },
+    data()
+    {
+        return {
+            options:
+            {
+                size: 6,
+                p: 1,
+                type: ''
+            },
+            list: []
+        }
+    },
+    created()
+    {
+        this.getCoupon();
+    },
+    methods:
+    {
+        getCoupon()
         {
-            vHeader,
-            vNo_data
+            getJSON
+            (
+                this.API.COUPON_LIST,
+                this.options,
+                data =>
+                {
+                    this.list = data.list;
+                }
+            );
         }
     }
+}
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">

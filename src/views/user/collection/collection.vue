@@ -3,7 +3,7 @@
         <v-header title="收藏">
             <span @click="edit = !edit" class="right" :class="{active: edit}">{{edit ? '完成' : '编辑'}}</span>
         </v-header>
-        <div class="mui-content" :class="{'btm-50': edit}">
+        <div class="mui-content" :class="{'btm-50': edit}" @scroll.passive="next($event)">
             <div class="plus">
                 <ul class="mui-table-view">
                     <li v-for="item in list" class="mui-table-view-cell">
@@ -59,7 +59,8 @@ export default
                 p: 1,
                 size: 6
             },
-            list: []
+            list: [],
+            scrolled: false
         }
     },
     computed:
@@ -83,6 +84,22 @@ export default
     },
     methods:
     {
+        next(ev)
+        {
+            // 防止重入
+            if (this.scrolled) return false;
+            this.scrolled = true;
+            // 锁定
+            let el = ev.target;
+            let bottom = el.scrollHeight - el.scrollTop - el.offsetHeight;
+            if (bottom <= 250)
+            {
+                this.options.p++;
+                this.getFavorite();
+            }
+            //解锁
+            setTimeout(() => this.scrolled = false, 1);
+        },
         getFavorite()
         {
             postJSON
@@ -91,7 +108,8 @@ export default
                 this.options,
                 data =>
                 {
-                    this.list = data.list;
+                    let goods = this.list.concat(data.list);
+                    this.list = goods;
                     for (var i in this.list)
                     {
                         this.$set(this.list[i], 'checked', false);

@@ -17,30 +17,31 @@
                 <h6 class="title">汇款信息</h6>
                 <ul class="mui-table-view">
                     <li class="mui-table-view-cell">
-                        <a class="mui-navigate-right">
-					        	<span class="remittance_info__name">
-					        		汇款银行
-					        	</span>
-                            <input class="remittance_info__text" type="text" placeholder="请选择汇款银行" />
-                        </a>
+                            <span class="remittance_info__name">
+                                汇款银行
+                            </span>
+                        <input v-model="options.bankName" class="remittance_info__text" type="text"
+                               placeholder="请选择汇款银行"/>
                     </li>
                     <li class="mui-table-view-cell">
 				        	<span class="remittance_info__name">
 				        		汇款卡号
 				        	</span>
-                        <input class="remittance_info__text" type="text" placeholder="请输入卡号" />
+                        <input v-model="options.bankNO" class="remittance_info__text" type="text" placeholder="请输入卡号"/>
                     </li>
                     <li class="mui-table-view-cell">
 				        	<span class="remittance_info__name">
 				        		汇款人
 				        	</span>
-                        <input class="remittance_info__text" type="text" placeholder="请输入持卡人姓名" />
+                        <input v-model="options.fristName" class="remittance_info__text" type="text"
+                               placeholder="请输入持卡人姓名"/>
                     </li>
                     <li class="mui-table-view-cell">
 				        	<span class="remittance_info__name">
 				        		金额(￥)
 				        	</span>
-                        <input class="remittance_info__text" type="text" placeholder="请输入充值金额(RMB)" />
+                        <input v-model="options.money" class="remittance_info__text" type="number"
+                               placeholder="请输入充值金额(RMB)"/>
                     </li>
                 </ul>
             </section>
@@ -48,18 +49,53 @@
                 手续费 0<br />
                 我们会按收到的人民币1：1充值到你的帐号= 0.00
             </p>
-            <footer class="footer">充值</footer>
+            <footer @click="recharge" class="footer">充值</footer>
         </div>
     </div>
 </template>
 
 <script>
 import vHeader from '@/components/header/header';
+import {postJSON, yesAlert} from '@/assets/js/common';  //公共函数库
+
 export default
 {
     components:
     {
         vHeader
+    },
+    data()
+    {
+        return {
+            options:
+            {
+                userId: localStorage.getItem('userId'),
+                channel: 2,
+                money: '',
+                bankName: '',
+                fristName: '',
+                bankNO: ''
+            }
+        }
+    },
+    created()
+    {
+
+    },
+    methods:
+    {
+        recharge()
+        {
+            postJSON
+            (
+                this.API.PAY_RECHARGE,
+                this.options,
+                data =>
+                {
+                    if(data.msg) yesAlert('充值成功！');
+                }
+            );
+        }
     }
 }
 </script>

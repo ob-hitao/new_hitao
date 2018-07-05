@@ -7,31 +7,21 @@
                     <li class="mui-table-view-cell">
                         <a class="mui-navigate-right">
                             <span class="ps">目的国家</span>
-                            <span>
-				        			<select id="list" name="area[]">
-							    		<option>马来西亚</option>
-							    	</select>
-				        		</span>
+                            <select v-model="options.country">
+                                <option :value="item.region_id" v-for="item in list">{{item.region_name}}</option>
+                            </select>
                         </a>
                     </li>
                     <li class="mui-table-view-cell">
                         <span class="ps">商品价格</span>
-                        <span><input type="text" id="price"/><span class="ps right">RMB</span></span>
+                        <span><input type="text" v-model="options.price" /><span class="ps right">RMB</span></span>
                     </li>
                     <li class="mui-table-view-cell">
-                        <span class="ps">商品体积</span>
-                        <span>5<span class="ps right"></span>m³</span>
-                    </li>
-                    <li class="mui-table-view-cell radio">
-                        <div>
-                            <v-checkbox></v-checkbox><span class="ps">g(克)</span>
-                        </div>
-                        <div>
-                            <v-checkbox></v-checkbox><span class="ps">m³(立方)</span>
-                        </div>
+                        <span class="ps">商品重量</span>
+                        <span><input type="text" v-model="options.weight" /><span class="ps right">g</span></span>
                     </li>
                 </ul>
-                <button class="calc">估算</button>
+                <button @click="calc" class="calc">估算</button>
             </section>
 
             <section class="results">
@@ -55,13 +45,56 @@
 
 <script>
 import vHeader from '@/components/header/header';
-import vCheckbox from '@/components/checkbox/checkbox';
+import {getJSON, postJSON} from '@/assets/js/common';  //公共函数库
+
+
 export default
 {
     components:
     {
-        vHeader,
-        vCheckbox
+        vHeader
+    },
+    data()
+    {
+        return {
+            list: [],
+            result: {},
+            options:
+            {
+                price: '',
+                weight: '',
+                volume: '',
+                country: '',
+                deliveryType: 1
+            }
+        }
+    },
+    created()
+    {
+        getJSON
+        (
+            this.API.ADDRESS_GETREGIONSNAME,
+            {},
+            data =>
+            {
+                this.list = data.list;
+            }
+        );
+    },
+    methods:
+    {
+        calc()
+        {
+            postJSON
+            (
+                this.API.OTHER_ESTIMATES,
+                this.options,
+                data =>
+                {
+                    this.result = data.list;
+                }
+            );
+        }
     }
 }
 </script>
@@ -72,10 +105,17 @@ export default
 {
     input, select
     {
-        width: 200px;
         margin: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        width: 200px;
+        height: 21px;
         border: none;
         text-align: right;
+    }
+    select
+    {
+        padding: 0;
     }
     .price
     {
@@ -104,6 +144,10 @@ export default
             justify-content: space-between;
             font-size: 14px;
 
+            &.mui-active
+            {
+                background: #fff;
+            }
             &::after
             {
                 right: 15px;
@@ -116,6 +160,11 @@ export default
                 font-size: 14px;
                 padding-right: 35px;
                 box-sizing: content-box;
+
+                &.mui-active
+                {
+                    background: #fff;
+                }
             }
             .ps
             {

@@ -9,7 +9,7 @@
                         <div class="mui-card-header mui-card-media">
                             <img src="./pay_paypal.png" />
                             <div class="mui-media-body">
-                                支付宝支付
+                                PayPal
                                 <p>单笔金额最高为20000元人民币</p>
                                 <div class="radio">
                                     <v-checkbox></v-checkbox>

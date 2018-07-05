@@ -96,15 +96,15 @@
                     <section class="shopping_bomb__info">
                         <div v-for="pro in props" class="mui-row">
                             {{pro}}<br/>
-                            <button v-for="p in propsList"  v-if="p.value.split(':')[0]==pro" type="button" class="mui-btn size">{{p.value.split(':')[1]}}</button>
+                            <button v-for="p in propsList"  v-if="p.value.split(':')[0] == pro" :class="{active: p.active}" @click="selectSize(p)" type="button" class="mui-btn size">{{p.value.split(':')[1]}}</button>
                         </div>
                         <div class="mui-row">
                             数量<br />
-                            <v-numbox></v-numbox>
+                            <v-numbox v-model="bombOp.num"></v-numbox>
                         </div>
                         <div class="mui-row">
                             备注<br />
-                            <textarea style="margin: 10px 0 0 0;" placeholder="如您有需要客服留心的问题或要求，可以在这里进行留言哦~"></textarea>
+                            <textarea v-model="bombOp.remark" placeholder="如您有需要客服留心的问题或要求，可以在这里进行留言哦~"></textarea>
                         </div>
                     </section>
                     <!--<section class="mui-row shopping_bomb__total">-->
@@ -122,7 +122,7 @@
                         <!--</div>-->
                     <!--</section>-->
                 </div>
-                <footer class="footer">
+                <footer @click="buy" class="footer">
                     确定
                 </footer>
             </div>
@@ -157,6 +157,11 @@ export default
             option:
             {
                 num_iid: ''
+            },
+            bombOp:
+            {
+                num: 1,
+                remark: ''
             },
             type: '',
             details: '',
@@ -208,6 +213,7 @@ export default
                         var op ={};
                         op.name = props;
                         op.value = data.item.props_list[props];
+                        op.active = false;
                         this.propsList.push(op);
                         if(pro != props.split(':')[0])
                         {
@@ -230,6 +236,18 @@ export default
             this.bomb = true;
             document.body.style.overflow = 'hidden';
         },
+        selectSize(item)
+        {
+            let thisStr = item.name.split(':')[0];
+            for (var i in this.propsList)
+            {
+                if (this.propsList[i].name.split(':')[0] == thisStr)
+                {
+                    this.propsList[i].active = false;
+                }
+            }
+            item.active = true;
+        },
         goShop()
         {
             this.$router.push({path: 'shopping_market', query: {href: `http:${this.goods.seller_info.zhuy}`, title: this.goods.seller_info.title}, append: true});
@@ -251,6 +269,39 @@ export default
             {
                 if(data.msg) yesAlert('收藏成功!');
             })
+        },
+        buy()
+        {
+            let skustr = '';
+            for (var i in this.propsList) if (this.propsList[i].active) skustr += this.propsList[i].name;
+
+            let op =
+            {
+                userId: localStorage.getItem('userId'),
+                goodsImg: this.goods.pic_url,
+                goodsUrl: this.goods.detail_url,
+                goodsName: this.goods.title,
+                goodsPrice:	this.goods.price,
+                goodsFreight: this.goods.freight,
+                goodsSkustr: skustr,
+                goodsNumber: this.bombOp.num,
+                goodsRemark: this.bombOp.remark,
+                // goodsSite: mui.currentWebview.channel,
+                goodsSeller: this.goods.nick ? this.goods.nick : this.goods.shop_name,
+                shopUrl: this.goods.seller_info.zhuy,
+                // shopname: mui.currentWebview.channel,//购买统计渠道
+                cid: this.goods.cid//购买统计分类
+            }
+
+            postJSON
+            (
+                this.API.CART_ADD,
+                op,
+                data =>
+                {
+                    console.log(data);
+                }
+            );
         }
     }
 }
@@ -766,6 +817,10 @@ export default
             height: 14px;
             vertical-align: middle;
         }
+    }
+    textarea, .numbox
+    {
+        margin: 10px 0 0;
     }
     .footer
     {

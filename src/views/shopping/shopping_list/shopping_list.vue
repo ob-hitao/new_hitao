@@ -115,7 +115,7 @@ export default
         {
             mui.getJSON(this.API.SEARCH_TAOBAO, this.option, data =>
             {
-                let goods = this.shopping_list = this.shopping_list.concat(data.items.item);
+                let goods = this.shopping_list.concat(data.items.item);
                 this.shopping_list = goods;
                 this.navs = data.items.navs;
             });
