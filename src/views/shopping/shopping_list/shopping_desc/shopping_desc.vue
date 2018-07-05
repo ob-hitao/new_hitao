@@ -181,7 +181,7 @@ export default
     {
         getDesc()
         {
-            // 判断api1
+            // 判断api
             let api = this.API[`DETAILS_${this.type}`];
             // 获取api
             mui.getJSON(api, this.option, data =>
