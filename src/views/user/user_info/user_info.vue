@@ -84,7 +84,7 @@ export default
         },
         setSex()
         {
-            confirm(data => {this.userInfo.sex = data.index})
+            confirm(['女', '男'], data => {this.userInfo.sex = data.index})
         },
         setImg(ev)
         {

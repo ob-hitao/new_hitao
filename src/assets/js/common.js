@@ -135,9 +135,9 @@ function yesAlert(message,callback)
  * @desc 确认框
  * @param {Function} callback
  */
-function confirm(callback)
+function confirm(arr = ['取消', '确认'], callback)
 {
-    mui.confirm('', 'hitao', ['女', '男'], callback)
+    mui.confirm('', 'hitao', arr, callback)
 }
 
 /**

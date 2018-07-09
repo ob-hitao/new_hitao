@@ -80,8 +80,8 @@ export default
             navs: {},
             option:
             {
-                q: '',
-                imgid: '',
+                q: this.$route.query.query,
+                imgid: this.$route.query.imgid,
                 cat: 0,
                 sort: '',
                 page: 1,
@@ -94,8 +94,6 @@ export default
     },
     created()
     {
-        this.option.imgid = this.$route.query.imgid ? this.$route.query.imgid : '';
-        this.option.q = this.$route.query.query ? this.$route.query.query : '';
         this.getShoppingList();
     },
     methods:

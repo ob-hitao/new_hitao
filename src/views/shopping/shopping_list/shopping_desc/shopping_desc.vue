@@ -21,7 +21,7 @@
                 <span>月销量：{{goods.sales ? goods.sales : 'null'}}</span>
             </div>
         </section>
-        <p @click="bombShow" class="select">
+        <p @click="bombShow(false)" class="select">
             请选择尺码  颜色  分类  款式 <span class="mui-pull-right">></span>
         </p>
         <section v-if="goods.item_imgs" class="shop">
@@ -74,10 +74,10 @@
                 <i class="iconfont icon-kongaixin"></i>
                 <span class="mui-tab-label">收藏</span>
             </a>
-            <a @click="bombShow" class="mui-tab-item mui-col-xs-3 cart">
+            <a @click="bombShow(false)" class="mui-tab-item mui-col-xs-3 cart">
                 <span class="mui-tab-label">加入购物车</span>
             </a>
-            <a @click="bombShow" class="mui-tab-item mui-col-xs-3 buy">
+            <a @click="bombShow(true)" class="mui-tab-item mui-col-xs-3 buy">
                 <span class="mui-tab-label">立即购买</span>
             </a>
         </nav>
@@ -156,23 +156,22 @@ export default
             propsList: [],
             option:
             {
-                num_iid: ''
+                num_iid: this.$route.query.num_iid
             },
             bombOp:
             {
                 num: 1,
                 remark: ''
             },
-            type: '',
+            type: this.$route.query.type ? this.$route.query.type : 'TAOBAO',
             details: '',
             details_show: true,
-            topActive: false
+            topActive: false,
+            is_buy: 0,
         }
     },
     created()
     {
-        this.option.num_iid = this.$route.query.num_iid ? this.$route.query.num_iid : '';
-        this.type = this.$route.query.type ? this.$route.query.type : 'TAOBAO';
         this.getDesc();
 
         window.addEventListener('scroll', this.handleScroll)
@@ -230,8 +229,9 @@ export default
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
             this.topActive =  scrollTop > 60 ? true : false;
         },
-        bombShow()
+        bombShow(isbuy)
         {
+            this.is_buy = isbuy ? 1 : 0;
             this.mask.show();
             this.bomb = true;
             document.body.style.overflow = 'hidden';
@@ -239,7 +239,7 @@ export default
         selectSize(item)
         {
             let thisStr = item.name.split(':')[0];
-            for (var i in this.propsList)
+            for (let i in this.propsList)
             {
                 if (this.propsList[i].name.split(':')[0] == thisStr)
                 {
@@ -273,8 +273,7 @@ export default
         buy()
         {
             let skustr = '';
-            for (var i in this.propsList) if (this.propsList[i].active) skustr += this.propsList[i].name;
-
+            for (let i in this.propsList) if (this.propsList[i].active) skustr += this.propsList[i].value;
             let op =
             {
                 userId: localStorage.getItem('userId'),
@@ -286,11 +285,12 @@ export default
                 goodsSkustr: skustr,
                 goodsNumber: this.bombOp.num,
                 goodsRemark: this.bombOp.remark,
-                // goodsSite: mui.currentWebview.channel,
+                goodsSite: this.type,
                 goodsSeller: this.goods.nick ? this.goods.nick : this.goods.shop_name,
                 shopUrl: this.goods.seller_info.zhuy,
-                // shopname: mui.currentWebview.channel,//购买统计渠道
-                cid: this.goods.cid//购买统计分类
+                shopname: this.goods.seller_info.title,
+                cid: this.goods.cid,
+                is_buy: this.is_buy
             }
 
             postJSON
@@ -299,7 +299,7 @@ export default
                 op,
                 data =>
                 {
-                    console.log(data);
+                    if(data.msg) yesAlert('添加购物车成功', () => this.mask.close());
                 }
             );
         }
@@ -838,8 +838,13 @@ export default
 }
 </style>
 <style>
-    .details__item img, .details__item table
+    .details__item
     {
         width: 100%;
+        overflow: hidden;
+    }
+    .details__item img, .details__item table
+    {
+        width: 100% !important;
     }
 </style>

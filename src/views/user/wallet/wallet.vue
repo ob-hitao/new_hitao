@@ -61,12 +61,12 @@ export default
     data()
     {
         return {
-            money: 0
+            money: this.$route.query.money
         }
     },
     created()
     {
-        this.money = this.$route.query.money ? this.$route.query.money : 0;
+
     }
 }
 </script>

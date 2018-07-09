@@ -2,44 +2,46 @@
     <div class="clearing">
         <v-header title="购物车结算"></v-header>
         <div class="mui-content">
-            <section class="main">
+            <section v-for="item in info.list" class="main">
                 <ul class="mui-table-view shadow br">
                     <li class="mui-table-view-cell">
                         <figure class="goods">
-                            <img class="goods__img" src="./avatar@2x.png" />
+                            <img class="goods__img" v-lazy="item.goodsimg" />
                             <figcaption class="goods__wrap">
                                 <h4 class="goods__wrap__title">
-                                    蕾丝送吊带2017春夏新款韩版直筒H型两件套
+                                    {{item.goodsname}}
                                 </h4>
-                                <p class="goods__wrap__description">颜色:白色; 尺码:S</p>
+                                <p class="goods__wrap__description">{{item.option}}</p>
                                 <div class="goods__wrap__priceAndnumber">
-                                    <span class="price">￥149.40</span>
-                                    <span class="mui-pull-right">×1</span>
+                                    <span class="price">￥{{item.goodsprice}}</span>
+                                    <span class="mui-pull-right">×{{item.goodsnum}}</span>
                                 </div>
                             </figcaption>
                         </figure>
                     </li>
                     <li class="mui-table-view-cell">
                         <span class="ps">商品备注</span>
-                        <input type="text" value="打包到仓库7天后再发货" />
+                        <input type="text" v-model="item.goodsRemark" />
                     </li>
                     <li class="mui-table-view-cell freight">
                         <span class="ps">快递运费</span>
-                        ￥0.00
+                        ￥{{item.sendprice}}
                     </li>
                     <li class="mui-table-view-cell">
                         <a class="mui-navigate-right">
                             <span class="ps">商品包装</span>
-                            <select>
-                                <option>真空包装</option>
+                            <select v-model="item.packaging">
+                                <option value="0">不拆包</option>
+                                <option value="1">拆包</option>
                             </select>
                         </a>
                     </li>
                     <li class="mui-table-view-cell">
                         <a class="mui-navigate-right">
                             <span class="ps">拍照服务</span>
-                            <select>
-                                <option value="0">拍照</option>
+                            <select v-model="item.isphoto">
+                                <option value="0">不拍照</option>
+                                <option value="1">拍照</option>
                             </select>
                         </a>
                     </li>
@@ -52,8 +54,8 @@
                 3.价格低于500日元需要支付“拍照”（1日元1件）。
             </section>
             <footer class="confirm_footer">
-                <span>共1件商品，总计 <span class="price">￥149.40</span></span>
-                <button type="button" class="btn_real">前往付款</button>
+                <span>共{{length}}件商品，总计 <span class="price">￥{{totalPrice}}</span></span>
+                <button @click="toPay" type="button" class="btn_real">前往付款</button>
             </footer>
         </div>
     </div>
@@ -61,11 +63,116 @@
 
 <script>
 import vHeader from '@/components/header/header';
+import {postJSON, yesAlert} from '@/assets/js/common';  //公共函数库
+
 export default
 {
     components:
     {
         vHeader
+    },
+    data()
+    {
+        return {
+            cartIds: this.$route.query.cartIds,
+            userId: localStorage.getItem('userId'),
+            info: {},
+            length: 0,
+            unpack: [],
+            photo: []
+        }
+    },
+    computed:
+    {
+        totalPrice()
+        {
+            let price = this.info.money;
+            this.unpack = [];
+            this.photo = [];
+            for (let i in this.info.list)
+            {
+                if (this.info.list[i].packaging == '1')
+                {
+                    this.unpack.push(1);
+                    price += 0;
+                }
+                else
+                {
+                    this.unpack.push(0);
+                }
+
+                if (this.info.list[i].isphoto == '1')
+                {
+                    this.photo.push(1);
+                    price += 1;
+                }
+                else
+                {
+                    this.photo.push(0);
+                }
+            }
+            return price;
+        }
+    },
+    created()
+    {
+        this.getInfo()
+    },
+    methods:
+    {
+        getInfo()
+        {
+            postJSON
+            (
+                this.API.CART_PAYMENT,
+                {
+                    userId: this.userId,
+                    cartIds: this.cartIds
+                },
+                data =>
+                {
+                    this.info = data;
+                    this.length = data.list.length;
+                }
+            );
+        },
+        toPay()
+        {
+            postJSON
+            (
+                this.API.CART_PAY,
+                {
+                    userId: this.userId,
+                    cartId: this.cartIds,
+                    unpack: String(this.unpack),
+                    photo: String(this.photo)
+                },
+                data =>
+                {
+                    if(data.orderIds)
+                    {
+                        if(data.approval == 'Y')
+                        {
+                            yesAlert('购买失败！',data =>
+                            {
+                                mui.back();
+                            });
+                        }
+                        else
+                        {
+                            this.$router.push({path: '/shopping/pay', query: {orderIds: data.orderIds, oidinfo: data.oidinfo}})
+                        }
+                    }
+                    else if(data.error_code == -2)
+                    {
+                        yesAlert('余额不足！', data =>
+                        {
+                            this.$router.push({path: '/user/wallet/rechange'})
+                        })
+                    }
+                }
+            );
+        }
     }
 }
 </script>
@@ -128,8 +235,9 @@ export default
     .shopping_cart_payment_last::after {
         height: 0px;
     }
-    .mui-content {
-        padding: 6.5px 8px;
+    .mui-content
+    {
+        padding-bottom: 40px !important;
     }
     .main
     {

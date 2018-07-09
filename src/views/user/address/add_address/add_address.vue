@@ -81,12 +81,11 @@ export default
                 address: ''
             },
             countryList: [],
-            edit: {}
+            edit: this.$route.query.edit
         }
     },
     created()
     {
-        this.edit = this.$route.query.edit ? this.$route.query.edit : '';
         if (this.edit)
         {
             this.options = this.edit;

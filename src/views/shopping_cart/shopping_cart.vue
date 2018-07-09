@@ -2,38 +2,37 @@
     <div class="shopping_cart">
         <v-header title="购物车" :backShow="back">
             <div class="shopping_cart__right">
-                <span>编辑</span>
+                <span @click="edit = !edit">{{!edit ? '编辑' : '完成'}}</span>
                 <i class="iconfont icon-xinxi"></i>
             </div>
         </v-header>
-        <section class="shopping_cart__list">
+        <section v-for="item in goodList" class="shopping_cart__list">
             <h4 class="shopping_cart__list__subtotal">
-                <v-checkbox></v-checkbox>
-                皇宫婚纱旗舰店<span class="shopping_cart__list__subtotal__price">国内运费: <span class="shopping_cart__list__subtotal__price__number">￥10.00</span></span>
+                <v-checkbox v-model="item.checked" @change="checkShop"></v-checkbox>
+                {{item.goodsseller}}
             </h4>
             <ul>
-                <li class="shopping_cart__list__main">
+                <li v-for="i in item.goods" class="shopping_cart__list__main" :style="{transform: 'translateX('+ i.slide +')'}" @swipeleft="slide(i, true)" @swiperight="slide(i, false)">
                     <div class="shopping_cart__list__main__wrap">
                         <div class="shopping_cart__list__main__wrap__100">
                             <div class="shopping_cart__list__main__wrap__checkbox">
-                                <v-checkbox></v-checkbox>
+                                <v-checkbox v-model="i.checked" @change="check()"></v-checkbox>
                             </div>
                             <figure class="goods">
-                                <img class="goods__img" src="./avatar@2x.png"/>
+                                <img class="goods__img" v-lazy="i.goodsimg" />
                                 <figcaption class="goods__wrap">
                                     <h4 class="goods__wrap__title">
-                                        春夏新款韩式公主抹胸显瘦蓬蓬裙小拖
-                                        尾新娘婚纱礼服
+                                        {{i.goodsname}}
                                     </h4>
-                                    <p class="goods__wrap__description">颜色：白色；尺码：L</p>
+                                    <p class="goods__wrap__description">{{i.option}}</p>
                                     <div class="goods__wrap__priceAndnumber">
-                                        <span class="price">￥495.9</span>
-                                        <span class="mui-pull-right">x1</span>
+                                        <span class="price">￥{{i.goodsprice}}</span>
+                                        <span class="mui-pull-right">x{{i.goodsnum}}</span>
                                     </div>
                                 </figcaption>
                             </figure>
                         </div>
-                        <div class="shopping_cart__list__main__wrap__del">
+                        <div ref="width" @click="del(i.gid)" class="shopping_cart__list__main__wrap__del">
                             <i class="iconfont icon-shanchu"></i><br />
                             删除
                         </div>
@@ -41,15 +40,22 @@
                 </li>
             </ul>
         </section>
-        <!--<v-no_data icon="icon-gouwuche" text="购物车空空如也"></v-no_data>-->
+        <v-no_data v-if="!goodList.length" icon="icon-gouwuche" text="购物车空空如也"></v-no_data>
         <footer class="shopping_cart__info">
             <div class="shopping_cart__info__all">
-                <v-checkbox></v-checkbox>
+                <v-checkbox v-model="allChecked" @change="checkAll"></v-checkbox> 全选
             </div>
-            <div class="shopping_cart__info__totalPrice">
-                合计：<span class="price">￥￥784.8</span>
+            <template v-if="!edit">
+                <div class="shopping_cart__info__totalPrice">
+                    合计：<span class="price">￥{{totalPrice}}</span>
+                </div>
+                <router-link :to="{path: 'clearing', query: {cartIds: ids}}" tag="span" class="shopping_cart__info__submit" append>
+                    去结算({{goodLength}})
+                </router-link>
+            </template>
+            <div v-else class="shopping_cart__info__btns">
+                <button @click="favorite" type="button" class="mui-btn">收藏</button><button @click="del" type="button" class="mui-btn">删除</button>
             </div>
-            <span class="shopping_cart__info__submit">去结算(2)</span>
         </footer>
         <v-footer></v-footer>
     </div>
@@ -60,6 +66,8 @@ import vHeader from '@/components/header/header';
 import vFooter from '@/components/footer/footer';
 import vNo_data from '@/components/no_data/no_data';
 import vCheckbox from '@/components/checkbox/checkbox';
+import {getJSON, postJSON, yesAlert, confirm} from '@/assets/js/common';  //公共函数库
+
 
 export default
 {
@@ -73,12 +81,144 @@ export default
     data()
     {
         return {
-            back: false
+            back: this.$route.query.back,
+            edit: false,
+            userId: localStorage.getItem('userId'),
+            goodList: [],
+            allChecked: false,
+            ids: [],
+            totalPrice: 0
+        }
+    },
+    computed:
+    {
+        goodLength()
+        {
+            let length = 0,
+                goodsNum = 0;
+            this.ids = [];
+            this.totalPrice = 0;
+            for (let i in this.goodList)
+            {
+                for (let j in this.goodList[i].goods)
+                {
+                    if (this.goodList[i].goods[j].checked)
+                    {
+                        // 选中的id
+                        this.ids.push(this.goodList[i].goods[j].gid);
+                        // 总价
+                        this.totalPrice += this.goodList[i].goods[j].goodsnum * this.goodList[i].goods[j].goodsprice;
+                        // 数量
+                        length++;
+                    }
+                    goodsNum++;
+                }
+            }
+            // 全选
+            this.allChecked = length == goodsNum ? true : false;
+            return length;
         }
     },
     created()
     {
-        this.back = this.$route.query.back ? true : false;
+        this.getCart();
+    },
+    methods:
+    {
+        getCart()
+        {
+            getJSON
+            (
+                this.API.CART_LIST,
+                {
+                    'userId': this.userId
+                },
+                data =>
+                {
+                    this.goodList = data.list;
+                    for (let i in this.goodList)
+                    {
+                        this.$set(this.goodList[i], 'checked', false);
+
+                        for (let j in this.goodList[i].goods)
+                        {
+                            this.$set(this.goodList[i].goods[j], 'checked', false);
+                            this.$set(this.goodList[i].goods[j], 'slide', '');
+                        }
+                    }
+                }
+            );
+        },
+        check()
+        {
+            for (let i in this.goodList)
+            {
+                let goodsL = this.goodList[i].goods.length,
+                    num = 0;
+                for (let j in this.goodList[i].goods) if (this.goodList[i].goods[j].checked) num++;
+                this.goodList[i].checked =  num == goodsL ? true : false;
+            }
+        },
+        checkShop()
+        {
+            for (let i in this.goodList)
+            {
+                for (let j in this.goodList[i].goods) this.goodList[i].goods[j].checked = this.goodList[i].checked ?  true : false;
+            }
+        },
+        checkAll()
+        {
+            for (let i in this.goodList) this.goodList[i].checked = this.allChecked ? true : false;
+            this.checkShop();
+        },
+        slide(el, flag)
+        {
+            el.slide = flag ? '-' + this.$refs.width[0].clientWidth + 'px' : 0;
+        },
+        del(id)
+        {
+            confirm(undefined, data =>
+            {
+                if (data.index)
+                {
+                    postJSON
+                    (
+                        this.API.CART_DEL,
+                        {
+                            userId: this.userId,
+                            cartId: id ? id : this.ids
+                        },
+                        data =>
+                        {
+                            if (data.msg)
+                            {
+                                yesAlert('删除成功！', data =>
+                                {
+                                    this.goodList = [];
+                                    this.getCart();
+                                });
+                            }
+                        }
+                    )
+                }
+            })
+
+        },
+        favorite()
+        {
+            postJSON
+            (
+                this.API.CART_MOVE_FAVORITE,
+                {
+                    userId: this.userId,
+                    cartIds: this.ids
+                },
+                data =>
+                {
+                    if(data.msg) yesAlert('CollectionSuccess！');
+                }
+            );
+        }
     }
 }
 </script>
@@ -179,6 +319,7 @@ ul
     }
     &__list
     {
+        margin-top: 10px;
         width: 100%;
         overflow: hidden;
         background: #fff;
@@ -186,6 +327,10 @@ ul
         &:first-of-type
         {
             margin-top: 44px;
+        }
+        &:last-of-type
+        {
+            margin-bottom: 100px;
         }
         label
         {
@@ -239,6 +384,10 @@ ul
                     padding-bottom: 0;
                     margin-bottom: 0;
                     border-bottom: none;
+                }
+                &__checkbox
+                {
+                    margin-right: 15px;
                 }
                 &__100
                 {
@@ -313,6 +462,33 @@ ul
             font-size: 16px;
             color: #fff;
             text-align: center;
+        }
+        &__btns
+        {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 100%;
+
+            .mui-btn
+            {
+                width: 50%;
+                height: 100%;
+                border-radius: 0;
+                border: none;
+
+                &:first-child
+                {
+                    background: #ffac4a;
+                    color: #fff;
+                }
+                &:last-child
+                {
+                    background: $theme;
+                    color: #fff;
+                }
+            }
         }
     }
 }

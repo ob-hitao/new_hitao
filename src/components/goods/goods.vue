@@ -2,34 +2,20 @@
     <section class="goods">
         <h4 class="goods__title">
             <div class="goods__type">
-                <i class="iconfont icon-xingxing"></i> 热卖商品
+                <i class="iconfont icon-xingxing"></i> {{goods.typename}}
             </div>
-            <div class="goods__more">
+            <router-link :to="{path: '/shopping/shopping_list', query: {query: goods.typename}}" tag="div" class="goods__more">
                 更多 <i class="iconfont icon-right"></i>
-            </div>
+            </router-link>
         </h4>
         <div class="goods__content">
-            <figure class="item">
-                <img class="item__img" src="./Shopping_dress.jpg" />
+            <router-link v-for="item in goods.goods_array" :key="item.num_iid" :to="{path: '/shopping/shopping_list/shopping_desc', query: {num_iid: item.num_iid}}" tag="figure" class="item">
+                <img class="item__img" v-lazy="item.fileimg" />
                 <figcaption>
-                    <div class="item__name">百搭闲瘦穿搭神器</div>
-                    <div class="item__price">￥362</div>
+                    <div class="item__name">{{item.title}}</div>
+                    <div class="item__price">￥{{item.price}}</div>
                 </figcaption>
-            </figure>
-            <figure class="item">
-                <img class="item__img" src="./Shopping_dress.jpg" />
-                <figcaption>
-                    <div class="item__name">百搭闲瘦穿搭神器</div>
-                    <div class="item__price">￥362</div>
-                </figcaption>
-            </figure>
-            <figure class="item">
-                <img class="item__img" src="./Shopping_dress.jpg" />
-                <figcaption>
-                    <div class="item__name">百搭闲瘦穿搭神器</div>
-                    <div class="item__price">￥362</div>
-                </figcaption>
-            </figure>
+            </router-link>
         </div>
     </section>
 </template>
@@ -37,7 +23,10 @@
 <script>
 export default
 {
-
+    props:
+    {
+        goods: Object
+    }
 }
 </script>
 

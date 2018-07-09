@@ -17,15 +17,12 @@ export default
     data()
     {
         return {
-            href: '',
-            title: '',
+            href: this.$route.query.href,
+            title: this.$route.query.title,
         }
     },
     created()
     {
-        this.href = this.$route.query.href ? this.$route.query.href : '';
-        this.title = this.$route.query.title ? this.$route.query.title : '';
-
         this.childPage();
     },
     mounted()

@@ -68,7 +68,7 @@ export default
         checkedList()
         {
             let list = [];
-            for (var i in this.list)
+            for (let i in this.list)
             {
                 if (this.list[i].checked)
                 {
@@ -110,7 +110,7 @@ export default
                 {
                     let goods = this.list.concat(data.list);
                     this.list = goods;
-                    for (var i in this.list)
+                    for (let i in this.list)
                     {
                         this.$set(this.list[i], 'checked', false);
                     }

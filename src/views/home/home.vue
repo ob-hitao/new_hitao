@@ -3,7 +3,7 @@
       <v-search icon="icon-xinxi"></v-search>
       <div class="home__container">
           <v-slider v-if="bannerList.length" :images="bannerList"></v-slider>
-          <v-goods></v-goods>
+          <v-goods :goods="item" :key="item.tid" v-for="item in goodList"></v-goods>
           <p class="tips">没有更多了</p>
       </div>
       <v-footer></v-footer>
@@ -39,7 +39,7 @@ export default
         // 轮播
         postJSON(this.API.INDEX_CAROUSEL, {}, data => this.bannerList = data.list.map(e => {return e.link + e.img}));
         // 推荐商品
-        // postJSON(this.API.INDEX_GOODSRECOMMEND, {}, data => this.goodList = data.list);
+        postJSON(this.API.INDEX_GOODSRECOMMEND, {}, data => this.goodList = data.list);
     }
 }
 </script>
