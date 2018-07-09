@@ -27,30 +27,30 @@
                     </router-link>
                 </h4>
                 <div class="elastic_module__content">
-                    <figure class="elastic_module__wrap">
+                    <router-link :to="{path: 'order', query: {modules: 'unpaid'}}" tag="figure" class="elastic_module__wrap" append>
                         <i class="iconfont icon-gerenzhongxindingdandaifukuan"></i>
                         <figcaption class="elastic_module__description">
                             待付款
                         </figcaption>
-                    </figure>
-                    <figure class="elastic_module__wrap">
+                    </router-link>
+                    <router-link :to="{path: 'order', query: {modules: 'arrived'}}" tag="figure" class="elastic_module__wrap" append>
                         <i class="iconfont icon-icon2"></i>
                         <figcaption class="elastic_module__description">
                             已到库
                         </figcaption>
-                    </figure>
-                    <figure class="elastic_module__wrap">
+                    </router-link>
+                    <router-link :to="{path: 'order', query: {modules: 'Ordered'}}" tag="figure" class="elastic_module__wrap" append>
                         <i class="iconfont icon-1huojian"></i>
                         <figcaption class="elastic_module__description">
                             已邮寄
                         </figcaption>
-                    </figure>
-                    <figure class="elastic_module__wrap">
+                    </router-link>
+                    <router-link :to="{path: 'order', query: {modules: 'pending'}}" tag="figure" class="elastic_module__wrap" append>
                         <i class="iconfont icon-gerenzhongxindingdandaishouhuo"></i>
                         <figcaption class="elastic_module__description">
-                            待收货
+                            处理中
                         </figcaption>
-                    </figure>
+                    </router-link>
                 </div>
             </section>
             <section class="data elastic_module">

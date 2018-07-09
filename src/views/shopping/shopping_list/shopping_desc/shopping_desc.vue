@@ -85,7 +85,7 @@
                     leave-active-class="animated bounceOutDown">
             <div v-if="bomb" class="shopping_bomb">
                 <figure class="goods">
-                    <img class="goods__img" v-lazy="goods.pic_url" />
+                    <img class="goods__img" :src="goods.pic_url" />
                     <figcaption class="goods__wrap">
                         <h4 class="goods__wrap__title">{{goods.title}}</h4>
                         <p class="goods__wrap__description">请选择颜色分类</p>
@@ -167,7 +167,7 @@ export default
             details: '',
             details_show: true,
             topActive: false,
-            is_buy: 0,
+            is_buy: 0
         }
     },
     created()
@@ -238,6 +238,7 @@ export default
         },
         selectSize(item)
         {
+            // 选择尺寸
             let thisStr = item.name.split(':')[0];
             for (let i in this.propsList)
             {
@@ -247,6 +248,17 @@ export default
                 }
             }
             item.active = true;
+
+            // 图片变换
+            let img = '';
+            for (let j in this.goods.prop_imgs.prop_img)
+            {
+                if (this.goods.prop_imgs.prop_img[j].properties == item.name)
+                {
+                    img = this.goods.prop_imgs.prop_img[j].url;
+                }
+            }
+            this.goods.pic_url = 'http:' + img;
         },
         goShop()
         {

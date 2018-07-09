@@ -5,29 +5,29 @@
             <section class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
                 <nav class="tab mui-scroll">
                     <div class="tab__item">
-                        <span class="tab__text active">全部</span>
+                        <span class="tab__text" :class="{active: modules == ''}" @click="modules = ''">全部</span>
                     </div>
                     <div class="tab__item">
-                        <span class="tab__text">待付款</span>
+                        <span class="tab__text" :class="{active: modules == 'unpaid'}" @click="modules = 'unpaid'">待付款</span>
                     </div>
                     <div class="tab__item">
-                        <span class="tab__text">处理中</span>
+                        <span class="tab__text" :class="{active: modules == 'pending'}" @click="modules = 'pending'">处理中</span>
                     </div>
                     <div class="tab__item">
-                        <span class="tab__text">已到库</span>
+                        <span class="tab__text" :class="{active: modules == 'arrived'}" @click="modules = 'arrived'">已到库</span>
                     </div>
                     <div class="tab__item">
-                        <span class="tab__text">已邮递</span>
+                        <span class="tab__text" :class="{active: modules == 'Ordered'}" @click="modules = 'Ordered'">已邮递</span>
                     </div>
                     <div class="tab__item">
-                        <span class="tab__text">无效单</span>
+                        <span class="tab__text" :class="{active: modules == 'invalid'}" @click="modules = 'invalid'">无效单</span>
                     </div>
                 </nav>
             </section>
             <section class="order_list__order">
                 <h4 class="order_list__order__title">
 						<span class="order_list__order__title__number">
-                            <v-checkbox></v-checkbox>
+                            <!--<v-checkbox></v-checkbox>-->
 							代购订单：DG0038022
 						</span>
                     <span class="order_list__order__title__type">待付款</span>
@@ -83,6 +83,12 @@ export default
         vHeader,
         vCheckbox,
         vNo_data
+    },
+    data()
+    {
+        return {
+            modules: this.$route.query.modules ? this.$route.query.modules : ''
+        }
     },
     mounted()
     {
