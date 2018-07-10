@@ -1,64 +1,63 @@
 <template>
     <div class="order">
         <v-header title="代购订单"><i class="iconfont icon-msnui-more"></i></v-header>
-        <div class="mui-content">
-            <section class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-                <nav class="tab mui-scroll">
-                    <div class="tab__item">
-                        <span class="tab__text" :class="{active: modules == ''}" @click="modules = ''">全部</span>
-                    </div>
-                    <div class="tab__item">
-                        <span class="tab__text" :class="{active: modules == 'unpaid'}" @click="modules = 'unpaid'">待付款</span>
-                    </div>
-                    <div class="tab__item">
-                        <span class="tab__text" :class="{active: modules == 'pending'}" @click="modules = 'pending'">处理中</span>
-                    </div>
-                    <div class="tab__item">
-                        <span class="tab__text" :class="{active: modules == 'arrived'}" @click="modules = 'arrived'">已到库</span>
-                    </div>
-                    <div class="tab__item">
-                        <span class="tab__text" :class="{active: modules == 'Ordered'}" @click="modules = 'Ordered'">已邮递</span>
-                    </div>
-                    <div class="tab__item">
-                        <span class="tab__text" :class="{active: modules == 'invalid'}" @click="modules = 'invalid'">无效单</span>
-                    </div>
-                </nav>
-            </section>
-            <section class="order_list__order">
+        <section class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+            <nav class="tab mui-scroll">
+                <div class="tab__item">
+                    <span class="tab__text" :class="{active: modules == ''}" @click="tab('')">全部</span>
+                </div>
+                <div class="tab__item">
+                    <span class="tab__text" :class="{active: modules == 'unpaid'}" @click="tab('unpaid')">待付款</span>
+                </div>
+                <div class="tab__item">
+                    <span class="tab__text" :class="{active: modules == 'pending'}" @click="tab('pending')">处理中</span>
+                </div>
+                <div class="tab__item">
+                    <span class="tab__text" :class="{active: modules == 'arrived'}" @click="tab('arrived')">已到库</span>
+                </div>
+                <div class="tab__item">
+                    <span class="tab__text" :class="{active: modules == 'Ordered'}" @click="tab('Ordered')">已邮递</span>
+                </div>
+                <div class="tab__item">
+                    <span class="tab__text" :class="{active: modules == 'invalid'}" @click="tab('invalid')">无效单</span>
+                </div>
+            </nav>
+        </section>
+        <div class="mui-content" :class="{btm: modules == 'arrived'}" @scroll.passive="next($event)">
+            <section v-for="item in list" class="order_list__order">
                 <h4 class="order_list__order__title">
 						<span class="order_list__order__title__number">
-                            <!--<v-checkbox></v-checkbox>-->
-							代购订单：DG0038022
+                            <v-checkbox v-if="modules == 'arrived'"></v-checkbox>
+							代购订单：{{item.number}}
 						</span>
-                    <span class="order_list__order__title__type">待付款</span>
+                    <span class="order_list__order__title__type">{{item.statusname}}</span>
                 </h4>
-                <figure class="goods">
-                    <img class="goods__img" src="./avatar@2x.png" />
+                <figure v-for="i in item.orders" class="goods">
+                    <img class="goods__img" v-lazy="i.goodsimg" />
                     <figcaption class="goods__wrap">
                         <h4 class="goods__wrap__title">
-                            蕾丝送吊带2017春夏新款韩版直筒H型两件套
+                            {{i.goodsname}}
                         </h4>
-                        <p class="goods__wrap__description">颜色:白色; 尺码:S</p>
+                        <p class="goods__wrap__description">{{i.option}}</p>
                         <div class="goods__wrap__priceAndnumber">
-                            <span class="price">￥149.40</span>
-                            <span class="mui-pull-right">x1</span>
+                            <span class="price">￥{{i.goodsprice}}</span>
+                            <span class="mui-pull-right">x{{i.goodsnum}}</span>
                         </div>
                     </figcaption>
                 </figure>
                 <p class="order_list__order__remarks">
-                    打包到仓库7天后再发货
+                    {{item.orders_remark}}
                 </p>
                 <div class="order_list__order__info">
-                    <span>卖家:C小小XIAOXIAO</span>
                     <span class="order_list__order__info__price">
-                        合计:<span class="price">合计:￥149.40(含运费￥0.00）</span>
+                        合计:<span class="price">￥{{item.amount_total}}(含运费￥{{item.amount_send}}）</span>
                     </span>
                 </div>
                 <div class="order_list__order__btns">
                     <button class="btn_empty">去付款</button>
                 </div>
             </section>
-            <!--<v-no_data icon="icon-zongheyewudingdan" text="您还没有订单"></v-no_data>-->
+            <v-no_data v-if="!list.length" icon="icon-zongheyewudingdan" text="您还没有订单"></v-no_data>
         </div>
         <footer class="order__footer">
             <div class="left">
@@ -75,6 +74,8 @@
 import vHeader from '@/components/header/header';
 import vCheckbox from '@/components/checkbox/checkbox';
 import vNo_data from '@/components/no_data/no_data';
+import {getJSON} from '@/assets/js/common';  //公共函数库
+
 
 export default
 {
@@ -87,14 +88,89 @@ export default
     data()
     {
         return {
-            modules: this.$route.query.modules ? this.$route.query.modules : ''
+            modules: this.$route.query.modules ? this.$route.query.modules : '',
+            orderState:
+            {
+                unpaid: 0,
+                pending: 1,
+                processing: 1,
+                complete: 5,
+                Ordered: 3,
+                arrived: 4,
+                Submit: 7,
+                invalid: 6
+            },
+            list: [],
+            options:
+            {
+                userId: localStorage.getItem('userId'),
+                orderState: '',
+                starttime: '',
+                endtime: '',
+                p: 1,
+                size: 6,
+                query: ''
+            },
+            scrolled: false
         }
+    },
+    created()
+    {
+        // 初始状态
+        this.options.orderState = this.orderState[this.modules];
+        this.getList()
     },
     mounted()
     {
         mui('.mui-scroll-wrapper').scroll({
             deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
         });
+    },
+    methods:
+    {
+        next(ev)
+        {
+            // 防止重入
+            if (this.scrolled) return false;
+            this.scrolled = true;
+            // 锁定
+            let el = ev.target;
+            let bottom = el.scrollHeight - el.scrollTop - el.offsetHeight;
+            if (bottom <= 250)
+            {
+                this.options.p++;
+                this.getList();
+            }
+            //解锁
+            setTimeout(() => this.scrolled = false, 1);
+        },
+        getList()
+        {
+            getJSON
+            (
+                this.API.ORDER_LIST,
+                this.options,
+                data =>
+                {
+                    let goods = this.list.concat(data.list);
+                    this.list = goods;
+                }
+            )
+        },
+        tab(state)
+        {
+            if (state == '')
+            {
+                this.modules = this.options.orderState = '';
+            }
+            else
+            {
+                this.modules = state;
+                this.options.orderState = this.orderState[this.modules];
+            }
+            this.list = [];
+            this.getList()
+        }
     }
 }
 </script>
@@ -103,9 +179,19 @@ export default
 @import "../../../assets/scss/parameter";
 .order
 {
-    .mui-content
+    .btm
     {
         bottom: 50px;
+    }
+    .mui-slider-indicator.mui-segmented-control
+    {
+        position: fixed;
+        top: 44px;
+        z-index: 9999;
+    }
+    .mui-content
+    {
+        top: 83px;
 
         .mui-scroll-wrapper
         {
@@ -230,12 +316,20 @@ export default
             &__info
             {
                 display: flex;
-                justify-content: space-between;
+                justify-content: flex-end;
                 height: 37px;
                 line-height: 37px;
                 font-size: 12px;
                 border-top: 1px solid #efefef;
                 border-bottom: 1px solid #efefef;
+
+                &__price
+                {
+                    span
+                    {
+                        color: #ff6900;
+                    }
+                }
             }
             &__btns
             {

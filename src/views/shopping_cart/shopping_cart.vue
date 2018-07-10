@@ -40,7 +40,7 @@
                 </li>
             </ul>
         </section>
-        <v-no_data v-if="!goodList.length" icon="icon-gouwuche" text="购物车空空如也"></v-no_data>
+        <v-no_data v-if="!goodsNum" icon="icon-gouwuche" text="购物车空空如也"></v-no_data>
         <footer class="shopping_cart__info">
             <div class="shopping_cart__info__all">
                 <v-checkbox v-model="allChecked" @change="checkAll"></v-checkbox> 全选
@@ -81,12 +81,13 @@ export default
     data()
     {
         return {
-            back: this.$route.query.back,
+            back: this.$route.query.back ? true : false,
             edit: false,
             userId: localStorage.getItem('userId'),
             goodList: [],
             allChecked: false,
             ids: [],
+            goodsNum: 0,
             totalPrice: 0
         }
     },
@@ -94,8 +95,8 @@ export default
     {
         goodLength()
         {
-            let length = 0,
-                goodsNum = 0;
+            let length = 0;
+            this.goodsNum = 0;
             this.ids = [];
             this.totalPrice = 0;
             for (let i in this.goodList)
@@ -111,11 +112,11 @@ export default
                         // 数量
                         length++;
                     }
-                    goodsNum++;
+                    this.goodsNum++;
                 }
             }
             // 全选
-            this.allChecked = length == goodsNum ? true : false;
+            this.allChecked = length == this.goodsNum ? true : false;
             return length;
         }
     },
