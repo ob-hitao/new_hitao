@@ -113,12 +113,45 @@
 
 <script>
 import vHeader from '@/components/header/header';
+import {postJSON} from '@/assets/js/common';  //公共函数库
 
 export default
 {
     components:
     {
         vHeader,
+    },
+    data()
+    {
+        return {
+            options:
+            {
+                userId: localStorage.getItem('userId'),
+                orderIds: this.$route.query.orderIds
+            }
+        }
+    },
+    created()
+    {
+        this.getGoods()
+    },
+    methods:
+    {
+        getGoods()
+        {
+            postJSON
+            (
+                this.API.ORDER_PAYMENT,
+                {
+                    userId: this.options.userId,
+                    orderIds: this.options.orderIds
+                },
+                data =>
+                {
+                    console.log(data)
+                }
+            );
+        }
     }
 }
 </script>

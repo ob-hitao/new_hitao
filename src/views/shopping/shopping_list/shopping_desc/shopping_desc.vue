@@ -258,7 +258,7 @@ export default
                     img = this.goods.prop_imgs.prop_img[j].url;
                 }
             }
-            this.goods.pic_url = 'http:' + img;
+            if(img) this.goods.pic_url = 'http:' + img;
         },
         goShop()
         {

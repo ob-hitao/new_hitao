@@ -32,7 +32,7 @@
 						</span>
                     <span class="order_list__order__title__type">{{item.statusname}}</span>
                 </h4>
-                <figure v-for="i in item.orders" class="goods">
+                <figure v-if="modules != 'arrived'" v-for="i in item.orders" class="goods">
                     <img class="goods__img" v-lazy="i.goodsimg" />
                     <figcaption class="goods__wrap">
                         <h4 class="goods__wrap__title">
@@ -45,16 +45,33 @@
                         </div>
                     </figcaption>
                 </figure>
+                <figure v-if="modules == 'arrived'" class="goods">
+                    <img class="goods__img" v-lazy="item.goodsimg" />
+                    <figcaption class="goods__wrap">
+                        <h4 class="goods__wrap__title">
+                            {{item.goodsname}}
+                        </h4>
+                        <p class="goods__wrap__description">{{item.option}}</p>
+                        <div class="goods__wrap__priceAndnumber">
+                            <span class="price">￥{{item.goodsprice}}</span>
+                            <span class="mui-pull-right">x{{item.goodsnum}}</span>
+                        </div>
+                    </figcaption>
+                </figure>
                 <p class="order_list__order__remarks">
                     {{item.orders_remark}}
                 </p>
                 <div class="order_list__order__info">
-                    <span class="order_list__order__info__price">
+                    <span v-if="modules != 'arrived'" class="order_list__order__info__price">
                         合计:<span class="price">￥{{item.amount_total}}(含运费￥{{item.amount_send}}）</span>
+                    </span>
+                    <span v-else class="order_list__order__info__price">
+                        合计:<span class="price">￥{{item.goodsprice}}(含运费￥{{item.goodsprice_def}}）</span>
                     </span>
                 </div>
                 <div class="order_list__order__btns">
-                    <button class="btn_empty">去付款</button>
+                    <router-link v-if="modules == 'unpaid'" :to="{path: '/shopping/pay', query: {orderIds: item.orders_id}}" tag="button" class="btn_empty">去付款</router-link>
+                    <router-link v-if="modules == 'arrived'" :to="{path: 'order_submit', query: {orderIds: item.oid}}" tag="button" class="btn_empty" append>提交</router-link>
                 </div>
             </section>
             <v-no_data v-if="!list.length" icon="icon-zongheyewudingdan" text="您还没有订单"></v-no_data>
@@ -98,13 +115,14 @@ export default
                 Ordered: 3,
                 arrived: 4,
                 Submit: 7,
-                invalid: 6
+                invalid: 6,
+                '': ''
             },
             list: [],
             options:
             {
                 userId: localStorage.getItem('userId'),
-                orderState: '',
+                orderState: null,
                 starttime: '',
                 endtime: '',
                 p: 1,
@@ -146,9 +164,10 @@ export default
         },
         getList()
         {
+            // console.log(this.API[this.modules != 'arrived' && this.modules !=  'pending' ? 'ORDER_LIST' : 'ORDER_GOODS_LIST'])
             getJSON
             (
-                this.API.ORDER_LIST,
+                this.API[this.modules != 'arrived' ? 'ORDER_LIST' : 'ORDER_GOODS_LIST'],
                 this.options,
                 data =>
                 {
@@ -159,15 +178,8 @@ export default
         },
         tab(state)
         {
-            if (state == '')
-            {
-                this.modules = this.options.orderState = '';
-            }
-            else
-            {
-                this.modules = state;
-                this.options.orderState = this.orderState[this.modules];
-            }
+            this.modules = state;
+            this.options.orderState = this.orderState[this.modules];
             this.list = [];
             this.getList()
         }

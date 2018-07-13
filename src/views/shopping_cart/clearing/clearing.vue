@@ -160,7 +160,7 @@ export default
                         }
                         else
                         {
-                            this.$router.push({path: '/shopping/pay', query: {orderIds: data.orderIds, oidinfo: data.oidinfo}})
+                            this.$router.push({path: '/shopping/pay', query: {orderIds: data.orderIds}})
                         }
                     }
                     else if(data.error_code == -2)

@@ -8,48 +8,44 @@
                     <ul class="mui-table-view">
                         <li class="mui-table-view-cell">
                             <span>应付总额：</span>
-                            <span class="price">￥149.40</span>
+                            <span class="price">￥{{moneyInfo.totalmoney}}</span>
                         </li>
                         <li class="mui-table-view-cell">
                             <span>账户余额：</span>
-                            <span class="price">￥149.40</span>
-                        </li>
-                        <li class="mui-table-view-cell">
-                            <span>还需支付：</span>
-                            <span class="price">￥149.40</span>
+                            <span class="price">￥{{moneyInfo.user_balance}}</span>
                         </li>
                     </ul>
                 </section>
                 <section class="payment_method">
                     <h4  class="settlement__title">支付方式</h4>
                     <ul class="mui-table-view">
-                        <li class="mui-table-view-cell">
+                        <li class="mui-table-view-cell" @click="type = 'PayPal'">
                             <div class="mui-card-header mui-card-media">
                                 <img src="./pay_paypal.png" />
                                 <div class="mui-media-body">
-                                    支付宝支付
+                                    PayPal
                                     <p>在线充值，快速到账，要收手续费</p>
-                                    <v-checkbox></v-checkbox>
+                                    <v-checkbox :checked="type == 'PayPal'"></v-checkbox>
                                 </div>
                             </div>
                         </li>
-                        <li class="mui-table-view-cell">
+                        <li class="mui-table-view-cell" @click="type = '支付宝支付'">
                             <div class="mui-card-header mui-card-media">
                                 <img src="./pay_alipay.png" />
                                 <div class="mui-media-body">
                                     支付宝支付
                                     <p>在线充值，快速到账，无手续费</p>
-                                    <v-checkbox></v-checkbox>
+                                    <v-checkbox :checked="type == '支付宝支付'"></v-checkbox>
                                 </div>
                             </div>
                         </li>
-                        <li class="mui-table-view-cell">
+                        <li class="mui-table-view-cell" @click="type = '微信支付'">
                             <div class="mui-card-header mui-card-media">
                                 <img src="./pay_wechat.png" />
                                 <div class="mui-media-body">
                                     微信支付
                                     <p>在线充值，快速到账，无手续费</p>
-                                    <v-checkbox></v-checkbox>
+                                    <v-checkbox :checked="type == '微信支付'"></v-checkbox>
                                 </div>
                             </div>
                         </li>
@@ -57,19 +53,68 @@
                 </section>
             </div>
         </div>
-        <footer class="footer">确定支付</footer>
+        <footer @click="pay" class="footer">确定支付</footer>
     </div>
 </template>
 
 <script>
 import vHeader from '@/components/header/header';
 import vCheckbox from '@/components/checkbox/checkbox';
+import {postJSON} from '@/assets/js/common';  //公共函数库
+
+
 export default
 {
     components:
     {
         vHeader,
         vCheckbox
+    },
+    data()
+    {
+        return {
+            userId: localStorage.getItem('userId'),
+            orderIds: this.$route.query.orderIds,
+            type: '',
+            moneyInfo: {}
+        }
+    },
+    created()
+    {
+        this.getMoney()
+    },
+    methods:
+    {
+        getMoney()
+        {
+            postJSON
+            (
+                this.API.ORDER_ORDERPAY,
+                {
+                    userId: this.userId,
+                    orderIds: this.orderIds
+                },
+                data => this.moneyInfo = data
+            )
+        },
+        pay()
+        {
+            postJSON
+            (
+                this.API.ORDER_ORDERCONFIRM,
+                {
+                    userId: this.userId,
+                    orderIds: this.orderIds
+                },
+                data =>
+                {
+                    if(data.msg || data)
+                    {
+                        this.$router.push({path: '/user/order?modules=pending'});
+                    }
+                }
+            );
+        }
     }
 }
 </script>
