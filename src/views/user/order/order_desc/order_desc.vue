@@ -3,52 +3,44 @@
         <v-header title="订单详情"><i class="iconfont icon-msnui-more"></i></v-header>
         <div class="mui-content">
             <section class="order_desc__info">
-                <h4 class="order_desc__info__title">卖家：从那以后SINCETHEN</h4>
+                <h4 class="order_desc__info__title">卖家：{{order.goodsseller}}</h4>
                 <figure class="goods">
-                    <img class="goods__img" src="./avatar@2x.png" />
+                    <img class="goods__img" v-lazy="order.goodsimg" />
                     <figcaption class="goods__wrap">
-                        <h4 class="goods__wrap__title">
-                            SINCE THEN
+                        <h4 class="goods__wrap__title mui-ellipsis">
+                            {{order.goodsname}}
                         </h4>
-                        <p class="goods__wrap__description">颜色:图片色; 尺码:L</p>
+                        <p class="goods__wrap__description">{{order.option}}</p>
                         <div class="goods__wrap__priceAndnumber">
-                            <span class="price">￥152.80</span>
-                            <span class="mui-pull-right">x1</span>
+                            <span class="price">￥{{order.goodsprice}}</span>
+                            <span class="mui-pull-right">x{{order.goodsnum}}</span>
                         </div>
                     </figcaption>
                 </figure>
                 <ul class="order_desc__info__list">
                     <li>
                         <span class="order_desc__info__list__left">商品备注</span>
-                        <span class="order_desc__info__list__right">打包到仓库7天后再发货</span>
+                        <span class="order_desc__info__list__right">{{order.goodsremark}}</span>
                     </li>
                     <li>
                         <span class="order_desc__info__list__left">采购留言</span>
-                        <span class="order_desc__info__list__right">无</span>
+                        <span class="order_desc__info__list__right">{{order.orderremark}}</span>
                     </li>
                     <li>
                         <span class="order_desc__info__list__left">重量/体积</span>
-                        <span class="order_desc__info__list__right">54 g</span>
+                        <span class="order_desc__info__list__right">{{order.orderweight}}g</span>
                     </li>
                     <li>
                         <span class="order_desc__info__list__left">国内运费</span>
-                        <span class="order_desc__info__list__right">￥0.00</span>
-                    </li>
-                    <li>
-                        <span class="order_desc__info__list__left">拍照服务</span>
-                        <span class="order_desc__info__list__right">拍照</span>
-                    </li>
-                    <li>
-                        <span class="order_desc__info__list__left">付款方式</span>
-                        <span class="order_desc__info__list__right">二次付款</span>
+                        <span class="order_desc__info__list__right">￥{{order.sendprice}}</span>
                     </li>
                     <li>
                         <span class="order_desc__info__list__left">付款时间</span>
-                        <span class="order_desc__info__list__right">2017-07-09 15:15:57</span>
+                        <span class="order_desc__info__list__right">{{order.addtime}}</span>
                     </li>
                     <li>
                         <span class="order_desc__info__list__left">实付款(含运费）</span>
-                        <span class="order_desc__info__list__right price">￥152.80</span>
+                        <span class="order_desc__info__list__right price">￥{{Number(order.goodsprice) + Number(order.sendprice)}}</span>
                     </li>
                 </ul>
             </section>
@@ -58,12 +50,44 @@
 
 <script>
 import vHeader from '@/components/header/header';
+import {postJSON} from '@/assets/js/common';  //公共函数库
 
 export default
 {
     components:
     {
         vHeader,
+    },
+    data()
+    {
+        return {
+            userId: localStorage.getItem('userId'),
+            oid: this.$route.query.id,
+            order: {}
+        }
+    },
+    created()
+    {
+        this.getInfo()
+    },
+    methods:
+    {
+        getInfo()
+        {
+            postJSON
+            (
+                this.API.ORDER_DETAILS,
+                {
+                    userId: this.userId,
+                    orderId: this.oid
+                },
+                data =>
+                {
+                    data.order.addtime = new Date(data.order.addtime*1000).Format("yyyy-MM-dd hh:mm:ss");
+                    this.order = data.order;
+                }
+            )
+        }
     }
 }
 </script>

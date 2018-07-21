@@ -113,7 +113,6 @@ export default
                 this.options,
                 data =>
                 {
-                    console.log(1)
                     if(data.msg) mui.back();
                 }
             );

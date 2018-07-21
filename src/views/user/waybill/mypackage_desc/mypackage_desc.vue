@@ -8,51 +8,20 @@
                         <a class="mui-navigate-right" href="#">基本信息</a>
                         <div class="mui-collapse-content">
                             <p class="order_number">
-                                国际订单号：AA0006821
+                                国际订单号：{{detail.sid}}
                                 <button>复制单号</button>
                             </p>
                             <p>
-                                提交时间：2016-11-10 11:44:56<br />
-                                付款时间：2016-11-10 11:45:51<br />
-                                发货时间：2016-11-10 11:46:22<br />
-                                含包装重量：7.90Kg<br />
-                                报关费：100.00(美元)<br />
-                                使用优惠券：￥5.00<br />
-                                商品备注：打包到仓库7天后再发货
-                            </p>
-                        </div>
-                    </li>
-                </ul>
-
-                <ul class="mui-table-view">
-                    <li class="mui-table-view-cell mui-collapse">
-                        <a class="mui-navigate-right" href="#">增值服务</a>
-                        <div class="mui-collapse-content">
-                            <p>
-                                提交时间：2016-11-10 11:44:56<br />
-                                付款时间：2016-11-10 11:45:51<br />
-                                发货时间：2016-11-10 11:46:22<br />
-                                含包装重量：7.90Kg<br />
-                                报关费：100.00(美元)<br />
-                                使用优惠券：￥5.00<br />
-                                商品备注：打包到仓库7天后再发货
-                            </p>
-                        </div>
-                    </li>
-                </ul>
-
-                <ul class="mui-table-view">
-                    <li class="mui-table-view-cell mui-collapse">
-                        <a class="mui-navigate-right" href="#">结算信息</a>
-                        <div class="mui-collapse-content">
-                            <p>
-                                提交时间：2016-11-10 11:44:56<br />
-                                付款时间：2016-11-10 11:45:51<br />
-                                发货时间：2016-11-10 11:46:22<br />
-                                含包装重量：7.90Kg<br />
-                                报关费：100.00(美元)<br />
-                                使用优惠券：￥5.00<br />
-                                商品备注：打包到仓库7天后再发货
+                                邮寄方式: {{detail.deliveryname}}<br />
+                                跟踪号: {{detail.sn}}<br />
+                                体积: <span v-if="detail.actualVolume == ''">{{detail.countvolume + 'm²'}}</span><span v-else><s>{{detail.countvolume + 'm²'}}</s> {{detail.actualVolume + 'm²'}}</span><br />
+                                报关费: {{detail.customsfee}}<br />
+                                状态: {{detail.state}}<br />
+                                收件人: {{detail.uname}}<br />
+                                时间: {{new Date(detail.uptime*1000).Format("yyyy-MM-dd hh:mm:ss")}}<br />
+                                重量: <span v-if="detail.actualWeight == ''">{{detail.countweight + 'm²'}}</span><span v-else><s>{{detail.countweight + 'm²'}}</s> {{detail.actualWeight + 'm²'}}</span><br />
+                                运费: <span v-if="detail.actualFreight == ''">{{detail.freight + 'm²'}}</span><span v-else><s>{{detail.freight + 'm²'}}</s> {{detail.actualFreight + 'm²'}}</span><br />
+                                总计: {{detail.totalfee}}<br />
                             </p>
                         </div>
                     </li>
@@ -64,12 +33,42 @@
 
 <script>
 import vHeader from '@/components/header/header';
+import {getJSON, postJSON} from '@/assets/js/common';  //公共函数库
 
 export default
 {
     components:
     {
         vHeader
+    },
+    data()
+    {
+        return {
+            detail: {},
+            packageId: this.$route.query.orderId
+        }
+    },
+    created()
+    {
+        this.getDesc()
+    },
+    methods:
+    {
+        getDesc()
+        {
+            postJSON
+            (
+                this.API.SENDORDER_DETAILS,
+                {
+                    userId: localStorage.getItem('userId'),
+                    packageId: this.packageId
+                },
+                data =>
+                {
+                    this.detail = data.order;
+                }
+            );
+        }
     }
 }
 </script>

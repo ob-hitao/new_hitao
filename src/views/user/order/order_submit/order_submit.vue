@@ -2,28 +2,26 @@
     <div class="order_submit">
         <v-header title="提交运单"></v-header>
         <div class="mui-content">
-            <section class="basic_info">
+            <router-link to="/user/address" tag="section" class="basic_info">
                 <div class="basic_info__receipt">
-                    <span>收货人: MS WONG</span>
-                    <span>0122205768</span>
+                    <span>收货人: {{info.address_array[0].consignee}}</span>
+                    <span>{{info.address_array[0].tel}}</span>
                 </div>
-                <div>国家: 马来西亚 - 西马</div>
-                <div>地址: Lot PT 3467, Jalan 6/3, Kawasan
-                    Perusahaan Seri Kembangan, 43300 Seri
-                    Kembangan, Selangor</div>
-                <div>邮编: 43300</div>
-            </section>
+                <div>国家: {{info.address_array[0].CountryName}}</div>
+                <div>地址: {{info.address_array[0].address}}</div>
+                <div>邮编: {{info.address_array[0].zip}}</div>
+            </router-link>
             <section class="goods_info">
-                <figure class="goods">
-                    <img class="goods__img" src="./avatar@2x.png"/>
+                <figure v-for="item in info.order_array" class="goods">
+                    <img class="goods__img" v-lazy="item.goodsimg" />
                     <figcaption class="goods__wrap">
-                        <h4 class="goods__wrap__title">
-                            蕾丝送吊带2017春夏新款韩版直筒
+                        <h4 class="goods__wrap__title mui-ellipsis">
+                            {{item.goodsname}}
                         </h4>
-                        <p class="goods__wrap__description">颜色:白色; 尺码:S</p>
+                        <p class="goods__wrap__description">{{item.option}}</p>
                         <div class="goods__wrap__priceAndnumber">
-                            <span class="price">￥149.40</span>
-                            <span class="mui-pull-right">x1</span>
+                            <span class="price">￥{{item.goodsprice}}</span>
+                            <span class="mui-pull-right">x{{item.goodsnum}}</span>
                         </div>
                     </figcaption>
                 </figure>
@@ -37,18 +35,19 @@
             </section>
             <section class="list">
                 <ul class="mui-table-view">
-                    <li class="mui-table-view-cell">
+                    <router-link :to="{path: 'order_logistics', query: {options}}" tag="li" class="mui-table-view-cell" append>
                         <a class="mui-navigate-right">
                             <span class="description">选择物流</span>
-                            <span>DHL</span>
+                            <span v-if="logistics">{{logistics.shipping_name}}</span>
                         </a>
-                    </li>
+                    </router-link>
                     <li class="mui-table-view-cell">
                         <a class="mui-navigate-right">
                             <span class="description">优惠券</span>
                             <span>
-                                <select style="margin: 0;padding: 0;background: transparent;">
-                                    <option>3元运费抵扣券 ￥3.00</option>
+                                <select v-model="coupon">
+                                    <option>不使用</option>
+                                    <option :value="{cid: coupon.cid, money: coupon.money}" v-for="coupon in info.coupon_array">{{coupon.money}}元运费抵扣券 ￥{{coupon.money}}</option>
                                 </select>
                             </span>
                         </a>
@@ -56,64 +55,64 @@
                     <li class="mui-table-view-cell">
                         <a class="mui-navigate-right">
                             <span class="description">服务费</span>
-                            <span class="price">￥5.00</span>
+                            <span class="price">￥{{info.cost.server_fee}}</span>
                         </a>
                     </li>
                     <li class="mui-table-view-cell">
                         <a class="mui-navigate-right">
                             <span class="description">运费</span>
-                            <span class="price">￥55.00</span>
+                            <span class="price" v-if="logistics">￥{{logistics.total_fee}}</span>
                         </a>
                     </li>
                     <li class="mui-table-view-cell">
                         <a class="mui-navigate-right">
                             <span class="description">运费折扣</span>
-                            <span class="green">￥5.00</span>
+                            <span class="green">￥{{info.cost.fee_discount}}</span>
                         </a>
                     </li>
-                    <li class="mui-table-view-cell">
+                    <li @click="service.vacuum = !service.vacuum" class="mui-table-view-cell">
                         <a class="mui-navigate-right">
                             <span class="description">商品包装</span>
                             <span>
-                                真空包装 <i class="iconfont icon-wentiquestions1"></i>
-                                <input type="checkbox">
+                                真空包装
+                                <input type="checkbox" v-model="service.vacuum">
                             </span>
                         </a>
                     </li>
-                    <li class="mui-table-view-cell">
+                    <li @click="service.needphoto = !service.needphoto" class="mui-table-view-cell">
                         <a class="mui-navigate-right">
                             <span class="description">拍照服务</span>
                             <span>
-                                拍照 <i class="iconfont icon-wentiquestions1"></i>
-                                <input type="checkbox">
+                                拍照
+                                <input type="checkbox" v-model="service.needphoto">
                             </span>
                         </a>
                     </li>
-                    <li class="mui-table-view-cell">
+                    <li @click="service.insurance = !service.insurance" class="mui-table-view-cell">
                         <a class="mui-navigate-right">
                             <span class="description">运费险</span>
                             <span>商品价格的2%
-                                <span class="price">￥50</span>
-                                <input type="checkbox">
+                                <span class="price">￥{{info.cost.insurancefee}}</span>
+                                <input type="checkbox" v-model="service.insurance">
                             </span>
                         </a>
                     </li>
                     <li class="mui-table-view-cell zhus">
                         <span class="description">商品备注</span>
-                        <input id="remark" class="text" type="text" placeholder="选填：填写对本次交易的说明等" />
+                        <input v-model="remark" class="text" type="text" placeholder="选填：填写对本次交易的说明等" />
                     </li>
                 </ul>
             </section>
         </div>
         <footer class="submit">
-            共￥149.40件商品，总计  <span class="price">￥149.40</span> <button>前往付款</button>
+            共{{info.order_array.length}}件商品，总计  <span class="price">￥{{totalMoney}}</span><button @click="pay">前往付款</button>
         </footer>
     </div>
 </template>
 
 <script>
 import vHeader from '@/components/header/header';
-import {postJSON} from '@/assets/js/common';  //公共函数库
+import {postJSON, yesAlert} from '@/assets/js/common';  //公共函数库
 
 export default
 {
@@ -127,13 +126,67 @@ export default
             options:
             {
                 userId: localStorage.getItem('userId'),
-                orderIds: this.$route.query.orderIds
-            }
+                orderIds: this.$route.query.orderIds,
+                country: {}
+            },
+            info:
+            {
+                address_array: [{}],
+                order_array: [],
+                cost: {},
+                addressId: {}
+            },
+            service:
+            {
+                vacuum: false,
+                insurance: false,
+                needphoto: false
+            },
+            remark: '',
+            coupon: {},
+            logistics: this.$route.query.logistics
+        }
+    },
+    computed:
+    {
+        totalMoney()
+        {
+            let money = 0,
+                info = this.info,
+                service = this.service;
+
+            // 物流费
+            if (this.logistics) money += this.logistics.total_fee * info.cost.fee_discount;
+            // 服务费
+            money += info.cost.server_fee;
+            // 保险费
+            money += service.insurance ? info.cost.insurance_fee : 0;
+            // 拍照费
+            money += service.needphoto ? info.cost.photo_fee : 0;
+            // 包装费
+            money += service.vacuum ? info.cost.vacuum_fee : 0;
+            // 优惠券
+            if (this.coupon.money) money -= Number(this.coupon.money);
+
+            return money.toFixed(2);
         }
     },
     created()
     {
         this.getGoods()
+
+        let _back = mui.back;
+        if (this.logistics)
+        {
+            mui.back = () =>
+            {
+                this.$router.push({path: '/user/order', query: {modules: 'arrived'}})
+            }
+        }
+        else
+        {
+            mui.back = _back;
+        }
     },
     methods:
     {
@@ -148,7 +201,46 @@ export default
                 },
                 data =>
                 {
-                    console.log(data)
+                    this.info = data;
+                    if (data.address_array.length)
+                    {
+                        this.options.country = data.address_array[0].country;
+                        this.options.addressId = data.address_array[0].aid;
+                    }
+                }
+            );
+        },
+        pay()
+        {
+            if (!this.logistics) return yesAlert('请选择物流');
+
+            postJSON
+            (
+                this.API.ORDER_PAYCONFIRM,
+                {
+                    userId: this.options.userId,
+                    orderIds: this.options.orderIds,
+                    couponId: this.coupon.cid,
+                    shippingAreaId: this.logistics.shipping_area_id,
+                    addressId: this.options.addressId,
+                    remark: this.remark,
+                    insurance: this.service.insurance ? 1 : 0,
+                    needphoto: this.service.needphoto ? 1 : 0,
+                    vacuum: this.service.vacuum ? 1 : 0
+                },
+                data =>
+                {
+                    if(data.sid)
+                    {
+                        this.$router.push({path: '/user/waybill', query: {modules: 'mypackage'}})
+                    }
+                    else if(data.error_code==-2)
+                    {
+                        yesAlert('余额不足', data =>
+                        {
+                            this.$router.push({path: '/user/wallet/rechange'})
+                        })
+                    }
                 }
             );
         }
@@ -295,6 +387,12 @@ export default
                 justify-content: space-between;
                 padding-right: 35px;
                 font-size: 14px;
+            }
+            select
+            {
+                margin: 0;
+                padding: 0;
+                background: transparent;
             }
         }
         .icon

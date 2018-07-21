@@ -32,7 +32,7 @@
 						</span>
                     <span class="order_list__order__title__type">{{item.statusname}}</span>
                 </h4>
-                <figure v-if="modules != 'arrived'" v-for="i in item.orders" class="goods">
+                <figure @click="toDesc(i.oid)" v-if="modules != 'arrived'" v-for="i in item.orders" class="goods">
                     <img class="goods__img" v-lazy="i.goodsimg" />
                     <figcaption class="goods__wrap">
                         <h4 class="goods__wrap__title">
@@ -45,7 +45,7 @@
                         </div>
                     </figcaption>
                 </figure>
-                <figure v-if="modules == 'arrived'" class="goods">
+                <figure @click="toDesc(item.oid)" v-if="modules == 'arrived'" class="goods">
                     <img class="goods__img" v-lazy="item.goodsimg" />
                     <figcaption class="goods__wrap">
                         <h4 class="goods__wrap__title">
@@ -171,10 +171,17 @@ export default
                 this.options,
                 data =>
                 {
-                    let goods = this.list.concat(data.list);
-                    this.list = goods;
+                    if (data.list)
+                    {
+                        let goods = this.list.concat(data.list);
+                        this.list = goods;
+                    }
                 }
             )
+        },
+        toDesc(id)
+        {
+            this.$router.push({path: 'order_desc', query: {id}, append: true})
         },
         tab(state)
         {

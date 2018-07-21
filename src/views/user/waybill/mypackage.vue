@@ -1,40 +1,135 @@
 <template>
-    <section class="order_list__order">
-        <h4 class="order_list__order__title">
+    <div class="mui-content" @scroll.passive="next($event)" style="top: 40px;">
+        <section v-for="item in list" class="order_list__order">
+            <h4 class="order_list__order__title">
                 <span class="order_list__order__title__number">
-                    ID：6821
+                    ID：{{item.sid}}
                 </span>
-            <span class="order_list__order__title__type">Pending</span>
-        </h4>
-        <div class="waybill__main">
-            <div class="left">
-                邮寄方式：ChinaPost<br />
-                重量：2000g<br />
-                照片：
+                <span class="order_list__order__title__type">{{item.state}}</span>
+            </h4>
+            <router-link :to="{path: 'mypackage_desc', query: {orderId: item.sid}}" tag="div" class="waybill__main" append>
+                <div class="left">
+                    邮寄方式：{{item.deliveryname}}<br />
+                    重量：{{item.countweight}}g<br />
+                    照片：
+                </div>
+                <div class="right">
+                    跟踪号：{{item.sn}}<br />
+                    体积：{{item.vacuum}}m³<br />
+                    时间：{{new Date(item.addtime*1000).Format("yyyy-MM-dd hh:mm:ss")}}
+                </div>
+            </router-link>
+            <div class="order_list__order__info">
+                运费:￥{{item.freight_cus}} 报关费:￥{{item.customsfee}} 总计:<span class="price">￥{{item.totalfee}}</span>
             </div>
-            <div class="right">
-                跟踪号：55156534555<br />
-                体积：1m³<br />
-                时间：2017-07-13
+            <div class="order_list__order__btns">
+                <button @click="payment(item)" v-if="item.state=='0'" class="btn_empty">付款</button>
+                <button @click="cancel(item)" v-if="item.state=='1'" class="btn_real">取消</button>
+                <button @click="receipt(item)" v-if="item.state=='2'" class="btn_real">确定收货</button>
             </div>
-        </div>
-        <div class="order_list__order__info">
-            运费:￥27.00 报关费:￥1.00  总计:<span class="price">￥28.00</span>
-        </div>
-        <div class="order_list__order__btns">
-            <button class="btn_real">确定收货</button>
-        </div>
-        <!--<v-no_data icon="icon-address" text="您还没有收货地址"></v-no_data>-->
-    </section>
+        </section>
+        <v-no_data v-if="!list.length" icon="icon-address" text="您还没有收货地址"></v-no_data>
+    </div>
+
 </template>
 
 <script>
 import vNo_data from '@/components/no_data/no_data';
+import {getJSON, postJSON, confirm} from '@/assets/js/common';  //公共函数库
+
 export default
 {
     components:
     {
         vNo_data
+    },
+    data()
+    {
+        return {
+            options:
+            {
+                userId: localStorage.getItem('userId'),
+                p: 1,
+                size: 6,
+            },
+            list: [],
+            scrolled: false
+        }
+    },
+    created()
+    {
+        this.getList()
+    },
+    methods:
+    {
+        next(ev)
+        {
+            // 防止重入
+            if (this.scrolled) return false;
+            this.scrolled = true;
+            // 锁定
+            let el = ev.target;
+            let bottom = el.scrollHeight - el.scrollTop - el.offsetHeight;
+            if (bottom <= 250)
+            {
+                this.options.p++;
+                this.getList();
+            }
+            //解锁
+            setTimeout(() => this.scrolled = false, 1);
+        },
+        getList()
+        {
+            getJSON
+            (
+                this.API.SENDORDER_LIST,
+                this.options,
+                data =>
+                {
+                    this.list = data.list
+                }
+            );
+        },
+        cancel(item)
+        {
+            confirm
+            ('确定要取消包裹吗？',  ['取消', '确定'],function(e){
+                if(e.index)
+                {
+                    postJSON
+                    (
+                        this.API.SENDORDER_CANCEL,
+                        {
+                            userId: item.uid,
+                            packageId: item.sid
+                        },
+                        data =>
+                        {
+                            if(data.msg) this.getList();
+                        }
+                    );
+                }
+            });
+        },
+        receipt(item)
+        {
+            postJSON
+            (
+                this.API.SENDORDER_RECEIPT,
+                {
+                    userId: item.uid,
+                    packageId: item.sid
+                },
+                data =>
+                {
+                    if(data.msg) this.getList();
+                }
+            );
+        },
+        payment()
+        {
+
+        }
     }
 }
 </script>

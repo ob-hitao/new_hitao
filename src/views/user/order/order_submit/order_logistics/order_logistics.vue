@@ -2,24 +2,30 @@
     <div class="order_logistics">
         <v-header title="选择物流"></v-header>
         <div class="mui-content">
-            <section class="order_logistics__item">
-                <h4 class="order_logistics__item__title">
-                    <v-checkbox></v-checkbox>DHL
-                </h4>
-                <div class="order_logistics__item__body">
-                    <p>
-                        <span>首重：￥1.00 / 1.00g</span>
-                        <span>续重：￥1.00 / 1.00g</span>
-                    </p>
-                    <p>
-                        <span>报关费：￥1.00 / 1.00g</span>
-                        <span>免费额度：￥1.00</span>
-                    </p>
-                </div>
-                <div class="order_logistics__item__footer">
-                    <span>预计运费</span><span class="price">￥38.00</span>
-                </div>
-            </section>
+            <div class="plus">
+                <section v-for="item in list" class="order_logistics__item">
+                    <h4 class="order_logistics__item__title">
+                        <v-checkbox @change="select(item)"></v-checkbox>{{item.shipping_name}}
+                    </h4>
+                    <div class="order_logistics__item__body">
+                        <p>
+                            <span>首重：{{item.first_fee}} / {{item.first_weight}}{{'volume' == item.mode ? 'm³' : 'g'}}</span>
+                            <span>续重：{{item.continue_fee}}/ {{item.continue_weight}}{{'volume' == item.mode ? 'm³' : 'g'}}</span>
+                        </p>
+                        <p>
+                            <span>报关费：{{item.customs_fee}}</span>
+                            <span>续重：{{item.fuel_fee}}</span>
+                        </p>
+                        <p>
+                            <span>服务费：{{item.server_fee}}</span>
+                            <span>免费额度：{{item.free_money}}</span>
+                        </p>
+                    </div>
+                    <div class="order_logistics__item__footer">
+                        <span>预计运费</span><span class="price">￥{{item.total_fee}}</span>
+                    </div>
+                </section>
+            </div>
         </div>
     </div>
 </template>
@@ -27,6 +33,8 @@
 <script>
 import vHeader from '@/components/header/header';
 import vCheckbox from '@/components/checkbox/checkbox';
+import {postJSON} from '@/assets/js/common';  //公共函数库
+
 
 export default
 {
@@ -34,6 +42,36 @@ export default
     {
         vHeader,
         vCheckbox
+    },
+    data()
+    {
+        return {
+            list: [],
+            options: this.$route.query.options
+        }
+    },
+    created()
+    {
+        this.getList()
+    },
+    methods:
+    {
+        getList()
+        {
+            postJSON
+            (
+                this.API.ORDER_GETSHIPPING,
+                this.options,
+                data =>
+                {
+                    this.list = data.list;
+                }
+            )
+        },
+        select(item)
+        {
+            this.$router.push({path: '/user/order/order_submit', query: {orderIds: this.options.orderIds, logistics: item}})
+        }
     }
 }
 </script>
@@ -41,8 +79,13 @@ export default
 <style scoped lang="scss" rel="stylesheet/scss">
 .order_logistics
 {
+    .price
+    {
+        color: #ff6900;
+    }
     &__item
     {
+        margin-bottom: 10px;
         padding: 12px;
         background: #fff;
 
